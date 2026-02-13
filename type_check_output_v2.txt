@@ -1,0 +1,57 @@
+
+> jebali-sweet@0.1.0 type-check
+> tsc --noEmit
+
+src/app/admin-category-management/components/AdminCategoryManagementInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-dashboard/components/AdminDashboardInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-dashboard/components/AdminDashboardInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/admin-order-management/components/AdminOrderManagementInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-order-management/components/AdminOrderManagementInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/admin-product-management/components/AdminProductManagementInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-promotion-management/components/AdminPromotionManagementInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-promotion-management/components/AdminPromotionManagementInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/admin-promotion-management/page.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/admin-testimonial-management/components/AdminTestimonialManagementInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/admin-testimonial-management/components/AdminTestimonialManagementInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/checkout-payment/components/CheckoutPaymentInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/checkout-payment/components/CheckoutPaymentInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/custom-cake/page.tsx(4,26): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/delivery-dashboard/components/DeliveryDashboardInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/delivery-dashboard/components/DeliveryDashboardInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/delivery/dashboard/page.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/homepage/components/CategoryCard.tsx(3,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/homepage/components/HeroSection.tsx(3,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/homepage/components/HomepageInteractive.tsx(9,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/homepage/components/ProductCard.tsx(6,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/homepage/components/PromotionalBanner.tsx(3,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/login/components/LoginForm.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/login/components/LoginInteractive.tsx(23,11): error TS2322: Type '{ onClose: () => void; onSuccess: () => void; }' is not assignable to type 'IntrinsicAttributes & ForgotPasswordWizardProps'.
+  Property 'onClose' does not exist on type 'IntrinsicAttributes & ForgotPasswordWizardProps'.
+src/app/login/page.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/not-found.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/orders/components/OrderHistoryInteractive.tsx(4,44): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/orders/components/OrderHistoryInteractive.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/page.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/product-catalog/components/ProductCatalogInteractive.tsx(4,44): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/product-catalog/page.tsx(2,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/register/components/RegistrationForm.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/app/register/page.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/shopping-cart/components/EmptyCart.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/shopping-cart/components/OrderSummary.tsx(5,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/shopping-cart/components/ShoppingCartInteractive.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/shopping-cart/page.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+src/app/user-profile/components/OrderHistoryTab.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/app/user-profile/components/UserProfileInteractive.tsx(4,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/common/BottomNavigation.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/BottomNavigation.tsx(5,29): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/common/BreadcrumbTrail.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/BreadcrumbTrail.tsx(5,29): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/common/BreadcrumbTrail.tsx(44,20): error TS7006: Parameter 'path' implicitly has an 'any' type.
+src/components/common/CartIndicator.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/Footer.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/Header.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/Header.tsx(5,29): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/common/UserMenu.tsx(4,18): error TS2307: Cannot find module 'next/link' or its corresponding type declarations.
+src/components/common/UserMenu.tsx(5,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/features/CakeConfigurator.tsx(5,27): error TS2307: Cannot find module 'next/navigation' or its corresponding type declarations.
+src/components/ui/AppImage.tsx(4,19): error TS2307: Cannot find module 'next/image' or its corresponding type declarations.

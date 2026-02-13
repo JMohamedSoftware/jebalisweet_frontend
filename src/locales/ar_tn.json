@@ -1,0 +1,239 @@
+{
+    "nav": {
+        "home": "الرئيسية",
+        "products": "السلع",
+        "account": "حسابي",
+        "login": "دخول",
+        "profile": "حسابي",
+        "orders": "طلبياتي",
+        "admin": "الإدارة",
+        "delivery": "فضاء الموصل",
+        "logout": "خروج",
+        "language": "اللغة",
+        "user": "مستعمل"
+    },
+    "home": {
+        "hero": {
+            "title": "ذوق البنة متع جبالي سويت",
+            "subtitle": "جبالي سويت يقدم لك أحسن ما يتآكل مالشكلاطة، الحلو، قاتو و باتيسري أرتيزانال مصنوعة ببرشة حب وخبرة.",
+            "cta": "شوف السلع متاعنا"
+        },
+        "categories": {
+            "title": "الأصناف متاعنا",
+            "subtitle": "شوف المجموعة الكاملة متع الحلو متاعنا",
+            "empty": "حتى صنف ما لقيناه.",
+            "descriptionDefault": "شوف أحسن ما عندنا من {category}."
+        },
+        "featured": {
+            "title": "السلع الأكثر مبيعا",
+            "subtitle": "شوف أحسن ما يتباع متاعنا والجديد",
+            "empty": "حتى سلعة مشهورة توة."
+        },
+        "promo": {
+            "title": "أوفير سبيسيال راس العام",
+            "subtitle": "بروفيتي بـ 20% ركسيون على الشكلاطة الكل حتى لـ 31 ديسمبر",
+            "cta": "شوف العروض"
+        },
+        "testimonials": {
+            "title": "آش قالوا الكليونات متاعنا",
+            "subtitle": "شوف رأي الكليونات متاعنا إلي فرحانين بينا",
+            "empty": "حتى كلمة من كليوناتنا توة."
+        },
+        "trust": {
+            "shipping": {
+                "title": "توصيل فيسع فيسع",
+                "description": "التوصيل بلاش ملفوق الـ 50د"
+            },
+            "quality": {
+                "title": "جودة مضمونة",
+                "description": "سلعة أرتيزانال متبعة"
+            },
+            "payment": {
+                "title": "خلاص مأمن",
+                "description": "100% مأمن"
+            }
+        }
+    },
+    "common": {
+        "loading": "قاعد يشرجي...",
+        "error": "فما مشكلة صارت",
+        "confirmDelete": "ثابت تحب تفسخها؟"
+    },
+    "catalog": {
+        "title": "السلع",
+        "subtitle": "شوف أحسن ما عندنا من حلويات",
+        "filters": {
+            "title": "فيلترات",
+            "reset": "رجّع من لول",
+            "categories": "الأصناف",
+            "price": "السوم",
+            "brands": "المركات",
+            "stockOnly": "إلي موجودين توة بركة",
+            "all": "الكل"
+        },
+        "sort": {
+            "relevance": "بالأهمية",
+            "priceAsc": "من الرخيص للغالي",
+            "priceDesc": "من الغالي للرخيص",
+            "newest": "الجديد",
+            "bestsellers": "الأكثر مبيعا"
+        },
+        "customCake": {
+            "title": "تحب قاتو سبيسيال؟",
+            "subtitle": "اصنع قاتو أحلامك بيدك.",
+            "cta": "نحب نصنع القاتو متاعي",
+            "exclusive": "حاجة خاصة"
+        },
+        "quickView": "نظرة خفيفة",
+        "addToCart": "زيد للحكة",
+        "outOfStock": "وفات السلعة",
+        "popularProducts": "السلع الأكثر مبيعا"
+    },
+    "quickView": {
+        "title": "نظرة خفيفة",
+        "close": "سكر",
+        "outOfStock": "وفات السلعة",
+        "inStock": "موجودة",
+        "reviews": "أراء",
+        "category": "الصنف"
+    },
+    "product": {
+        "outOfStock": "وفات السلعة",
+        "addToCart": "زيد",
+        "addToCartAria": "زيد {productName} للحكة",
+        "quickViewProduct": "نظرة خفيفة على {productName}",
+        "customCakeCategory": "Gâteaux"
+    },
+    "admin": {
+        "orders": {
+            "title": "إدارة الطلبيات",
+            "count": "{count} طلبيات جملة",
+            "searchPlaceholder": "لوج بالرقم، الاسم ولا الإيميل...",
+            "backHome": "ارجع للرئيسية",
+            "status": {
+                "all": "الكل",
+                "pending": "قيد الانتظار",
+                "pending_quote": "في استراحة لمراجعة السعر",
+                "confirmed": "موافقة",
+                "assigned": "معطاة لموصل",
+                "in_delivery": "قاعدين نوصلوا",
+                "delivered": "وصلت",
+                "cancelled": "ملغية"
+            },
+            "itemsTable": {
+                "title": "السلع إلي مطلوبة:",
+                "priceToQuote": "لازم سوم",
+                "unitPrice": "السوم",
+                "confirmQuote": "وافق على السوم",
+                "note": "ملاحظة الكليون:",
+                "inspiration": "التصويرة:",
+                "viewFull": "شوفها كبيرة"
+            },
+            "shipping": {
+                "address": "عنوان التوصيل:",
+                "driver": "الموصل الحاضر:"
+            },
+            "actions": {
+                "confirm": "وافق",
+                "assign": "اعطي لموصل",
+                "delivered": "وصلت",
+                "details": "تفاصيل",
+                "cancel": "بطل"
+            },
+            "statusLabel": "الوضعية:",
+            "confirmDelivered": "ثابت تحب تحطها وصلت؟",
+            "noResults": "حتى طلبية ما فمة",
+            "selectDriver": "اختار موصل",
+            "quantity": "الكمية",
+            "total": "المجموع",
+            "modal": {
+                "title": "تفاصيل الطلبية",
+                "items": "السلع",
+                "shipping": "التوصيل",
+                "payment": "الخلاص"
+            }
+        },
+        "testimonials": {
+            "title": "إدارة آراء الكليونات",
+            "subtitle": "زيد ولا فصخ آراء الكليونات إلي يظهروا في الصفحة الرئيسية",
+            "backToDashboard": "ارجع للإدارة",
+            "newTitle": "رأي جديد",
+            "clientName": "اسم الكليون",
+            "location": "البلاصة",
+            "rating": "العدد (1-5)",
+            "comment": "الرأي",
+            "placeholderName": "مثال: مريم ديبوا",
+            "placeholderLocation": "مثال: تونس العاصمة",
+            "placeholderComment": "أكتب الرأي هنا...",
+            "add": "زيد",
+            "empty": "حتى رأي ما لقيناه. زيد واحد!",
+            "stars": "نجوم",
+            "successAdd": "الرأي تزاد بنجاح!",
+            "errorAdd": "مشكلة صارت و الرأي ما تزادش.",
+            "errorDelete": "مشكلة صارت و الرأي ما تفسخش."
+        },
+        "dashboard": {
+            "totalSales": "جملة المبيعات",
+            "orders": "الطلبيات",
+            "products": "السلع",
+            "customers": "الكليونات"
+        },
+        "productManagement": {
+            "title": "إدارة السلع",
+            "count": "{count} سلعة جملة",
+            "addProduct": "زيد سلعة",
+            "searchPlaceholder": "لوج على سلعة...",
+            "allCategories": "كل الأصناف",
+            "inStock": "موجودة",
+            "outOfStock": "وفات",
+            "stock": "الموجود",
+            "modifier": "بدل",
+            "delete": "فصخ",
+            "noResults": "حتى سلعة ما فمة",
+            "modal": {
+                "addTitle": "زيد سلعة جديدة",
+                "editTitle": "بدل السلعة",
+                "name": "اسم السلعة *",
+                "description": "الوصف *",
+                "price": "السوم (د.ت) *",
+                "stockQuantity": "قداش فمة في الستوك *",
+                "category": "الصنف *",
+                "brand": "الماركة *",
+                "imagePreview": "التصويرة",
+                "imageUrl": "رابط التصويرة (URL)",
+                "imageHelp": "حط رابط ولا طلع تصويرة من عندك.",
+                "upload": "ولا طلع تصويرة من الحاسوب",
+                "alt": "وصف التصويرة",
+                "inStockCheck": "السلعة موجودة",
+                "isFeaturedCheck": "سلعة مشهورة (الأكثر مبيعا)",
+                "submitAdd": "زيد",
+                "submitEdit": "بدل",
+                "cancel": "بطل",
+                "noImage": "حتى تصويرة ما فمة"
+            }
+        }
+    },
+    "cart": {
+        "title": "الحكة متاعي",
+        "continueShopping": "كمل قضياتك",
+        "freeShippingInfo": "توصيل بلاش ملفوق الـ {threshold} د.ت",
+        "empty": {
+            "title": "الحكة متاعك فارغة",
+            "subtitle": "شوف أحسن ما عندنا و ابدا قضياتك",
+            "cta": "شوف السلع متاعنا"
+        },
+        "summary": {
+            "title": "ملخص الطلبية",
+            "subtotal": "المجموع",
+            "shipping": "التوصيل",
+            "discount": "تخفيض",
+            "total": "المجموع الجملي",
+            "promoCode": "كود برومو",
+            "apply": "استعمل",
+            "invalidCode": "الكود غالط",
+            "successCode": "الكود {code} تخدم !",
+            "checkout": "خلص توة",
+            "customNote": "ثبت إلي السلع إلي تصنعوا باليد ياخذوا شوية وقت."
+        }
+    }
+}

@@ -1,0 +1,258 @@
+{
+    "nav": {
+        "home": "Accueil",
+        "products": "Produits",
+        "account": "Mon Compte",
+        "login": "Connexion",
+        "profile": "Mon Profil",
+        "orders": "Mes Commandes",
+        "admin": "Administration",
+        "delivery": "Espace Livreur",
+        "logout": "Déconnexion",
+        "language": "Langue",
+        "user": "Utilisateur"
+    },
+    "home": {
+        "hero": {
+            "title": "Découvrez l'Excellence Sucrée",
+            "subtitle": "Jebali Sweet vous propose une sélection raffinée de chocolats, bonbons, gâteaux et pâtisseries artisanales préparés avec passion et savoir-faire.",
+            "cta": "Découvrir nos produits"
+        },
+        "categories": {
+            "title": "Nos Catégories",
+            "subtitle": "Explorez notre gamme complète de produits sucrés artisanaux",
+            "empty": "Aucune catégorie trouvée.",
+            "descriptionDefault": "Découvrez notre sélection de {category}."
+        },
+        "featured": {
+            "title": "Produits Populaires",
+            "subtitle": "Découvrez nos meilleures ventes et nouveautés",
+            "empty": "Aucun produit populaire pour le moment."
+        },
+        "promo": {
+            "title": "Offre Spéciale Noël",
+            "subtitle": "Profitez de 20% de réduction sur tous nos chocolats et coffrets cadeaux",
+            "cta": "Voir les offres"
+        },
+        "testimonials": {
+            "title": "Ce Que Disent Nos Clients",
+            "subtitle": "Découvrez les avis de nos clients satisfaits",
+            "empty": "Aucun témoignage pour le moment."
+        },
+        "trust": {
+            "shipping": {
+                "title": "Livraison Rapide",
+                "description": "Gratuite dès 50 DT"
+            },
+            "quality": {
+                "title": "Qualité Garantie",
+                "description": "Produits artisanaux"
+            },
+            "payment": {
+                "title": "Paiement Sécurisé",
+                "description": "100% sécurisé"
+            }
+        }
+    },
+    "common": {
+        "loading": "Chargement...",
+        "error": "Une erreur est survenue",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?"
+    },
+    "catalog": {
+        "title": "Catalogue",
+        "subtitle": "Découvrez nos douceurs authentiques",
+        "filters": {
+            "title": "Filtres",
+            "reset": "Réinitialiser",
+            "categories": "Catégories",
+            "price": "Prix",
+            "brands": "Marques",
+            "stockOnly": "En stock uniquement",
+            "all": "Tous"
+        },
+        "sort": {
+            "relevance": "Pertinence",
+            "priceAsc": "Prix croissant",
+            "priceDesc": "Prix décroissant",
+            "newest": "Nouveautés",
+            "bestsellers": "Meilleures ventes"
+        },
+        "customCake": {
+            "title": "Besoin d'un gâteau unique ?",
+            "subtitle": "Créez le gâteau de vos rêves.",
+            "cta": "Personnaliser mon gâteau",
+            "exclusive": "Exclusivité"
+        },
+        "quickView": "Aperçu rapide",
+        "addToCart": "Ajouter au panier",
+        "outOfStock": "Rupture de stock",
+        "popularProducts": "Produits populaires"
+    },
+    "quickView": {
+        "title": "Aperçu rapide",
+        "close": "Fermer l'aperçu",
+        "outOfStock": "Rupture de stock",
+        "inStock": "En stock",
+        "reviews": "avis",
+        "category": "Catégorie"
+    },
+    "product": {
+        "outOfStock": "Rupture de stock",
+        "addToCart": "Ajouter",
+        "addToCartAria": "Ajouter {productName} au panier",
+        "quickViewProduct": "Aperçu rapide de {productName}",
+        "customCakeCategory": "Gâteaux"
+    },
+    "admin": {
+        "orders": {
+            "title": "Gestion des Commandes",
+            "count": "{count} commande(s) au total",
+            "searchPlaceholder": "Rechercher par numéro, nom ou email...",
+            "backHome": "Retour à l'accueil",
+            "status": {
+                "all": "Tous",
+                "pending": "En attente",
+                "pending_quote": "Devis en attente",
+                "confirmed": "Confirmée",
+                "assigned": "Assignée",
+                "in_delivery": "En livraison",
+                "delivered": "Livrée",
+                "cancelled": "Annulée"
+            },
+            "itemsTable": {
+                "title": "Articles commandés :",
+                "priceToQuote": "À DEVISER",
+                "unitPrice": "Prix unit.",
+                "confirmQuote": "Confirmer le Devis",
+                "note": "Note Client :",
+                "inspiration": "Inspiration :",
+                "viewFull": "Voir en plein écran"
+            },
+            "shipping": {
+                "address": "Adresse de livraison :",
+                "driver": "Livreur assigné :"
+            },
+            "actions": {
+                "confirm": "Confirmer",
+                "assign": "Assigner livreur",
+                "delivered": "Livrée",
+                "details": "Détails",
+                "cancel": "Annuler"
+            },
+            "statusLabel": "Statut :",
+            "confirmDelivered": "Confirmer la livraison ?",
+            "noResults": "Aucune commande trouvée",
+            "selectDriver": "Sélectionner un livreur",
+            "quantity": "Quantité",
+            "total": "Total",
+            "modal": {
+                "title": "Détails de la commande",
+                "items": "Articles",
+                "shipping": "Livraison",
+                "payment": "Paiement"
+            }
+        },
+        "testimonials": {
+            "title": "Gestion des Témoignages",
+            "subtitle": "Ajoutez ou supprimez les avis clients affichés sur la page d'accueil",
+            "backToDashboard": "Retour Dashboard",
+            "newTitle": "Nouveau Témoignage",
+            "clientName": "Nom du client",
+            "location": "Localisation",
+            "rating": "Note (1-5)",
+            "comment": "Commentaire",
+            "placeholderName": "ex: Marie Dubois",
+            "placeholderLocation": "ex: Paris, France",
+            "placeholderComment": "Contenu du témoignage...",
+            "add": "Ajouter",
+            "empty": "Aucun témoignage trouvé. Ajoutez-en un !",
+            "stars": "Étoiles",
+            "successAdd": "Témoignage ajouté avec succès !",
+            "errorAdd": "Erreur lors de l’ajout du témoignage.",
+            "errorDelete": "Erreur lors de la suppression."
+        },
+        "dashboard": {
+            "totalSales": "Ventes Totales",
+            "orders": "Commandes",
+            "products": "Produits",
+            "customers": "Clients"
+        },
+        "productManagement": {
+            "title": "Gestion des Produits",
+            "count": "{count} produit(s) au total",
+            "addProduct": "Ajouter un produit",
+            "searchPlaceholder": "Rechercher un produit...",
+            "allCategories": "Toutes les catégories",
+            "inStock": "En stock",
+            "outOfStock": "Rupture",
+            "stock": "Stock",
+            "modifier": "Modifier",
+            "delete": "Supprimer",
+            "noResults": "Aucun produit trouvé",
+            "modal": {
+                "addTitle": "Ajouter un produit",
+                "editTitle": "Modifier le produit",
+                "name": "Nom du produit *",
+                "description": "Description *",
+                "price": "Prix (DT) *",
+                "stockQuantity": "Quantité en stock *",
+                "category": "Catégorie *",
+                "brand": "Marque *",
+                "imagePreview": "Aperçu de l'image",
+                "imageUrl": "Lien de l'image (URL)",
+                "imageHelp": "Collez ici un lien direct ou téléchargez un fichier.",
+                "upload": "Ou télécharger un fichier local",
+                "alt": "Texte alternatif de l'image",
+                "inStockCheck": "Produit en stock",
+                "isFeaturedCheck": "Produit Populaire (Vedette)",
+                "submitAdd": "Ajouter",
+                "submitEdit": "Mettre à jour",
+                "cancel": "Annuler",
+                "noImage": "Aucune image sélectionnée"
+            }
+        }
+    },
+    "cart": {
+        "title": "Mon Panier",
+        "continueShopping": "Continuer les achats",
+        "freeShippingInfo": "Livraison gratuite dès {threshold} DT",
+        "empty": {
+            "title": "Votre panier est vide",
+            "subtitle": "Découvrez nos délicieuses douceurs et commencez vos achats",
+            "cta": "Découvrir nos produits"
+        },
+        "summary": {
+            "title": "Résumé de la commande",
+            "subtotal": "Sous-total",
+            "shipping": "Livraison",
+            "discount": "Remise",
+            "total": "Total",
+            "promoCode": "Code promo",
+            "apply": "Appliquer",
+            "invalidCode": "Code promotionnel invalide",
+            "successCode": "Code {code} appliqué !",
+            "checkout": "Passer à la caisse",
+            "customNote": "Veuillez noter que les articles personnalisés peuvent nécessiter un délai supplémentaire."
+        }
+    },
+    "footer": {
+        "about": {
+            "title": "À Propos",
+            "description": "Jebali Sweet est votre destination privilégiée pour des douceurs artisanales de haute qualité, alliant tradition et innovation sucrée."
+        },
+        "links": {
+            "title": "Liens Rapides",
+            "catalog": "Catalogue",
+            "account": "Mon Compte",
+            "orders": "Mes Commandes"
+        },
+        "contact": {
+            "title": "Contact"
+        },
+        "social": {
+            "title": "Suivez-nous"
+        },
+        "copy": "Tous droits réservés"
+    }
+}

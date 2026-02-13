@@ -1,0 +1,277 @@
+'use client';
+
+import React, { useState } from 'react';
+import Icon from '@/components/ui/AppIcon';
+import { API_ENDPOINT } from '@/config/api';
+
+interface Account {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone?: string;
+    role: string;
+}
+
+interface ForgotPasswordWizardProps {
+    onClose: () => void;
+    onSuccess?: () => void;
+}
+
+const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps) => {
+    const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
+    const [email, setEmail] = useState('');
+    const [otp, setOtp] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+
+    // Step 1: Find account by email
+    const handleFindAccount = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        try {
+            // Check if email exists
+            const res = await fetch(`${API_ENDPOINT}/auth/check-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.message || 'Email non trouvé');
+
+            // If account found, move to OTP step immediately
+            // We don't need to select account since email is unique
+            const account: Account = {
+                id: data.user.id,
+                firstName: data.user.firstName,
+                lastName: data.user.lastName,
+                email: data.user.email,
+                phone: data.user.phone,
+                role: 'client' // Default role or from API
+            };
+
+            setSelectedAccount(account);
+            await sendOTP(account.email);
+            setStep(2); // Skip account selection step as email is unique
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Step 2 helper: Send OTP
+    const sendOTP = async (userEmail: string) => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_ENDPOINT}/auth/forgot-password/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userEmail }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+
+            // If in development mode and OTP is returned, log it to console (but don't auto-fill)
+            if (data.development && data.otp) {
+                console.log('🔐 Mode développement - Code OTP:', data.otp);
+            }
+            // Success, move to step 3 (handled by caller if manual selection)
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Step 2: Verify OTP
+    const handleVerifyOTP = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch(`${API_ENDPOINT}/auth/forgot-password/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: selectedAccount?.id, otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            setStep(3);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Step 4: Reset Password
+    const handleResetPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            setError('Les mots de passe ne correspondent pas');
+            return;
+        }
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch(`${API_ENDPOINT}/auth/forgot-password/reset`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: selectedAccount?.id, otp, newPassword }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+
+            alert('Mot de passe modifié avec succès !');
+            if (onSuccess) onSuccess();
+            else onClose(); // Close wizard if no onSuccess provided
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
+                <div className="p-6">
+                    <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Icon name="key" className="w-8 h-8 text-primary" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">Mot de passe oublié</h2>
+                        <p className="text-sm text-muted-foreground mt-2">
+                            {step === 1 && "Entrez votre email pour recevoir un code de récupération."}
+                            {step === 2 && "Un code de vérification a été envoyé."}
+                            {step === 3 && "Créez votre nouveau mot de passe."}
+                        </p>
+                    </div>
+
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                            <Icon name="alert-circle" className="w-4 h-4 shrink-0" />
+                            {error}
+                        </div>
+                    )}
+
+                    {step === 1 && (
+                        <form onSubmit={handleFindAccount} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Email
+                                </label>
+                                <div className="relative">
+                                    <Icon name="mail" className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                        placeholder="exemple@email.com"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                            >
+                                {loading ? 'Recherche...' : 'Continuer'}
+                            </button>
+                        </form>
+                    )}
+
+                    {step === 2 && (
+                        <form onSubmit={handleVerifyOTP} className="space-y-4">
+                            <p className="text-sm text-muted-foreground text-center">
+                                Un code a été envoyé à <strong>{email}</strong>
+                            </p>
+                            <p className="text-xs text-warning bg-warning/10 p-2 rounded border border-warning/30 text-center">
+                                💡 Mode dev : Voir console serveur pour le code
+                            </p>
+                            <input
+                                type="text"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                placeholder="Code à 6 chiffres"
+                                className="w-full p-3 rounded-lg border border-input text-center tracking-widest text-lg"
+                                maxLength={6}
+                                required
+                            />
+                            <button type="submit" disabled={loading} className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold">
+                                {loading ? 'Vérifier le code' : 'Vérifier le code'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => sendOTP(email)}
+                                disabled={loading}
+                                className="w-full py-2 text-sm text-primary hover:text-primary/80 transition-smooth underline"
+                            >
+                                Renvoyer le code
+                            </button>
+                        </form>
+                    )}
+
+                    {step === 3 && (
+                        <form onSubmit={handleResetPassword} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nouveau mot de passe
+                                </label>
+                                <input
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="w-full p-2 rounded-lg border border-gray-300"
+                                    placeholder="••••••••"
+                                    required
+                                    minLength={6}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Confirmer le mot de passe
+                                </label>
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full p-2 rounded-lg border border-gray-300"
+                                    placeholder="••••••••"
+                                    required
+                                    minLength={6}
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold"
+                            >
+                                {loading ? 'Modification...' : 'Modifier le mot de passe'}
+                            </button>
+                        </form>
+                    )}
+
+                    <button
+                        onClick={onClose}
+                        className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ForgotPasswordWizard;
