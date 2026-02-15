@@ -79,10 +79,6 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
 
-            // If in development mode and OTP is returned, log it to console (but don't auto-fill)
-            if (data.development && data.otp) {
-                console.log('🔐 Mode développement - Code OTP:', data.otp);
-            }
             // Success, move to step 3 (handled by caller if manual selection)
         } catch (err: any) {
             setError(err.message);
@@ -195,9 +191,6 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                         <form onSubmit={handleVerifyOTP} className="space-y-4">
                             <p className="text-sm text-muted-foreground text-center">
                                 Un code a été envoyé à <strong>{email}</strong>
-                            </p>
-                            <p className="text-xs text-warning bg-warning/10 p-2 rounded border border-warning/30 text-center">
-                                💡 Mode dev : Voir console serveur pour le code
                             </p>
                             <input
                                 type="text"

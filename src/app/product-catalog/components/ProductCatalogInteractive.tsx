@@ -25,32 +25,47 @@ interface Product {
   category: string;
   brand: string;
   inStock: boolean;
+  stockQuantity?: number;
+  priceUnit?: string;
 }
 
-const ProductCatalogInteractive = () => {
+interface ProductCatalogInteractiveProps {
+  initialData?: {
+    products: Product[];
+    categories: string[];
+    brands: string[];
+    maxPrice: number;
+    totalPages: number;
+    total: number;
+  };
+}
+
+const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractiveProps) => {
   const router = useRouter();
   const { t } = useLanguage();
   const [isHydrated, setIsHydrated] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
-  const [maxPrice, setMaxPrice] = useState(100);
+  const [products, setProducts] = useState<Product[]>(initialData?.products || []);
+  const [categories, setCategories] = useState<string[]>(initialData?.categories || []);
+  const [brands, setBrands] = useState<string[]>(initialData?.brands || []);
+  const [maxPrice, setMaxPrice] = useState(initialData?.maxPrice || 100);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [responseTotal, setResponseTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(initialData?.totalPages || 1);
+  const [responseTotal, setResponseTotal] = useState(initialData?.total || 0);
   const ITEMS_PER_PAGE = 8;
 
   const [selectedCategory, setSelectedCategory] = useState(CATEGORY_ALL);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, initialData?.maxPrice || 100]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!initialData);
   const searchParams = useSearchParams();
   const hasInitialized = useRef(false);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -78,6 +93,14 @@ const ProductCatalogInteractive = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      // Skip fetching on mount if we already have initial data
+      if (isFirstRender.current && initialData) {
+        isFirstRender.current = false;
+        setIsHydrated(true);
+        setIsLoading(false);
+        return;
+      }
+
       setIsLoading(true);
       try {
         const filters = {
@@ -86,15 +109,17 @@ const ProductCatalogInteractive = () => {
           minPrice: priceRange[0],
           maxPrice: priceRange[1],
           inStock: showInStockOnly,
-          sortBy: sortBy
+          sortBy: sortBy,
+          search: searchQuery
         };
-        console.log('Fetching products with filters:', filters); // DEBUG LOG
         const response = await api.products.getAll(currentPage, ITEMS_PER_PAGE, filters);
         setProducts(response.products.map((p: any) => ({
           ...p,
           id: (p._id || p.id).toString(),
-          inStock: p.inStock !== false,
-          category: p.categoryName || (p.category && p.category.name) || p.category
+          stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
+          inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
+          category: p.categoryName || (p.category && p.category.name) || p.category,
+          priceUnit: p.priceUnit || 'pièce',
         })));
         setTotalPages(response.totalPages || 1);
         setResponseTotal(response.total || 0);
@@ -111,10 +136,11 @@ const ProductCatalogInteractive = () => {
       } finally {
         setIsHydrated(true);
         setIsLoading(false);
+        isFirstRender.current = false;
       }
     };
     loadData();
-  }, [currentPage, selectedCategory, selectedBrands, priceRange, showInStockOnly, categories.length, sortBy]);
+  }, [currentPage, selectedCategory, selectedBrands, priceRange, showInStockOnly, sortBy, searchQuery, initialData]);
 
   const handleAddToCart = async (product: Product) => {
     if (!localStorage.getItem('user')) {
@@ -124,7 +150,6 @@ const ProductCatalogInteractive = () => {
     try {
       await api.cart.add(product.id, 1);
       window.dispatchEvent(new Event('cartUpdated'));
-      // Optional: Add a subtle alert or toast here if needed
     } catch (error: any) {
       console.error('Cart error:', error);
       if (error.message.includes('Token') || error.message.includes('Accès refusé')) {
@@ -136,9 +161,7 @@ const ProductCatalogInteractive = () => {
     }
   };
 
-  // Client-side sorting removed as it's now handled by the backend
-
-  if (!isHydrated) return <LoadingSkeleton />;
+  if (!isHydrated && !initialData) return <LoadingSkeleton />;
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -148,7 +171,14 @@ const ProductCatalogInteractive = () => {
       </div>
 
       <div className="mb-6">
-        <SortControls sortBy={sortBy} onSortChange={(s) => { setSortBy(s); setCurrentPage(1); }} onToggleFilters={() => setIsMobileFiltersOpen(true)} isMobileFiltersOpen={isMobileFiltersOpen} />
+        <SortControls
+          sortBy={sortBy}
+          onSortChange={(s) => { setSortBy(s); setCurrentPage(1); }}
+          onToggleFilters={() => setIsMobileFiltersOpen(true)}
+          isMobileFiltersOpen={isMobileFiltersOpen}
+          searchQuery={searchQuery}
+          onSearchChange={(q) => { setSearchQuery(q); setCurrentPage(1); }}
+        />
       </div>
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-6">
@@ -184,7 +214,7 @@ const ProductCatalogInteractive = () => {
 
           {isLoading ? <LoadingSkeleton /> : (
             <div className="space-y-8 animate-in fade-in duration-500">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 <ProductGrid products={products} onAddToCart={handleAddToCart} onQuickView={setSelectedProduct} />
               </div>
               {totalPages > 1 && (

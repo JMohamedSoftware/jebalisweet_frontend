@@ -28,6 +28,7 @@ interface Product {
   alt: string;
   category: string;
   inStock: boolean;
+  stockQuantity?: number;
 }
 
 interface Testimonial {
@@ -89,7 +90,8 @@ const HomepageInteractive = () => {
         const mappedProducts = prods.map((p: any) => ({
           ...p,
           id: p.id || p._id,
-          inStock: p.inStock !== false,
+          stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
+          inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
           category: p.categoryName || (p.category && p.category.name) || "Général",
         }));
         setFeaturedProducts(mappedProducts);
@@ -189,7 +191,7 @@ const HomepageInteractive = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {featuredProducts.length > 0 ? (
               featuredProducts.map((product) =>
                 <ProductCard

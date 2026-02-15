@@ -1,0 +1,6 @@
+node_modules/@humanwhocodes/config-array -> 0.11.14
+node_modules/@humanwhocodes/object-schema -> 2.0.3
+node_modules/@next/eslint-plugin-next/node_modules/glob -> 10.3.10
+node_modules/glob -> 7.2.3
+node_modules/inflight -> 1.0.6
+node_modules/rimraf -> 3.0.2

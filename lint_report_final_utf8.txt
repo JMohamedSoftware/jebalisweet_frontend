@@ -1,0 +1,47 @@
+﻿
+> jebali-sweet@0.1.0 lint
+> eslint src/
+
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\admin-promotion-management\components\AdminPromotionManagementInteractive.tsx
+  299:23  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\orders\components\OrderHistoryInteractive.tsx
+  217:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  239:35  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  239:50  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\product-catalog\components\ProductCatalogInteractive.tsx
+  229:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\register\components\RegistrationForm.tsx
+  586:20  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  588:43  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\user-profile\components\AddressBookTab.tsx
+  213:85  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\user-profile\components\OrderHistoryTab.tsx
+  103:57  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\user-profile\components\PreferencesTab.tsx
+  177:53  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\app\user-profile\components\UserProfileInteractive.tsx
+  244:65  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\components\common\Header.tsx
+  107:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\components\features\CakeConfigurator.tsx
+  106:34  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  125:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\User\Desktop\jebalisweet\jebalisweet_frontend\src\components\ui\AppImage.tsx
+   94:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  109:7   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  142:9   warning  Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                              jsx-a11y/alt-text
+  147:10  warning  Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                              jsx-a11y/alt-text
+
+Ô£û 18 problems (10 errors, 8 warnings)
+

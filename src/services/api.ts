@@ -58,6 +58,7 @@ export const api = {
                 if (filters.featured) params.append('featured', 'true');
                 if (filters.sortBy) params.append('sortBy', filters.sortBy);
                 if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+                if (filters.search) params.append('search', filters.search);
             }
 
             return fetch(`${API_BASE_URL}/products?${params.toString()}`, { headers: getPublicHeaders() }).then(handleResponse);
@@ -174,6 +175,15 @@ export const api = {
                 method: 'PUT',
                 headers: getAuthHeaders(),
                 body: JSON.stringify({ status })
+            }).then(handleResponse),
+        getAll: () =>
+            fetch(`${API_BASE_URL}/users`, {
+                headers: getAuthHeaders()
+            }).then(handleResponse),
+        delete: (userId: string | number) =>
+            fetch(`${API_BASE_URL}/users/${userId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
             }).then(handleResponse),
     },
     files: {

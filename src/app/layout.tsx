@@ -8,17 +8,49 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'Jebali Sweet - Pâtisserie & Chocolaterie Fine par Chef Aida Jebali',
+  metadataBase: new URL('https://jebalisweet.tn'),
+  title: {
+    default: 'Jebali Sweet - Pâtisserie & Chocolaterie Fine par Chef Aida Jebali',
+    template: '%s | Jebali Sweet'
+  },
   description: 'Découvrez les délices de Jebali Sweet : chocolats artisanaux, gâteaux personnalisés et salés raffinés par Chef Aida Jebali en Tunisie. Qualité premium pour tous vos événements.',
   keywords: 'chef aida jebali, aida jebali, jebali sweet, jebali sweet tunisie, pâtisserie tunisie, chocolat artisanal, gâteau sur mesure, gâteau anniversaire, salés tunisiens, pâtisserie fine, jebalisweet.tn, commande gâteau en ligne',
   authors: [{ name: 'Chef Aida Jebali' }],
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
     title: 'Jebali Sweet - Pâtisserie & Chocolaterie Fine par Chef Aida Jebali',
     description: 'Chocolats artisanaux, gâteaux personnalisés et salés raffinés en Tunisie.',
     url: 'https://jebalisweet.tn',
     siteName: 'Jebali Sweet',
+    images: [
+      {
+        url: '/og-image.jpg', // Ensure this exists or fallback to a default
+        width: 1200,
+        height: 630,
+        alt: 'Jebali Sweet - Pâtisserie Fine',
+      },
+    ],
     locale: 'fr_FR',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jebali Sweet - Pâtisserie Fine',
+    description: 'Chocolats artisanaux et gâteaux personnalisés en Tunisie.',
+    images: ['/og-image.jpg'],
   },
   icons: {
     icon: [
@@ -38,9 +70,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
         </LanguageProvider>
-
-        <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fjebaliswe9208back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.12" />
-        <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2" /></body>
+      </body>
     </html>
   );
 }

@@ -72,30 +72,30 @@ const QuickViewModal = ({
       onClick={handleBackdropClick}
     >
       <div className="bg-card rounded-lg shadow-warm-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-slide-up">
-        <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between z-10">
-          <h2 className="font-heading text-xl font-semibold text-foreground">
+        <div className="sticky top-0 bg-card/95 backdrop-blur-md border-b border-border/50 p-4 flex items-center justify-between z-20">
+          <h2 className="font-heading text-lg sm:text-xl font-bold text-foreground">
             {t('quickView.title')}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg transition-smooth hover:bg-muted focus:outline-none focus:ring-3 focus:ring-ring"
+            className="p-2.5 rounded-full bg-muted/50 hover:bg-muted text-foreground transition-all active:scale-90"
             aria-label={t('quickView.close')}
           >
-            <Icon name="XMarkIcon" size={24} className="text-foreground" />
+            <Icon name="XMarkIcon" size={20} className="sm:w-6 sm:h-6" />
           </button>
         </div>
 
         <div className="p-6">
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="relative h-96 rounded-lg overflow-hidden bg-muted">
+            <div className="relative h-64 sm:h-96 rounded-2xl overflow-hidden bg-muted shadow-inner">
               <AppImage
                 src={product.image}
                 alt={product.alt}
                 className="w-full h-full object-cover"
               />
               {!product.inStock && (
-                <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-                  <span className="bg-error text-error-foreground px-6 py-3 rounded-lg font-semibold text-lg">
+                <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center">
+                  <span className="bg-error text-error-foreground px-6 py-3 rounded-xl font-bold text-lg shadow-lg">
                     {t('quickView.outOfStock')}
                   </span>
                 </div>
@@ -103,12 +103,14 @@ const QuickViewModal = ({
             </div>
 
             <div className="space-y-6">
-              <div className="space-y-2">
-                <p className="caption text-muted-foreground">{product.brand}</p>
-                <h3 className="font-heading text-3xl font-bold text-foreground">
-                  {product.name}
-                </h3>
-                <p className="text-muted-foreground">{product.description}</p>
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <p className="caption text-muted-foreground font-medium uppercase tracking-wider">{product.brand}</p>
+                  <h3 className="font-heading text-2xl sm:text-3xl font-black text-foreground leading-tight">
+                    {product.name}
+                  </h3>
+                </div>
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">{product.description}</p>
               </div>
 
               <div className="flex items-center gap-3">

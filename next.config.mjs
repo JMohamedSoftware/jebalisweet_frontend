@@ -42,6 +42,7 @@ const nextConfig = {
       },
     ];
   },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.(jsx|tsx)$/,
@@ -52,6 +53,7 @@ const nextConfig = {
     });
     return config;
   },
+
 };
 
 export default nextConfig;

@@ -21,6 +21,7 @@ interface Product {
   inStock: boolean;
   stockQuantity: number;
   isFeatured: boolean;
+  priceUnit: string;
 }
 
 interface ProductFormData {
@@ -34,6 +35,7 @@ interface ProductFormData {
   inStock: boolean;
   stockQuantity: string;
   isFeatured: boolean;
+  priceUnit: string;
 }
 
 const AdminProductManagementInteractive = () => {
@@ -54,6 +56,7 @@ const AdminProductManagementInteractive = () => {
     inStock: true,
     stockQuantity: '0',
     isFeatured: false,
+    priceUnit: 'pièce',
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState(CATEGORY_ALL);
@@ -80,7 +83,8 @@ const AdminProductManagementInteractive = () => {
         brand: p.brand || 'Jebali Sweet',
         inStock: p.inStock ?? (p.stockQuantity > 0),
         stockQuantity: p.stockQuantity || 0,
-        isFeatured: p.isFeatured || false
+        isFeatured: p.isFeatured || false,
+        priceUnit: p.priceUnit || 'pièce'
       }));
       setProducts(mappedProducts);
 
@@ -132,6 +136,7 @@ const AdminProductManagementInteractive = () => {
         inStock: product.inStock,
         stockQuantity: product.stockQuantity.toString(),
         isFeatured: product.isFeatured,
+        priceUnit: product.priceUnit || 'pièce',
       });
     } else {
       setEditingProduct(null);
@@ -146,6 +151,7 @@ const AdminProductManagementInteractive = () => {
         inStock: true,
         stockQuantity: '0',
         isFeatured: false,
+        priceUnit: 'pièce',
       });
     }
     setIsModalOpen(true);
@@ -194,7 +200,8 @@ const AdminProductManagementInteractive = () => {
       brand: formData.brand,
       stockQuantity: parseInt(formData.stockQuantity),
       inStock: formData.inStock,
-      isFeatured: formData.isFeatured
+      isFeatured: formData.isFeatured,
+      priceUnit: formData.priceUnit
     };
 
     try {
@@ -428,6 +435,21 @@ const AdminProductManagementInteractive = () => {
                     min="0"
                     className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block caption font-medium text-foreground">
+                    Unité de prix
+                  </label>
+                  <select
+                    name="priceUnit"
+                    value={formData.priceUnit}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                  >
+                    <option value="pièce">À la pièce</option>
+                    <option value="kg">Au kilo (kg)</option>
+                  </select>
                 </div>
 
                 <div className="space-y-2">

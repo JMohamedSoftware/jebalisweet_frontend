@@ -1,0 +1,5 @@
+@humanwhocodes/config-array is required by: node_modules/eslint
+@humanwhocodes/object-schema is required by: node_modules/@humanwhocodes/config-array
+rimraf is required by: node_modules/flat-cache
+inflight is required by: node_modules/glob
+glob is required by: node_modules/@next/eslint-plugin-next, node_modules/rimraf

@@ -15,6 +15,7 @@ interface Product {
   category: string;
   brand: string;
   inStock: boolean;
+  priceUnit?: string;
 }
 
 interface ProductGridProps {
