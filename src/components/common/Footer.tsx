@@ -60,11 +60,11 @@ const Footer = () => {
                         <ul className="space-y-3">
                             <li className="flex items-center gap-3 text-muted-foreground">
                                 <Icon name="PhoneIcon" size={20} className="text-primary" />
-                                <span>+216 28 284 411</span>
+                                <span>+216 46 340 400</span>
                             </li>
                             <li className="flex items-center gap-3 text-muted-foreground">
                                 <Icon name="EnvelopeIcon" size={20} className="text-primary" />
-                                <span>contact@jebalisweet.com</span>
+                                <span>AidaJebali.Sweet@gmail.com</span>
                             </li>
                             <li className="flex items-center gap-3 text-muted-foreground">
                                 <Icon name="MapPinIcon" size={20} className="text-primary" />
@@ -91,7 +91,7 @@ const Footer = () => {
                                 </svg>
                             </a>
                             <a
-                                href="https://instagram.com"
+                                href="https://www.instagram.com/aida.jebali.940/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"

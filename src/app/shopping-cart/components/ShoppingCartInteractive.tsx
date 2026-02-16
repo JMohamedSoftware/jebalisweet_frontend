@@ -97,6 +97,7 @@ const ShoppingCartInteractive = () => {
     try {
       await api.cart.add(productId, newQuantity, customOptions, undefined, customImage, true);
       fetchCart();
+      window.dispatchEvent(new Event('cartUpdated'));
     } catch (error) {
       console.error('Error updating quantity:', error);
     }
@@ -121,6 +122,7 @@ const ShoppingCartInteractive = () => {
     try {
       await api.cart.remove(productId, customOptions, customImage);
       fetchCart();
+      window.dispatchEvent(new Event('cartUpdated'));
     } catch (error) {
       console.error('Error removing item:', error);
     }

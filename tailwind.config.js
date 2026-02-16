@@ -147,7 +147,15 @@ module.exports = {
         'reveal': {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
-        }
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'scale-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
       },
       animation: {
         'pulse-gentle': 'pulse-gentle 2s ease-in-out infinite',
@@ -157,6 +165,8 @@ module.exports = {
         'fade-in': 'fade-in 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         'float': 'float 6s ease-in-out infinite',
         'reveal': 'reveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+        'slide-up': 'slide-up 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        'scale-in': 'scale-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
     },
   },

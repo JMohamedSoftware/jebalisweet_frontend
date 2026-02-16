@@ -39,7 +39,7 @@ const SortControls = ({
         </div>
         <input
           type="text"
-          placeholder={t('catalog.searchPlaceholder') || "Rechercher un délice..."}
+          placeholder={t('Rechercher un délice...')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full pl-12 pr-4 py-3 bg-muted/30 border-2 border-transparent focus:border-primary/20 focus:bg-background rounded-xl text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all font-medium"
@@ -57,7 +57,7 @@ const SortControls = ({
 
         <div className="flex items-center gap-3 min-w-[200px]">
           <label htmlFor="sort-select" className="text-sm font-bold text-muted-foreground uppercase tracking-wider hidden sm:block whitespace-nowrap">
-            {t('catalog.sort.label') || "Trier par:"}
+            {t('Trier par:')}
           </label>
           <div className="relative flex-1">
             <select

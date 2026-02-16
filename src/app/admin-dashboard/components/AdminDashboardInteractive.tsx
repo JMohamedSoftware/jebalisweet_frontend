@@ -346,6 +346,17 @@ const AdminDashboardInteractive = () => {
               </Link>
 
               <Link
+                href="/admin-user-management"
+                className="flex items-center gap-3 p-4 bg-success/5 hover:bg-success/10 rounded-lg transition-smooth border border-success/20"
+              >
+                <Icon name="UsersIcon" size={24} className="text-success" />
+                <div>
+                  <p className="font-medium text-foreground">Gérer Clients</p>
+                  <p className="caption text-muted-foreground">Comptes, rôles et statuts</p>
+                </div>
+              </Link>
+
+              <Link
                 href="/user-profile"
                 className="flex items-center gap-3 p-4 bg-accent/5 hover:bg-accent/10 rounded-lg transition-smooth border border-accent/20"
               >

@@ -57,8 +57,10 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
             };
 
             setSelectedAccount(account);
-            await sendOTP(account.email);
-            setStep(2); // Skip account selection step as email is unique
+            const success = await sendOTP(account.email);
+            if (success) {
+                setStep(2); // Skip account selection step as email is unique
+            }
 
         } catch (err: any) {
             setError(err.message);
@@ -79,7 +81,8 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
 
-            // Success, move to step 3 (handled by caller if manual selection)
+            // Success, return true
+            return true;
         } catch (err: any) {
             setError(err.message);
         } finally {

@@ -231,7 +231,10 @@ const CheckoutPaymentInteractive = () => {
       await api.orders.create(orderData);
 
       // Cart is cleared on the backend during order creation
-      window.dispatchEvent(new Event('cartUpdated'));
+      // Small timeout ensures backend operations are fully completed before frontend refresh
+      setTimeout(() => {
+        window.dispatchEvent(new Event('cartUpdated'));
+      }, 500);
 
       setIsProcessing(false);
 

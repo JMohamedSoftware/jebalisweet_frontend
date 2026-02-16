@@ -104,7 +104,7 @@ const RegistrationForm = () => {
     };
 
     const validatePostalCode = (code: string): boolean => {
-        const postalRegex = /^[0-9]{5}$/;
+        const postalRegex = /^[0-9]{4}$/;
         return postalRegex.test(code);
     };
 
@@ -155,7 +155,7 @@ const RegistrationForm = () => {
             if (!formData.postalCode.trim()) {
                 newErrors.postalCode = 'Le code postal est requis';
             } else if (!validatePostalCode(formData.postalCode)) {
-                newErrors.postalCode = 'Code postal invalide (5 chiffres)';
+                newErrors.postalCode = 'Code postal invalide (4 chiffres)';
             }
         }
 
@@ -309,7 +309,7 @@ const RegistrationForm = () => {
                                     onChange={handleInputChange}
                                     className={`w-full px-4 py-3 rounded-lg border ${errors.firstName ? 'border-error' : 'border-input'
                                         } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="Jean"
+                                    placeholder="Prénom"
                                 />
                                 {errors.firstName && (
                                     <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -334,7 +334,7 @@ const RegistrationForm = () => {
                                     onChange={handleInputChange}
                                     className={`w-full px-4 py-3 rounded-lg border ${errors.lastName ? 'border-error' : 'border-input'
                                         } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="Dupont"
+                                    placeholder="nom"
                                 />
                                 {errors.lastName && (
                                     <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -360,7 +360,7 @@ const RegistrationForm = () => {
                                 onChange={handleInputChange}
                                 className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-error' : 'border-input'
                                     } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                placeholder="jean.dupont@example.com"
+                                placeholder="nomPrénom@example.com"
                             />
                             {errors.email && (
                                 <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -557,7 +557,7 @@ const RegistrationForm = () => {
                                             maxLength={5}
                                             className={`w-full px-4 py-3 rounded-lg border ${errors.postalCode ? 'border-error' : 'border-input'
                                                 } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                            placeholder="75001"
+                                            placeholder="2013"
                                         />
                                         {errors.postalCode && (
                                             <p className="mt-1 text-sm text-error flex items-center gap-1">

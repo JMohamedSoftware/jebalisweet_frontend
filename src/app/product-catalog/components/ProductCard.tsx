@@ -57,8 +57,8 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
   };
 
   return (
-    <div className="bg-card rounded-lg shadow-warm hover:shadow-warm-md transition-smooth overflow-hidden group">
-      <div className="relative h-64 overflow-hidden bg-muted">
+    <div className="bg-card rounded-lg shadow-warm hover:shadow-warm-md transition-smooth overflow-hidden group border border-border/10">
+      <div className="relative h-44 sm:h-64 overflow-hidden bg-muted">
         <AppImage
           src={product.image}
           alt={product.alt}

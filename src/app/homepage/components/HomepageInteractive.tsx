@@ -164,7 +164,7 @@ const HomepageInteractive = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
             {categories.length > 0 ? (
               categories.map((category, index) =>
                 <div
@@ -176,7 +176,7 @@ const HomepageInteractive = () => {
                 </div>
               )
             ) : (
-              <p className="text-center w-full text-muted-foreground">{t('home.categories.empty')}</p>
+              <p className="text-center col-span-3 text-muted-foreground">{t('home.categories.empty')}</p>
             )}
           </div>
         </section>
