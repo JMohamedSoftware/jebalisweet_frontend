@@ -1,5 +1,6 @@
 import Header from '@/components/common/Header';
 import AdminDashboardInteractive from './components/AdminDashboardInteractive';
+import AdminGuard from '@/components/auth/AdminGuard';
 
 export const metadata = {
   title: 'Tableau de Bord Admin - Jebali Sweet',
@@ -8,10 +9,10 @@ export const metadata = {
 
 const AdminDashboardPage = () => {
   return (
-    <>
+    <AdminGuard>
       <Header />
       <AdminDashboardInteractive />
-    </>
+    </AdminGuard>
   );
 };
 

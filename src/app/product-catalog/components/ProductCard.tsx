@@ -87,9 +87,6 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
           <h3 className="font-heading text-sm sm:text-lg font-semibold text-foreground line-clamp-2 leading-tight">
             {product.name}
           </h3>
-          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 hidden sm:block">
-            {product.description}
-          </p>
         </div>
 
         <div className="hidden sm:flex items-center gap-2">

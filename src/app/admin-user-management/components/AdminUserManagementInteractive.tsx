@@ -7,6 +7,8 @@ import Icon from '@/components/ui/AppIcon';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 
+import { TrashIcon, EyeIcon } from "@heroicons/react/24/outline";
+
 interface User {
     id: string;
     _id?: string;
@@ -18,7 +20,6 @@ interface User {
     role: 'client' | 'admin' | 'livreur';
     status: 'active' | 'pending' | 'rejected';
     createdAt: string;
-    readablePassword?: string;
     loginHistory?: { ip: string; timestamp: string }[];
     address?: string;
     city?: string;
@@ -81,16 +82,17 @@ const AdminUserManagementInteractive = () => {
         }
     };
 
-    const handleAuth = (e: React.FormEvent) => {
+    const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
-        const correctPass = process.env.NEXT_PUBLIC_ADMIN_USER_PASS;
-
-
-        if (adminPassword === correctPass) {
+        setLoading(true);
+        try {
+            await api.users.verifyAdminPassword(adminPassword);
             setIsAuthorized(true);
             fetchUsers();
-        } else {
-            alert("Mot de passe incorrect.");
+        } catch (error: any) {
+            alert(error.message || "Mot de passe incorrect.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -303,15 +305,30 @@ const AdminUserManagementInteractive = () => {
                                             <p className="font-semibold">{selectedUser.phone || 'Non renseigné'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-sm text-muted-foreground">Mot de passe</p>
-                                            <p className={`font-mono font-bold px-2 py-1 rounded inline-block mt-1 ${selectedUser.readablePassword ? 'text-primary bg-primary/5' : 'text-warning bg-warning/10'}`}>
-                                                {selectedUser.readablePassword || 'Attente prochaine connexion'}
-                                            </p>
-                                            {!selectedUser.readablePassword && (
-                                                <p className="text-[10px] text-muted-foreground mt-1">
-                                                    * Sera capturé automatiquement lors de sa prochaine connexion au site.
-                                                </p>
-                                            )}
+                                            <p className="text-sm text-muted-foreground">Accès rapide</p>
+                                            <button
+                                                onClick={async () => {
+                                                    if (!confirm(`Voulez-vous vraiment vous connecter en tant que ${selectedUser.username} ?`)) return;
+                                                    setLoading(true);
+                                                    try {
+                                                        const res = await api.users.impersonate(selectedUser.id || (selectedUser as any)._id);
+                                                        // Stocker les nouveaux identifiants
+                                                        localStorage.setItem('token', res.token);
+                                                        localStorage.setItem('user', JSON.stringify(res.user));
+                                                        // Rediriger vers la page d'accueil ou le compte
+                                                        window.location.href = '/';
+                                                    } catch (error: any) {
+                                                        alert(error.message || "Erreur lors de la connexion au compte client.");
+                                                    } finally {
+                                                        setLoading(false);
+                                                    }
+                                                }}
+                                                disabled={loading}
+                                                className="mt-1 flex items-center gap-2 px-3 py-1.5 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-all font-bold text-xs"
+                                            >
+                                                <EyeIcon className="h-4 w-4" />
+                                                Se connecter en tant que client
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

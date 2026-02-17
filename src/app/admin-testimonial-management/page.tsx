@@ -1,4 +1,5 @@
 import AdminTestimonialManagementInteractive from './components/AdminTestimonialManagementInteractive';
+import AdminGuard from '@/components/auth/AdminGuard';
 
 export const metadata = {
     title: 'Gestion des Témoignages | Jebali Sweet Admin',
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function AdminTestimonialManagementPage() {
-    return <AdminTestimonialManagementInteractive />;
+    return (
+        <AdminGuard>
+            <AdminTestimonialManagementInteractive />
+        </AdminGuard>
+    );
 }

@@ -1,13 +1,9 @@
 import { API_ENDPOINT } from '@/config/api';
 const API_BASE_URL = API_ENDPOINT;
-console.log('--- API DEBUG INFO ---');
-console.log('API_BASE_URL being used:', API_BASE_URL);
-console.log('Environment NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
-console.log('----------------------');
 
 // Cloudinary Configuration
-const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgiwx2p7n';
-const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'JSweet';
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || '';
+const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '';
 import { CATEGORY_ALL } from '@/constants';
 
 const getPublicHeaders = () => {
@@ -26,8 +22,8 @@ const getAuthHeaders = () => {
     };
 };
 
-const handleResponse = async (response: Response) => {
-    if (response.status === 401 || response.status === 403) {
+const handleResponse = async (response: Response, wipeOnAuthError: boolean = true) => {
+    if (wipeOnAuthError && (response.status === 401 || response.status === 403)) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.dispatchEvent(new Event('authChanged'));
@@ -183,6 +179,17 @@ export const api = {
         delete: (userId: string | number) =>
             fetch(`${API_BASE_URL}/users/${userId}`, {
                 method: 'DELETE',
+                headers: getAuthHeaders()
+            }).then(handleResponse),
+        verifyAdminPassword: (password: string) =>
+            fetch(`${API_BASE_URL}/users/verify-admin-password`, {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ password })
+            }).then(res => handleResponse(res, false)),
+        impersonate: (userId: string | number) =>
+            fetch(`${API_BASE_URL}/users/impersonate/${userId}`, {
+                method: 'POST',
                 headers: getAuthHeaders()
             }).then(handleResponse),
     },

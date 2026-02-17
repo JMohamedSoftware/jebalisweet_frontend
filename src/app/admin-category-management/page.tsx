@@ -1,5 +1,10 @@
 import AdminCategoryManagementInteractive from './components/AdminCategoryManagementInteractive';
+import AdminGuard from '@/components/auth/AdminGuard';
 
 export default function AdminCategoryManagementPage() {
-    return <AdminCategoryManagementInteractive />;
+    return (
+        <AdminGuard>
+            <AdminCategoryManagementInteractive />
+        </AdminGuard>
+    );
 }

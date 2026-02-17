@@ -7,8 +7,8 @@ import Icon from '@/components/ui/AppIcon';
 import CartIndicator from '@/components/common/CartIndicator';
 import UserMenu from '@/components/common/UserMenu';
 import MobileNavToggle from '@/components/common/MobileNavToggle';
+import MobileAuthControl from '@/components/common/MobileAuthControl';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
-import BottomNavigation from '@/components/common/BottomNavigation';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface NavigationItem {
@@ -139,9 +139,12 @@ const Header = () => {
               <div className="hidden sm:block">
                 <LanguageSwitcher />
               </div>
+              {userRole !== 'livreur' && <CartIndicator />}
               <div className="hidden md:flex items-center gap-4">
-                {userRole !== 'livreur' && <CartIndicator />}
                 <UserMenu />
+              </div>
+              <div className="md:hidden flex items-center">
+                <MobileAuthControl />
               </div>
               <MobileNavToggle
                 isOpen={isMobileMenuOpen}
@@ -165,10 +168,6 @@ const Header = () => {
             <div className="p-6 space-y-2">
               {navigationItems
                 .filter(item => {
-                  // Hide items that are already in the BottomNavigation on mobile
-                  const inBottomNav = ['/', '/product-catalog', '/login', '/shopping-cart'].includes(item.path);
-                  if (inBottomNav) return false;
-
                   if (userRole === 'livreur') {
                     return item.path === '/' || item.path === '/login';
                   }
@@ -198,7 +197,6 @@ const Header = () => {
           </nav>
         </div>
       )}
-      <BottomNavigation />
     </>
   );
 };
