@@ -164,7 +164,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
   if (!isHydrated && !initialData) return <LoadingSkeleton />;
 
   return (
-    <div className="container mx-auto px-6 py-8">
+    <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mb-8">
         <h1 className="font-heading text-4xl font-bold text-foreground mb-2">{t('catalog.title')}</h1>
         <p className="text-muted-foreground">{t('catalog.subtitle')}</p>
@@ -197,17 +197,25 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
 
         <main>
           {selectedCategory === t('product.customCakeCategory') && (
-            <div className="mb-10 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-3xl p-8 border border-primary/20 flex flex-col md:flex-row items-center gap-8 animate-in fade-in slide-in-from-top duration-700">
-              <div className="flex-1 space-y-4">
-                <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider rounded-full">{t('catalog.customCake.exclusive')}</span>
-                <h2 className="text-3xl font-heading font-bold text-foreground">{t('catalog.customCake.title')}</h2>
-                <p className="text-muted-foreground text-lg">{t('catalog.customCake.subtitle')}</p>
-                <button onClick={() => router.push('/custom-cake')} className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+            <div className="mb-10 relative overflow-hidden bg-black rounded-3xl p-8 sm:p-12 border border-border flex flex-col md:flex-row items-center gap-8 shadow-warm-xl group">
+              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent z-10" />
+              <div className="absolute inset-0 z-0">
+                <img src="/images/17189029461596829888opals_3200x1200.jpg" className="w-full h-full object-cover opacity-60 transition-transform duration-[10s] group-hover:scale-110" alt="Gâteau sur mesure" />
+              </div>
+              <div className="relative z-20 flex-1 space-y-5 animate-in fade-in slide-in-from-left duration-700">
+                <span className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md text-white border border-white/20 text-[10px] font-bold uppercase tracking-[0.2em] rounded-full shadow-inner">
+                  {t('catalog.customCake.exclusive')}
+                </span>
+                <h2 className="text-4xl sm:text-5xl font-heading font-bold text-white drop-shadow-md">
+                  {t('catalog.customCake.title')}
+                </h2>
+                <div className="h-1 w-16 bg-[#D4AF37]/60 rounded-full" />
+                <p className="text-white/80 text-lg sm:text-xl font-light max-w-xl">
+                  {t('catalog.customCake.subtitle')}
+                </p>
+                <button onClick={() => router.push('/custom-cake')} className="mt-4 bg-[#D4AF37] text-white px-8 py-3.5 rounded-full font-bold shadow-lg shadow-[#D4AF37]/20 hover:scale-105 hover:bg-[#D4AF37]/90 active:scale-95 transition-all inline-block">
                   {t('catalog.customCake.cta')}
                 </button>
-              </div>
-              <div className="w-48 h-48 hidden md:block">
-                <img src="/images/17189029461596829888opals_3200x1200.jpg" className="w-full h-full object-cover rounded-2xl shadow-xl rotate-3" alt="Custom" />
               </div>
             </div>
           )}
@@ -218,9 +226,9 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
                 <ProductGrid products={products} onAddToCart={handleAddToCart} onQuickView={setSelectedProduct} />
               </div>
               {totalPages > 1 && (
-                <div className="flex justify-center gap-2">
+                <div className="flex justify-center gap-2 mt-8">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                    <button key={p} onClick={() => setCurrentPage(p)} className={`w-10 h-10 rounded-lg transition-smooth hover:scale-105 active:scale-95 ${currentPage === p ? 'bg-primary text-primary-foreground font-bold shadow-md' : 'bg-background border border-border text-muted-foreground hover:border-primary hover:text-primary'}`}>{p}</button>
+                    <button key={p} onClick={() => setCurrentPage(p)} className={`w-10 h-10 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 ${currentPage === p ? 'bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20' : 'bg-transparent border border-border/40 text-muted-foreground hover:border-primary/40 hover:text-primary hover:bg-primary/5'}`}>{p}</button>
                   ))}
                 </div>
               )}

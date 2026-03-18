@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface BillingAddress {
   firstName: string;
@@ -20,6 +21,7 @@ interface BillingAddressFormProps {
 }
 
 const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: BillingAddressFormProps) => {
+  const { t } = useLanguage();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     onUpdateBillingAddress({
@@ -40,14 +42,14 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
           className="w-4 h-4 rounded border-input text-primary focus:ring-3 focus:ring-ring"
         />
         <label htmlFor="useShippingAddress" className="text-sm text-foreground cursor-pointer">
-          Utiliser l'adresse de livraison
+          {t('checkout.shipping.useShippingAsBilling')}
         </label>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="firstName" className="block text-sm font-medium text-foreground">
-            Prénom
+            {t('checkout.shipping.firstName')}
           </label>
           <input
             type="text"
@@ -55,9 +57,8 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
             name="firstName"
             value={billingAddress.firstName}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.firstName ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.firstName ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           {errors.firstName && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -69,7 +70,7 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
 
         <div className="space-y-2">
           <label htmlFor="lastName" className="block text-sm font-medium text-foreground">
-            Nom
+            {t('checkout.shipping.lastName')}
           </label>
           <input
             type="text"
@@ -77,9 +78,8 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
             name="lastName"
             value={billingAddress.lastName}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.lastName ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.lastName ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           {errors.lastName && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -92,7 +92,7 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
 
       <div className="space-y-2">
         <label htmlFor="address" className="block text-sm font-medium text-foreground">
-          Adresse
+          {t('checkout.shipping.address')}
         </label>
         <input
           type="text"
@@ -100,10 +100,9 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
           name="address"
           value={billingAddress.address}
           onChange={handleInputChange}
-          placeholder="123 Rue de la Paix"
-          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-            errors.address ? 'border-error' : 'border-input focus:border-primary'
-          }`}
+          placeholder={t('auth.register.placeholders.address')}
+          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.address ? 'border-error' : 'border-input focus:border-primary'
+            }`}
         />
         {errors.address && (
           <p className="text-sm text-error flex items-center gap-1">
@@ -116,7 +115,7 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="city" className="block text-sm font-medium text-foreground">
-            Ville
+            {t('checkout.shipping.city')}
           </label>
           <input
             type="text"
@@ -124,9 +123,8 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
             name="city"
             value={billingAddress.city}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.city ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.city ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           {errors.city && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -138,7 +136,7 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
 
         <div className="space-y-2">
           <label htmlFor="postalCode" className="block text-sm font-medium text-foreground">
-            Code postal
+            {t('checkout.shipping.postalCode')}
           </label>
           <input
             type="text"
@@ -146,10 +144,9 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
             name="postalCode"
             value={billingAddress.postalCode}
             onChange={handleInputChange}
-            placeholder="75001"
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.postalCode ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            placeholder="75000"
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.postalCode ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           {errors.postalCode && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -162,7 +159,7 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
 
       <div className="space-y-2">
         <label htmlFor="phone" className="block text-sm font-medium text-foreground">
-          Téléphone
+          {t('checkout.shipping.phone')}
         </label>
         <input
           type="tel"
@@ -171,9 +168,8 @@ const BillingAddressForm = ({ billingAddress, onUpdateBillingAddress, errors }: 
           value={billingAddress.phone}
           onChange={handleInputChange}
           placeholder="06 12 34 56 78"
-          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-            errors.phone ? 'border-error' : 'border-input focus:border-primary'
-          }`}
+          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.phone ? 'border-error' : 'border-input focus:border-primary'
+            }`}
         />
         {errors.phone && (
           <p className="text-sm text-error flex items-center gap-1">

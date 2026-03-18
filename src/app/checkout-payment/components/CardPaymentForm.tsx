@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CardDetails {
   cardNumber: string;
@@ -17,6 +18,7 @@ interface CardPaymentFormProps {
 }
 
 const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPaymentFormProps) => {
+  const { t } = useLanguage();
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, '');
     const chunks = cleaned.match(/.{1,4}/g);
@@ -61,13 +63,13 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
       <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
         <Icon name="ShieldCheckIcon" size={20} className="text-success" />
         <p className="text-sm text-muted-foreground">
-          Paiement sécurisé SSL - Vos données sont protégées
+          {t('checkout.payment.secureInfo')}
         </p>
       </div>
 
       <div className="space-y-2">
         <label htmlFor="cardNumber" className="block text-sm font-medium text-foreground">
-          Numéro de carte
+          {t('checkout.payment.cardNumber')}
         </label>
         <div className="relative">
           <input
@@ -76,9 +78,8 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
             value={cardDetails.cardNumber}
             onChange={handleCardNumberChange}
             placeholder="1234 5678 9012 3456"
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${
-              errors.cardNumber ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${errors.cardNumber ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
             <Icon name="CreditCardIcon" size={24} className="text-muted-foreground" />
@@ -95,7 +96,7 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="expiryDate" className="block text-sm font-medium text-foreground">
-            Date d'expiration
+            {t('checkout.payment.expiryDate')}
           </label>
           <input
             type="text"
@@ -103,9 +104,8 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
             value={cardDetails.expiryDate}
             onChange={handleExpiryDateChange}
             placeholder="MM/AA"
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${
-              errors.expiryDate ? 'border-error' : 'border-input focus:border-primary'
-            }`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${errors.expiryDate ? 'border-error' : 'border-input focus:border-primary'
+              }`}
           />
           {errors.expiryDate && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -117,7 +117,7 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
 
         <div className="space-y-2">
           <label htmlFor="cvv" className="block text-sm font-medium text-foreground">
-            CVV
+            {t('checkout.payment.cvv')}
           </label>
           <div className="relative">
             <input
@@ -126,9 +126,8 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
               value={cardDetails.cvv}
               onChange={handleCvvChange}
               placeholder="123"
-              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${
-                errors.cvv ? 'border-error' : 'border-input focus:border-primary'
-              }`}
+              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring data-text ${errors.cvv ? 'border-error' : 'border-input focus:border-primary'
+                }`}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
               <Icon name="QuestionMarkCircleIcon" size={20} className="text-muted-foreground" />
@@ -145,17 +144,16 @@ const CardPaymentForm = ({ cardDetails, onUpdateCardDetails, errors }: CardPayme
 
       <div className="space-y-2">
         <label htmlFor="cardholderName" className="block text-sm font-medium text-foreground">
-          Nom du titulaire
+          {t('checkout.payment.cardName')}
         </label>
         <input
           type="text"
           id="cardholderName"
           value={cardDetails.cardholderName}
           onChange={handleCardholderNameChange}
-          placeholder="JEAN DUPONT"
-          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring uppercase ${
-            errors.cardholderName ? 'border-error' : 'border-input focus:border-primary'
-          }`}
+          placeholder={t('checkout.payment.cardholderPlaceholder')}
+          className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring uppercase ${errors.cardholderName ? 'border-error' : 'border-input focus:border-primary'
+            }`}
         />
         {errors.cardholderName && (
           <p className="text-sm text-error flex items-center gap-1">

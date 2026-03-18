@@ -95,16 +95,16 @@ const CakeConfigurator = () => {
     return (
         <div className="max-w-4xl mx-auto py-8 px-4">
             <div className="text-center mb-10">
-                <h1 className="text-4xl font-heading font-bold text-foreground mb-4">Commandez Votre Gâteau Sur Mesure</h1>
-                <p className="text-muted-foreground text-lg">
+                <h1 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">Commandez Votre Gâteau Sur Mesure</h1>
+                <p className="text-gray-300 text-lg max-w-2xl mx-auto">
                     Téléchargez une photo d'inspiration ou un croquis, et nous vous donnerons un devis personnalisé.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white p-8 rounded-3xl shadow-xl border border-border">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-[#111]/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/10">
                 {/* Image Upload Area */}
                 <div
-                    className={`relative aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer overflow-hidden ${previewUrl ? 'border-primary' : 'border-muted-foreground/30 hover:border-primary/50 bg-muted/20'
+                    className={`relative aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all cursor-pointer overflow-hidden ${previewUrl ? 'border-primary' : 'border-white/20 hover:border-primary/50 bg-white/5'
                         }`}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
@@ -113,7 +113,7 @@ const CakeConfigurator = () => {
                     {previewUrl ? (
                         <div className="relative w-full h-full group">
                             <img src={previewUrl} alt="Aperçu" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                 <span className="text-white font-bold flex items-center gap-2">
                                     <Icon name="PencilIcon" size={20} /> Modifier la photo
                                 </span>
@@ -121,12 +121,12 @@ const CakeConfigurator = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center text-center p-6">
-                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+                            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary mb-4 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                                 <Icon name="CameraIcon" size={32} />
                             </div>
-                            <p className="font-bold text-lg mb-1">Ajoutez votre photo</p>
-                            <p className="text-xs text-muted-foreground">Cliquez ou glissez-déposez ici</p>
-                            <p className="text-[10px] text-muted-foreground mt-2">JPG, PNG (Max 5MB)</p>
+                            <p className="font-bold text-lg text-white mb-1">Ajoutez votre photo</p>
+                            <p className="text-xs text-gray-400">Cliquez ou glissez-déposez ici</p>
+                            <p className="text-[10px] text-gray-500 mt-2">JPG, PNG (Max 5MB)</p>
                         </div>
                     )}
                     <input
@@ -141,7 +141,7 @@ const CakeConfigurator = () => {
                 {/* Details Area */}
                 <div className="flex flex-col">
                     <div className="mb-6">
-                        <label className="block text-sm font-bold text-foreground mb-2 flex items-center gap-2">
+                        <label className="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                             <Icon name="ChatBubbleLeftRightIcon" size={18} className="text-primary" />
                             Expliquez-nous votre projet
                         </label>
@@ -149,7 +149,7 @@ const CakeConfigurator = () => {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Décrivez les saveurs, le nombre de parts, le texte à inscrire..."
-                            className="w-full h-48 bg-muted/30 border border-border rounded-xl p-4 text-sm focus:ring-2 ring-primary/20 outline-none resize-none transition-all"
+                            className="w-full h-48 bg-white/5 border border-white/10 text-white rounded-xl p-4 text-sm focus:ring-2 ring-primary/30 outline-none resize-none transition-all placeholder:text-gray-500"
                         />
                     </div>
 
@@ -179,27 +179,27 @@ const CakeConfigurator = () => {
                 </div>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-                <div className="p-4">
-                    <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary mx-auto mb-3">
-                        <Icon name="ArrowUpTrayIcon" size={20} />
+            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+                <div className="p-6 bg-[#111]/50 backdrop-blur-sm rounded-2xl border border-white/5">
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary mx-auto mb-4 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                        <Icon name="ArrowUpTrayIcon" size={24} />
                     </div>
-                    <h4 className="font-bold text-sm mb-1">1. Partagez</h4>
-                    <p className="text-xs text-muted-foreground">Téléchargez votre inspiration ou photo.</p>
+                    <h4 className="font-bold text-white mb-2 text-lg">1. Partagez</h4>
+                    <p className="text-sm text-gray-400">Téléchargez votre inspiration ou photo.</p>
                 </div>
-                <div className="p-4">
-                    <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary mx-auto mb-3">
-                        <Icon name="TicketIcon" size={20} />
+                <div className="p-6 bg-[#111]/50 backdrop-blur-sm rounded-2xl border border-white/5">
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary mx-auto mb-4 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                        <Icon name="TicketIcon" size={24} />
                     </div>
-                    <h4 className="font-bold text-sm mb-1">2. Devis</h4>
-                    <p className="text-xs text-muted-foreground">Nous estimons le prix en 24h.</p>
+                    <h4 className="font-bold text-white mb-2 text-lg">2. Devis</h4>
+                    <p className="text-sm text-gray-400">Nous estimons le prix en 24h.</p>
                 </div>
-                <div className="p-4">
-                    <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center text-secondary mx-auto mb-3">
-                        <Icon name="CheckCircleIcon" size={20} />
+                <div className="p-6 bg-[#111]/50 backdrop-blur-sm rounded-2xl border border-white/5">
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary mx-auto mb-4 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                        <Icon name="CheckCircleIcon" size={24} />
                     </div>
-                    <h4 className="font-bold text-sm mb-1">3. Réalisation</h4>
-                    <p className="text-xs text-muted-foreground">Une fois validé, nous créons la magie.</p>
+                    <h4 className="font-bold text-white mb-2 text-lg">3. Réalisation</h4>
+                    <p className="text-sm text-gray-400">Une fois validé, nous créons la magie.</p>
                 </div>
             </div>
         </div>

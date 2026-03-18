@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import ContactModal from './ContactModal';
 import { useLanguage } from '@/context/LanguageContext';
 
 const Footer = () => {
     const { t } = useLanguage();
+    const [showEmails, setShowEmails] = useState(false);
+    const [modalType, setModalType] = useState<'patisserie' | 'support' | null>(null);
 
     // Falling back to hardcoded strings if t('footer.about.title') etc. are missing
     const getT = (path: string, fallback: string) => {
@@ -15,8 +18,9 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-card border-t border-border mt-12 py-12 px-6">
-            <div className="container mx-auto">
+        <footer className="bg-card border-t border-border/10 mt-12 py-16 px-6 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 pointer-events-none" />
+            <div className="container mx-auto relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* About Section */}
                     <div className="space-y-4">
@@ -58,17 +62,60 @@ const Footer = () => {
                             {getT('footer.contact.title', 'Contact')}
                         </h3>
                         <ul className="space-y-3">
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Icon name="PhoneIcon" size={20} className="text-primary" />
-                                <span>+216 46 340 400</span>
+                            <li className="flex items-center gap-3 text-muted-foreground pb-2">
+                                <Icon name="PhoneIcon" size={20} className="text-primary flex-shrink-0" />
+                                <span className="font-semibold text-foreground text-lg tracking-wide">+216 46 340 400</span>
                             </li>
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Icon name="EnvelopeIcon" size={20} className="text-primary" />
-                                <span>AidaJebali.Sweet@gmail.com</span>
+                            <li className="flex items-start gap-3 text-muted-foreground group">
+                                <Icon name="MapPinIcon" size={20} className="text-primary mt-1 flex-shrink-0" />
+                                <a
+                                    href="https://www.google.com/maps/place/Patisserie+Jebali+Sweet/@37.013526,10.9507302,348m/data=!3m2!1e3!4b1!4m6!3m5!1s0x131d4796ea4aeaff:0x295bb8f35d8502a2!8m2!3d37.013526!4d10.9520177!16s%2Fg%2F11mvj5rgdy?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors leading-relaxed"
+                                >
+                                    <span className="block text-foreground font-medium text-base mb-0.5">Patisserie Jebali Sweet</span>
+                                    <span className="text-sm font-light text-muted-foreground group-hover:text-primary/70 transition-colors">Saheb Jebal</span>
+                                </a>
                             </li>
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Icon name="MapPinIcon" size={20} className="text-primary" />
-                                <span>Tunis, Tunisie</span>
+
+                            <li className="pt-3 border-t border-border/10">
+                                <button
+                                    onClick={() => setShowEmails(!showEmails)}
+                                    className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium text-sm group"
+                                >
+                                    <Icon name="EnvelopeIcon" size={20} className="group-hover:-translate-y-0.5 transition-transform" />
+                                    <span>{getT('footer.contact.emailButton', 'Nous contacter par e-mail')}</span>
+                                    <Icon name={showEmails ? "ChevronUpIcon" : "ChevronDownIcon"} size={16} className={`transition-transform duration-300 ${showEmails ? 'rotate-180' : ''}`} />
+                                </button>
+
+                                {showEmails && (
+                                    <div className="mt-4 pl-7 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div className="flex flex-col gap-0.5 relative group/mail">
+                                            <button
+                                                onClick={() => setModalType('patisserie')}
+                                                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-left"
+                                            >
+                                                <span>AidaJebali@jebalisweet.tn</span>
+                                            </button>
+                                            <span className="text-[11px] text-muted-foreground/60 italic">
+                                                {getT('footer.contact.phoneFallback', '(Si injoignable par téléphone)')}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-col gap-0.5 relative group/support">
+                                            <button
+                                                onClick={() => setModalType('support')}
+                                                className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors font-medium text-left"
+                                            >
+                                                <Icon name="WrenchIcon" size={14} className="text-primary/80" />
+                                                <span>{getT('footer.contact.techSupport', 'Support Technique')}</span>
+                                            </button>
+                                            <span className="text-[11px] text-muted-foreground/60 italic border-l-2 border-primary/20 pl-2 ml-1 mt-1">
+                                                MohamedJbeli@jebalisweet.tn
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                             </li>
                         </ul>
                     </div>
@@ -80,10 +127,10 @@ const Footer = () => {
                         </h3>
                         <div className="flex gap-4">
                             <a
-                                href="https://www.facebook.com/aida.jebali.940"
+                                href="https://www.facebook.com/profile.php?id=100064274102694"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
+                                className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary border border-primary/10 hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
                                 aria-label="Facebook"
                             >
                                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -94,7 +141,7 @@ const Footer = () => {
                                 href="https://www.instagram.com/aida.jebali.940/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
+                                className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary border border-primary/10 hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
                                 aria-label="Instagram"
                             >
                                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -123,6 +170,12 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+
+            <ContactModal
+                isOpen={modalType !== null}
+                onClose={() => setModalType(null)}
+                type={modalType || 'patisserie'}
+            />
         </footer>
     );
 };

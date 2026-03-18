@@ -68,6 +68,7 @@ const MobileAuthControl = () => {
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         setUser(null);
         setIsOpen(false);
         window.dispatchEvent(new Event('authChanged'));
@@ -119,6 +120,17 @@ const MobileAuthControl = () => {
                             <Icon name="UserCircleIcon" size={18} />
                             <span>{t('nav.profile')}</span>
                         </Link>
+
+                        {user.role === 'admin' && (
+                            <Link
+                                href="/admin-dashboard"
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-muted transition-smooth"
+                            >
+                                <Icon name="Squares2X2Icon" size={18} />
+                                <span>{t('nav.admin')}</span>
+                            </Link> // Admin Dashboard Link corrected
+                        )}
 
                         {user.role !== 'livreur' && (
                             <Link

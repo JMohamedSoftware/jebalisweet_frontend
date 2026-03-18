@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import { API_ENDPOINT } from '@/config/api';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Account {
     id: string;
@@ -19,6 +20,7 @@ interface ForgotPasswordWizardProps {
 }
 
 const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps) => {
+    const { t } = useLanguage();
     const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
@@ -43,7 +45,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
             });
             const data = await res.json();
 
-            if (!res.ok) throw new Error(data.message || 'Email non trouvé');
+            if (!res.ok) throw new Error(data.message || t('auth.login.errors.emailInvalid'));
 
             // If account found, move to OTP step immediately
             // We don't need to select account since email is unique
@@ -115,7 +117,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
     const handleResetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {
-            setError('Les mots de passe ne correspondent pas');
+            setError(t('auth.register.errors.confirmPassword'));
             return;
         }
         setLoading(true);
@@ -129,7 +131,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
 
-            alert('Mot de passe modifié avec succès !');
+            alert(t('auth.forgotPassword.success'));
             if (onSuccess) onSuccess();
             else onClose(); // Close wizard if no onSuccess provided
         } catch (err: any) {
@@ -147,11 +149,11 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Icon name="key" className="w-8 h-8 text-primary" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">Mot de passe oublié</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">{t('auth.forgotPassword.title')}</h2>
                         <p className="text-sm text-muted-foreground mt-2">
-                            {step === 1 && "Entrez votre email pour recevoir un code de récupération."}
-                            {step === 2 && "Un code de vérification a été envoyé."}
-                            {step === 3 && "Créez votre nouveau mot de passe."}
+                            {step === 1 && t('auth.forgotPassword.step1')}
+                            {step === 2 && t('auth.forgotPassword.step2')}
+                            {step === 3 && t('auth.forgotPassword.step3')}
                         </p>
                     </div>
 
@@ -166,7 +168,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                         <form onSubmit={handleFindAccount} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Email
+                                    {t('auth.login.email')}
                                 </label>
                                 <div className="relative">
                                     <Icon name="mail" className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -175,7 +177,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                                        placeholder="exemple@email.com"
+                                        placeholder={t('auth.register.placeholders.email')}
                                         required
                                     />
                                 </div>
@@ -185,7 +187,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                                 disabled={loading}
                                 className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
                             >
-                                {loading ? 'Recherche...' : 'Continuer'}
+                                {loading ? t('common.loading') : t('common.next')}
                             </button>
                         </form>
                     )}
@@ -193,19 +195,19 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                     {step === 2 && (
                         <form onSubmit={handleVerifyOTP} className="space-y-4">
                             <p className="text-sm text-muted-foreground text-center">
-                                Un code a été envoyé à <strong>{email}</strong>
+                                {t('auth.forgotPassword.step2')} <strong>{email}</strong>
                             </p>
                             <input
                                 type="text"
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
-                                placeholder="Code à 6 chiffres"
+                                placeholder={t('auth.forgotPassword.otpPlaceholder')}
                                 className="w-full p-3 rounded-lg border border-input text-center tracking-widest text-lg"
                                 maxLength={6}
                                 required
                             />
                             <button type="submit" disabled={loading} className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold">
-                                {loading ? 'Vérifier le code' : 'Vérifier le code'}
+                                {loading ? t('common.loading') : t('auth.forgotPassword.submit')}
                             </button>
                             <button
                                 type="button"
@@ -213,7 +215,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                                 disabled={loading}
                                 className="w-full py-2 text-sm text-primary hover:text-primary/80 transition-smooth underline"
                             >
-                                Renvoyer le code
+                                {t('common.submit')} {t('auth.forgotPassword.otpLabel')}
                             </button>
                         </form>
                     )}
@@ -222,28 +224,28 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                         <form onSubmit={handleResetPassword} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Nouveau mot de passe
+                                    {t('auth.forgotPassword.newPassword')}
                                 </label>
                                 <input
                                     type="password"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     className="w-full p-2 rounded-lg border border-gray-300"
-                                    placeholder="••••••••"
+                                    placeholder={t('auth.register.placeholders.password')}
                                     required
                                     minLength={6}
                                 />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Confirmer le mot de passe
+                                    {t('auth.forgotPassword.confirmNewPassword')}
                                 </label>
                                 <input
                                     type="password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="w-full p-2 rounded-lg border border-gray-300"
-                                    placeholder="••••••••"
+                                    placeholder={t('auth.register.placeholders.password')}
                                     required
                                     minLength={6}
                                 />
@@ -253,7 +255,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                                 disabled={loading}
                                 className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold"
                             >
-                                {loading ? 'Modification...' : 'Modifier le mot de passe'}
+                                {loading ? t('common.loading') : t('auth.forgotPassword.updateSubmit')}
                             </button>
                         </form>
                     )}
@@ -262,7 +264,7 @@ const ForgotPasswordWizard = ({ onClose, onSuccess }: ForgotPasswordWizardProps)
                         onClick={onClose}
                         className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
                     >
-                        Annuler
+                        {t('common.cancel')}
                     </button>
                 </div>
             </div>

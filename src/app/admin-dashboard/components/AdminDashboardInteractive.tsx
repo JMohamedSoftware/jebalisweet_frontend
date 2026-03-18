@@ -385,7 +385,18 @@ const AdminDashboardInteractive = () => {
                 <Icon name="TagIcon" size={24} className="text-secondary" />
                 <div>
                   <p className="font-medium text-foreground">Gérer Promotions</p>
-                  <p className="caption text-muted-foreground">Offre spéciale, banneaux Noël</p>
+                  <p className="caption text-muted-foreground">Offre spéciale, bannières Noël</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/admin-promo-codes"
+                className="flex items-center gap-3 p-4 bg-primary/5 hover:bg-primary/10 rounded-lg transition-smooth border border-primary/20"
+              >
+                <Icon name="TagIcon" size={24} className="text-primary" />
+                <div>
+                  <p className="font-medium text-foreground">Gérer Codes Promo</p>
+                  <p className="caption text-muted-foreground">Coupons et remises panier</p>
                 </div>
               </Link>
             </div>

@@ -26,6 +26,7 @@ const handleResponse = async (response: Response, wipeOnAuthError: boolean = tru
     if (wipeOnAuthError && (response.status === 401 || response.status === 403)) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         window.dispatchEvent(new Event('authChanged'));
     }
     if (!response.ok) {
@@ -195,6 +196,14 @@ export const api = {
     },
     files: {
         upload: async (file: File) => {
+            // Client-side validation
+            if (!file.type.startsWith('image/')) {
+                throw new Error('Seules les images sont autorisées.');
+            }
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                throw new Error('L\'image ne doit pas dépasser 5 Mo.');
+            }
+
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -249,5 +258,23 @@ export const api = {
             headers: getAuthHeaders(),
             body: JSON.stringify(data)
         }).then(handleResponse),
+    },
+    promoCodes: {
+        getAll: () => fetch(`${API_BASE_URL}/promo-codes`, { headers: getAuthHeaders() }).then(handleResponse),
+        create: (data: any) => fetch(`${API_BASE_URL}/promo-codes`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(data)
+        }).then(handleResponse),
+        update: (id: string, data: any) => fetch(`${API_BASE_URL}/promo-codes/${id}`, {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(data)
+        }).then(handleResponse),
+        delete: (id: string) => fetch(`${API_BASE_URL}/promo-codes/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        }).then(handleResponse),
+        validate: (code: string) => fetch(`${API_BASE_URL}/promo-codes/validate/${code}`, { headers: getPublicHeaders() }).then(handleResponse),
     }
 };

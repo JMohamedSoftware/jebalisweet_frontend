@@ -46,7 +46,7 @@ const FilterPanel = ({
   };
 
   return (
-    <div className="bg-card rounded-lg shadow-warm p-6 space-y-6">
+    <div className="bg-card rounded-2xl shadow-sm border border-border/20 p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-xl font-semibold text-foreground">
           {t('catalog.filters.title')}
@@ -67,9 +67,9 @@ const FilterPanel = ({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onCategoryChange(CATEGORY_ALL)}
-              className={`px-4 py-2 rounded-full transition-smooth font-medium caption ${selectedCategory === CATEGORY_ALL
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-foreground hover:bg-muted-foreground/10'
+              className={`px-4 py-2 rounded-full transition-all duration-300 font-medium caption border ${selectedCategory === CATEGORY_ALL
+                ? 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20'
+                : 'bg-transparent border-border/40 text-foreground hover:border-primary/40 hover:bg-primary/5'
                 }`}
             >
               {t('catalog.filters.all')}
@@ -78,9 +78,9 @@ const FilterPanel = ({
               <button
                 key={category}
                 onClick={() => onCategoryChange(category)}
-                className={`px-4 py-2 rounded-full transition-smooth font-medium caption ${selectedCategory === category
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-foreground hover:bg-muted-foreground/10'
+                className={`px-4 py-2 rounded-full transition-all duration-300 font-medium caption border ${selectedCategory === category
+                  ? 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20'
+                  : 'bg-transparent border-border/40 text-foreground hover:border-primary/40 hover:bg-primary/5'
                   }`}
               >
                 {category}

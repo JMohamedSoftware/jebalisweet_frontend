@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface User {
   id?: string;
@@ -34,10 +35,11 @@ interface AddressBookTabProps {
 }
 
 const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
+  const { t } = useLanguage();
   const [addresses, setAddresses] = useState<Address[]>([
     {
       id: '1',
-      label: 'Domicile',
+      label: t('profile.addresses.home'),
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       address: user.address || '',
@@ -65,31 +67,31 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.label.trim()) {
-      newErrors.label = 'Le libellé est requis';
+      newErrors.label = t('auth.register.errors.general');
     }
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Le prénom est requis';
+      newErrors.firstName = t('auth.register.errors.firstName');
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Le nom est requis';
+      newErrors.lastName = t('auth.register.errors.lastName');
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = 'L\'adresse est requise';
+      newErrors.address = t('auth.register.errors.address');
     }
 
     if (!formData.city.trim()) {
-      newErrors.city = 'La ville est requise';
+      newErrors.city = t('auth.register.errors.city');
     }
 
-    if (!formData.postalCode.match(/^[0-9]{5}$/)) {
-      newErrors.postalCode = 'Code postal invalide (5 chiffres)';
+    if (!formData.postalCode.match(/^[0-9]{4,5}$/)) {
+      newErrors.postalCode = t('auth.register.errors.postalCode');
     }
 
-    if (!formData.phone.match(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)) {
-      newErrors.phone = 'Numéro de téléphone invalide';
+    if (formData.phone && !formData.phone.match(/^[0-9+\s]{8,15}$/)) {
+      newErrors.phone = t('auth.register.errors.phone');
     }
 
     setErrors(newErrors);
@@ -144,8 +146,8 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
           addr.id === editingId
             ? { ...formData, id: editingId }
             : formData.isDefault
-            ? { ...addr, isDefault: false }
-            : addr
+              ? { ...addr, isDefault: false }
+              : addr
         )
       );
       setEditingId(null);
@@ -211,7 +213,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-2xl font-semibold text-foreground">
-          Carnet d'adresses
+          {t('profile.addresses.title')}
         </h2>
         {!isAddingNew && !editingId && (
           <button
@@ -219,7 +221,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth"
           >
             <Icon name="PlusIcon" size={20} />
-            Ajouter une adresse
+            {t('profile.addresses.add')}
           </button>
         )}
       </div>
@@ -227,20 +229,19 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
       {(isAddingNew || editingId) && (
         <div className="bg-muted rounded-lg p-6 space-y-4">
           <h3 className="font-semibold text-foreground mb-4">
-            {editingId ? 'Modifier l\'adresse' : 'Nouvelle adresse'}
+            {editingId ? t('profile.addresses.edit') : t('profile.addresses.new')}
           </h3>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground">Libellé</label>
+            <label className="block text-sm font-medium text-foreground">{t('profile.addresses.label')}</label>
             <input
               type="text"
               name="label"
               value={formData.label}
               onChange={handleInputChange}
-              placeholder="Domicile, Bureau, etc."
-              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                errors.label ? 'border-error' : 'border-input focus:border-primary'
-              }`}
+              placeholder={t('profile.addresses.labelPlaceholder')}
+              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.label ? 'border-error' : 'border-input focus:border-primary'
+                }`}
             />
             {errors.label && (
               <p className="text-sm text-error flex items-center gap-1">
@@ -252,15 +253,14 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-foreground">Prénom</label>
+              <label className="block text-sm font-medium text-foreground">{t('auth.register.firstName')}</label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.firstName ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.firstName ? 'border-error' : 'border-input focus:border-primary'
+                  }`}
               />
               {errors.firstName && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -271,15 +271,14 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-foreground">Nom</label>
+              <label className="block text-sm font-medium text-foreground">{t('auth.register.lastName')}</label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.lastName ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.lastName ? 'border-error' : 'border-input focus:border-primary'
+                  }`}
               />
               {errors.lastName && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -291,16 +290,15 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground">Adresse</label>
+            <label className="block text-sm font-medium text-foreground">{t('auth.register.address')}</label>
             <input
               type="text"
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              placeholder="123 Rue de la Paix"
-              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                errors.address ? 'border-error' : 'border-input focus:border-primary'
-              }`}
+              placeholder={t('auth.register.placeholders.address')}
+              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.address ? 'border-error' : 'border-input focus:border-primary'
+                }`}
             />
             {errors.address && (
               <p className="text-sm text-error flex items-center gap-1">
@@ -312,15 +310,14 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-foreground">Ville</label>
+              <label className="block text-sm font-medium text-foreground">{t('auth.register.city')}</label>
               <input
                 type="text"
                 name="city"
                 value={formData.city}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.city ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.city ? 'border-error' : 'border-input focus:border-primary'
+                  }`}
               />
               {errors.city && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -331,16 +328,15 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-foreground">Code postal</label>
+              <label className="block text-sm font-medium text-foreground">{t('auth.register.postalCode')}</label>
               <input
                 type="text"
                 name="postalCode"
                 value={formData.postalCode}
                 onChange={handleInputChange}
-                placeholder="75001"
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.postalCode ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                placeholder={t('auth.register.placeholders.postalCode')}
+                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.postalCode ? 'border-error' : 'border-input focus:border-primary'
+                  }`}
               />
               {errors.postalCode && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -352,16 +348,15 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground">Téléphone</label>
+            <label className="block text-sm font-medium text-foreground">{t('auth.register.phone')}</label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              placeholder="06 12 34 56 78"
-              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                errors.phone ? 'border-error' : 'border-input focus:border-primary'
-              }`}
+              placeholder={t('auth.register.placeholders.phone')}
+              className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.phone ? 'border-error' : 'border-input focus:border-primary'
+                }`}
             />
             {errors.phone && (
               <p className="text-sm text-error flex items-center gap-1">
@@ -381,7 +376,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
               className="w-4 h-4 rounded border-input text-primary focus:ring-3 focus:ring-ring"
             />
             <label htmlFor="isDefault" className="text-sm text-foreground cursor-pointer">
-              Définir comme adresse par défaut
+              {t('profile.addresses.setDefault')}
             </label>
           </div>
 
@@ -390,13 +385,13 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
               onClick={handleSave}
               className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-smooth"
             >
-              Enregistrer
+              {t('common.save')}
             </button>
             <button
               onClick={handleCancel}
               className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium hover:bg-muted/80 transition-smooth"
             >
-              Annuler
+              {t('common.cancel')}
             </button>
           </div>
         </div>
@@ -414,7 +409,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
                   <h3 className="font-semibold text-foreground">{address.label}</h3>
                   {address.isDefault && (
                     <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
-                      Par défaut
+                      {t('profile.addresses.default')}
                     </span>
                   )}
                 </div>
@@ -436,7 +431,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
                   className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
                 >
                   <Icon name="StarIcon" size={20} />
-                  Définir par défaut
+                  {t('profile.addresses.setDefault')}
                 </button>
               )}
               <button
@@ -444,7 +439,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
                 className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
               >
                 <Icon name="PencilIcon" size={20} />
-                Modifier
+                {t('common.edit')}
               </button>
               {addresses.length > 1 && (
                 <button
@@ -452,7 +447,7 @@ const AddressBookTab = ({ user, onUpdateUser }: AddressBookTabProps) => {
                   className="flex items-center gap-2 px-4 py-2 bg-error/10 text-error rounded-lg hover:bg-error/20 transition-smooth font-medium"
                 >
                   <Icon name="TrashIcon" size={20} />
-                  Supprimer
+                  {t('profile.addresses.delete')}
                 </button>
               )}
             </div>

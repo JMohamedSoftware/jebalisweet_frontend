@@ -87,7 +87,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-100 transition-smooth ${isScrolled ? 'glass shadow-warm-md' : 'bg-card'
+        className={`sticky top-0 z-100 transition-all duration-300 ${isScrolled ? 'bg-card shadow-md border-b border-border/20' : 'bg-card'
           }`}
       >
         <div className="container mx-auto">
@@ -103,7 +103,7 @@ const Header = () => {
                   alt="Jebali Sweet Logo"
                   width="45"
                   height="45"
-                  className="rounded-full object-cover transition-smooth hover:scale-105 shadow-sm border border-primary/20"
+                  className="rounded-full object-cover transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md border border-primary/10"
                 />
                 <span className="font-heading text-2xl font-semibold text-primary hidden sm:block">
                   Jebali Sweet
@@ -123,9 +123,9 @@ const Header = () => {
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-md transition-smooth font-medium ${isActivePath(item.path)
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-foreground hover:bg-muted'
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${isActivePath(item.path)
+                        ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
+                        : 'text-foreground hover:bg-primary/5 hover:text-primary'
                         }`}
                     >
                       <Icon name={item.icon as any} size={20} />
@@ -168,8 +168,14 @@ const Header = () => {
             <div className="p-6 space-y-2">
               {navigationItems
                 .filter(item => {
+                  // Always hide the Login/Account link from the mobile menu
+                  // because it is already handled by the MobileAuthControl icon in the header
+                  if (item.path === '/login') {
+                    return false;
+                  }
+
                   if (userRole === 'livreur') {
-                    return item.path === '/' || item.path === '/login';
+                    return item.path === '/';
                   }
                   return true;
                 })

@@ -27,6 +27,7 @@ interface Order {
   subtotal: number;
   deliveryCost: number;
   discount: number;
+  promoCode?: string | null;
   total: number;
   status: 'pending' | 'pending_quote' | 'confirmed' | 'assigned' | 'in_delivery' | 'delivered' | 'cancelled';
   paymentMethod: string;
@@ -76,7 +77,8 @@ const AdminOrderManagementInteractive = () => {
         })),
         subtotal: (o.items || []).reduce((sum: any, item: any) => sum + ((Number(item.price) || 0) * (item.quantity || 0)), 0),
         deliveryCost: 0,
-        discount: 0,
+        discount: o.discountAmount || 0,
+        promoCode: o.promoCode || null,
         total: o.total,
         status: o.status,
         paymentMethod: o.paymentMethod,
@@ -347,9 +349,16 @@ const AdminOrderManagementInteractive = () => {
                 <div className="border-t border-border pt-4 mb-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-muted-foreground caption">{t('admin.orders.total')}</span>
-                    <span className="font-heading text-xl font-bold text-primary">
-                      {formatPrice(order.total)}
-                    </span>
+                    <div className="text-right">
+                      {order.discount > 0 && (
+                        <p className="text-[10px] text-success font-bold uppercase mb-1">
+                          PROMO: {order.promoCode} (-{formatPrice(order.discount)})
+                        </p>
+                      )}
+                      <span className="font-heading text-xl font-bold text-primary">
+                        {formatPrice(order.total)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 

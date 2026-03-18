@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/services/api';
 import { formatPrice } from '@/utils/format';
 
@@ -20,6 +21,7 @@ interface Order {
 }
 
 const OrderHistoryTab = () => {
+  const { t, language } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,25 +58,12 @@ const OrderHistoryTab = () => {
   };
 
   const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'confirmed':
-        return 'Confirmée';
-      case 'processing':
-        return 'En préparation';
-      case 'shipped':
-        return 'Expédiée';
-      case 'delivered':
-        return 'Livrée';
-      case 'cancelled':
-        return 'Annulée';
-      default:
-        return status;
-    }
+    return t(`profile.orders.status.${status}`) || status;
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('fr-FR', {
+    return new Intl.DateTimeFormat(language === 'ar_tn' ? 'ar-TN' : 'fr-FR', {
       day: '2-digit',
       month: 'long',
       year: 'numeric',
@@ -96,17 +85,17 @@ const OrderHistoryTab = () => {
       <div className="text-center py-12">
         <Icon name="ClipboardDocumentListIcon" size={64} className="text-muted-foreground mx-auto mb-4" />
         <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
-          Aucune commande
+          {t('profile.orders.noOrders')}
         </h3>
         <p className="text-muted-foreground mb-6">
-          Vous n'avez pas encore passé de commande
+          {t('profile.orders.empty')}
         </p>
         <Link
           href="/product-catalog"
           className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-smooth"
         >
           <Icon name="ShoppingBagIcon" size={20} />
-          Découvrir nos produits
+          {t('profile.orders.discover')}
         </Link>
       </div>
     );
@@ -115,7 +104,7 @@ const OrderHistoryTab = () => {
   return (
     <div className="space-y-4">
       <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
-        Historique des commandes
+        {t('profile.orders.history')}
       </h2>
 
       {orders.map((order) => (
@@ -132,11 +121,11 @@ const OrderHistoryTab = () => {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Commandé le {formatDate(order.createdAt)}
+                {t('profile.orders.date')} {formatDate(order.createdAt)}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-muted-foreground mb-1">Total</p>
+              <p className="text-sm text-muted-foreground mb-1">{t('profile.orders.total')}</p>
               <p className="font-heading text-2xl font-bold text-primary data-text">
                 {formatPrice(order.total)}
               </p>
@@ -147,10 +136,10 @@ const OrderHistoryTab = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">
-                  {order.items.length} article{order.items.length > 1 ? 's' : ''}
+                  {t('profile.orders.items', { count: order.items.length })}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Paiement: {order.paymentMethod === 'card' ? 'Carte bancaire' : order.paymentMethod === 'paypal' ? 'PayPal' : 'Virement bancaire'}
+                  {t('profile.orders.payment')}: {order.paymentMethod === 'card' ? t('checkout.onlinePayment') : order.paymentMethod === 'paypal' ? 'PayPal' : t('checkout.cashOnDelivery')}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -159,13 +148,13 @@ const OrderHistoryTab = () => {
                   className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
                 >
                   <Icon name="EyeIcon" size={20} />
-                  Voir détails
+                  {t('profile.orders.viewDetails')}
                 </Link>
                 <button
                   className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium"
                 >
                   <Icon name="ArrowPathIcon" size={20} />
-                  Recommander
+                  {t('profile.orders.reorder')}
                 </button>
               </div>
             </div>

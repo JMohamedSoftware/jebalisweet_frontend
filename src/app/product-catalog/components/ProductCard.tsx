@@ -57,34 +57,34 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
   };
 
   return (
-    <div className="bg-card rounded-lg shadow-warm hover:shadow-warm-md transition-smooth overflow-hidden group border border-border/10">
-      <div className="relative h-44 sm:h-64 overflow-hidden bg-muted">
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-white/20 flex flex-col h-full">
+      <div className="relative h-48 sm:h-64 overflow-hidden bg-transparent">
         <AppImage
           src={product.image}
           alt={product.alt}
           className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
         />
         {!product.inStock && (
-          <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-            <span className="bg-error text-error-foreground px-4 py-2 rounded-lg font-semibold">
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center z-10 transition-opacity">
+            <span className="bg-background/90 text-foreground px-5 py-2.5 rounded-full font-heading font-semibold text-sm tracking-wide shadow-lg border border-border/50">
               {t('product.outOfStock')}
             </span>
           </div>
         )}
         <button
           onClick={(e) => { e.stopPropagation(); onQuickView(product); }}
-          className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] bg-white/90 backdrop-blur-sm text-foreground py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-smooth hover:bg-white border border-border/50 shadow-sm"
+          className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2rem)] bg-white/40 backdrop-blur-xl text-foreground py-2 sm:py-2.5 rounded-xl font-medium text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 hover:bg-white border border-white/20 shadow-lg translate-y-2 sm:group-hover:translate-y-0 z-20"
           aria-label={t('product.quickViewProduct', { productName: product.name })}
         >
-          <Icon name="EyeIcon" size={14} className="sm:w-4 sm:h-4" />
+          <Icon name="EyeIcon" size={16} className="sm:w-5 sm:h-5 text-primary" />
           {t('catalog.quickView')}
         </button>
       </div>
 
-      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
-        <div className="space-y-0.5 sm:space-y-1">
-          <p className="caption text-muted-foreground hidden sm:block">{product.brand}</p>
-          <h3 className="font-heading text-sm sm:text-lg font-semibold text-foreground line-clamp-2 leading-tight">
+      <div className="p-4 sm:p-5 flex flex-col flex-1 space-y-3 sm:space-y-4">
+        <div className="space-y-1">
+          <p className="text-[10px] sm:text-xs font-semibold tracking-widest text-muted-foreground uppercase hidden sm:block">{product.brand}</p>
+          <h3 className="font-heading text-base sm:text-xl font-bold text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors">
             {product.name}
           </h3>
         </div>
@@ -99,34 +99,36 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
         </div>
 
         {product.inStock && (
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${(product.stockQuantity || 0) > 5 ? 'bg-success' : 'bg-warning'}`}></div>
-            <span className={`text-xs font-semibold ${(product.stockQuantity || 0) > 5 ? 'text-success' : 'text-warning'}`}>
-              Stock: {Math.max(0, product.stockQuantity || 0)} {product.priceUnit === 'kg' ? 'kg' : 'pièces'}
+            <span className={`text-[10px] sm:text-xs font-semibold ${(product.stockQuantity || 0) > 5 ? 'text-success' : 'text-warning'}`}>
+              Stock: {Math.max(0, product.stockQuantity || 0)} {product.priceUnit === 'kg' ? 'kg' : 'pcs'}
             </span>
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-border">
-          <span className="font-heading text-lg sm:text-2xl font-bold text-primary">
-            {formatPrice(product.price)}
-            {product.priceUnit === 'kg' && <span className="text-[10px] sm:text-sm font-medium text-muted-foreground ml-0.5 sm:ml-1">/ kg</span>}
-          </span>
+        <div className="flex items-end justify-between pt-3 sm:pt-4 border-t border-border/40 mt-auto">
+          <div className="flex flex-col">
+            <span className="font-heading text-xl sm:text-2xl font-bold text-primary leading-none">
+              {formatPrice(product.price)}
+            </span>
+            {product.priceUnit === 'kg' && <span className="text-[10px] sm:text-xs font-medium text-muted-foreground mt-0.5">/ kg</span>}
+          </div>
           <button
             onClick={handleAddToCart}
             disabled={product.inStock === false || isAdding}
-            className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg transition-smooth font-medium focus:outline-none focus:ring-3 focus:ring-ring focus:ring-offset-3 ${isAdding
+            className={`group/btn flex items-center justify-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl transition-all duration-300 font-bold focus:outline-none focus:ring-4 focus:ring-primary/20 ${isAdding
               ? 'bg-accent text-accent-foreground animate-pulse'
-              : 'bg-primary text-primary-foreground hover:opacity-90'
+              : 'bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
             aria-label={t('product.addToCartAria', { productName: product.name })}
           >
             {isAdding ? (
-              <Icon name="CheckIcon" size={20} />
+              <Icon name="CheckIcon" size={16} className="sm:w-5 sm:h-5" />
             ) : (
-              <Icon name="ShoppingCartIcon" size={20} />
+              <Icon name="ShoppingCartIcon" size={16} className="sm:w-5 sm:h-5" />
             )}
-            <span className="hidden sm:inline">
+            <span className="text-xs sm:text-base">
               {isAdding ? t('common.loading') : t('product.addToCart')}
             </span>
           </button>

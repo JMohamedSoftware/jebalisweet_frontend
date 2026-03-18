@@ -37,7 +37,7 @@ const OrderSummary = ({
   };
 
   return (
-    <div className="bg-card rounded-lg shadow-warm-md p-6 border border-border sticky top-20">
+    <div className="bg-card rounded-3xl shadow-lg border border-border/10 p-8 sticky top-20">
       <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
         {t('cart.summary.title')}
       </h2>
@@ -121,7 +121,7 @@ const OrderSummary = ({
 
       <Link
         href="/checkout-payment"
-        className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-heading font-semibold text-lg hover:opacity-90 transition-smooth shadow-warm-md hover:shadow-warm-lg block text-center"
+        className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-heading font-bold text-lg hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-primary/20 block text-center"
       >
         {t('cart.summary.checkout')}
       </Link>

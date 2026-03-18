@@ -21,8 +21,8 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [language, setLanguageState] = useState<Language>('fr');
-    const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
+    const [language, setLanguageState] = useState<Language>('ar_tn');
+    const [direction, setDirection] = useState<'ltr' | 'rtl'>('rtl');
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') as Language;

@@ -5,9 +5,11 @@ import BreadcrumbTrail from '@/components/common/BreadcrumbTrail';
 import ProductCatalogInteractive from './components/ProductCatalogInteractive';
 import LoadingSkeleton from './components/LoadingSkeleton';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
-  title: 'Catalogue de Produits - Jebali Sweet',
-  description: 'Découvrez notre collection complète de douceurs orientales authentiques. Parcourez nos pâtisseries, confiseries et biscuits traditionnels avec filtres par catégorie, prix et marque.',
+  title: 'Catalogue Pâtisserie & Chocolaterie - Jebali Sweet',
+  description: 'Découvrez notre collection complète : chocolats artisanaux, gâteaux personnalisés sur mesure et salés raffinés. Achetez en ligne vos gourmandises préférées de chez Chef Aida Jebali.',
 };
 
 async function getInitialData(params: { [key: string]: string | string[] | undefined }) {

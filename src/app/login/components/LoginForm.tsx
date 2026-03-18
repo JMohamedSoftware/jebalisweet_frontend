@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
 import { API_ENDPOINT } from '@/config/api';
+import { useLanguage } from '@/context/LanguageContext';
 import ForgotPasswordWizard from './ForgotPasswordWizard';
 
 interface LoginFormProps {
@@ -24,6 +25,7 @@ interface FormErrors {
 }
 
 const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isHydrated, setIsHydrated] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -49,15 +51,15 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
     const newErrors: FormErrors = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = 'L\'adresse e-mail est requise';
+      newErrors.email = t('auth.login.errors.emailRequired');
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Veuillez entrer une adresse e-mail valide';
+      newErrors.email = t('auth.login.errors.emailInvalid');
     }
 
     if (!formData.password.trim()) {
-      newErrors.password = 'Le mot de passe est requis';
+      newErrors.password = t('auth.login.errors.passwordRequired');
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+      newErrors.password = t('auth.login.errors.passwordShort');
     }
 
     setErrors(newErrors);
@@ -114,6 +116,10 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
           }));
           localStorage.setItem('token', data.token);
 
+          // Sync token to cookie for Next.js Middleware Route Protection
+          // Secure flag is important if HTTPS is used
+          document.cookie = `auth_token=${data.token}; path=/; max-age=604800; SameSite=Lax; Secure`;
+
           if (formData.rememberMe) {
             localStorage.setItem('rememberMe', 'true');
           }
@@ -133,12 +139,12 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
         }
       } else {
         setErrors({
-          general: data.message || 'Identifiants incorrects.'
+          general: data.message || t('auth.login.errors.invalid')
         });
       }
     } catch (error) {
       setErrors({
-        general: 'Erreur de connexion au serveur.'
+        general: t('common.error')
       });
     } finally {
       setIsLoading(false);
@@ -147,7 +153,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
 
   if (!isHydrated) {
     return (
-      <div className="w-full max-w-md mx-auto p-8 bg-card rounded-xl shadow-warm-lg">
+      <div className="w-full max-w-md mx-auto p-8 bg-card rounded-3xl shadow-xl border border-border/10">
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-muted rounded w-3/4 mx-auto" />
           <div className="space-y-4">
@@ -161,11 +167,11 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-8 bg-card rounded-xl shadow-warm-lg">
+    <div className="w-full max-w-md mx-auto p-8 bg-card rounded-3xl shadow-xl border border-border/10">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Connexion</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">{t('auth.login.title')}</h1>
         <p className="text-muted-foreground">
-          Connectez-vous à votre compte Jebali Sweet
+          {t('auth.login.subtitle')}
         </p>
       </div>
 
@@ -186,7 +192,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
             htmlFor="email"
             className="block text-sm font-medium text-foreground"
           >
-            Adresse e-mail
+            {t('auth.login.email')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -202,10 +208,10 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`w-full pl-10 pr-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.email
+              className={`w-full pl-10 pr-4 py-3 bg-background border rounded-xl font-medium transition-all focus:outline-none focus:ring-3 focus:ring-primary/20 ${errors.email
                 ? 'border-error focus:border-error' : 'border-input focus:border-primary'
                 }`}
-              placeholder="votre@email.fr"
+              placeholder={t('auth.register.placeholders.email')}
               autoComplete="email"
               disabled={isLoading}
             />
@@ -223,7 +229,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
             htmlFor="password"
             className="block text-sm font-medium text-foreground"
           >
-            Mot de passe
+            {t('auth.login.password')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -239,10 +245,10 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              className={`w-full pl-10 pr-12 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.password
+              className={`w-full pl-10 pr-12 py-3 bg-background border rounded-xl font-medium transition-all focus:outline-none focus:ring-3 focus:ring-primary/20 ${errors.password
                 ? 'border-error focus:border-error' : 'border-input focus:border-primary'
                 }`}
-              placeholder="••••••••"
+              placeholder={t('auth.register.placeholders.password')}
               autoComplete="current-password"
               disabled={isLoading}
             />
@@ -274,10 +280,10 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
               name="rememberMe"
               checked={formData.rememberMe}
               onChange={handleInputChange}
-              className="w-4 h-4 text-primary bg-background border-input rounded focus:ring-3 focus:ring-ring transition-smooth cursor-pointer"
+              className="w-4 h-4 text-primary bg-background border-input rounded focus:ring-3 focus:ring-primary/20 transition-all cursor-pointer"
               disabled={isLoading}
             />
-            <span className="text-sm text-foreground">Se souvenir de moi</span>
+            <span className="text-sm text-foreground">{t('auth.login.rememberMe') || 'Se souvenir de moi'}</span>
           </label>
 
           <button
@@ -286,14 +292,14 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
             className="text-sm text-primary hover:text-primary/80 transition-smooth font-medium"
             disabled={isLoading}
           >
-            Mot de passe oublié ?
+            {t('auth.login.forgotPassword')}
           </button>
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 px-4 bg-primary text-primary-foreground rounded-lg font-semibold transition-smooth hover:opacity-90 focus:outline-none focus:ring-3 focus:ring-ring focus:ring-offset-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-4 px-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -302,26 +308,26 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
                 size={20}
                 className="animate-spin"
               />
-              <span>Connexion en cours...</span>
+              <span>{t('auth.login.loading')}</span>
             </>
           ) : (
             <>
               <Icon name="ArrowRightOnRectangleIcon" size={20} />
-              <span>Se connecter</span>
+              <span>{t('auth.login.submit')}</span>
             </>
           )}
         </button>
 
         <div className="text-center pt-4 border-t border-border">
           <p className="text-sm text-muted-foreground">
-            Vous n&apos;avez pas de compte ?{' '}
+            {t('auth.login.noAccount')}{' '}
             <button
               type="button"
               onClick={() => router.push('/register')}
               className="text-primary hover:text-primary/80 transition-smooth font-medium"
               disabled={isLoading}
             >
-              Créer un compte
+              {t('auth.login.register')}
             </button>
           </p>
         </div>

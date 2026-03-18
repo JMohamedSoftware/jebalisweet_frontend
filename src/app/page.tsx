@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Header from '@/components/common/Header';
-import BreadcrumbTrail from '@/components/common/BreadcrumbTrail';
 import HomepageInteractive from './homepage/components/HomepageInteractive';
 import Footer from '@/components/common/Footer';
 
@@ -14,7 +13,6 @@ export default function HomePage() {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">
-                <BreadcrumbTrail />
                 <HomepageInteractive />
             </main>
             <Footer />

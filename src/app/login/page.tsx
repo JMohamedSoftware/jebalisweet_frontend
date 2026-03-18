@@ -7,7 +7,7 @@ import AppImage from '@/components/ui/AppImage';
 export const metadata: Metadata = {
   title: 'Connexion - Jebali Sweet',
   description:
-  'Connectez-vous à votre compte Jebali Sweet pour accéder à vos commandes, gérer votre profil et profiter de nos délicieuses confiseries.'
+    'Connectez-vous à votre compte Jebali Sweet pour accéder à vos commandes, gérer votre profil et profiter de nos délicieuses confiseries.'
 };
 
 export default function LoginPage() {
@@ -45,7 +45,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-16 grid sm:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-card rounded-xl shadow-warm">
+            <div className="text-center p-6 bg-card rounded-2xl shadow-sm border border-border/10">
               <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-primary"
@@ -69,7 +69,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <div className="text-center p-6 bg-card rounded-xl shadow-warm">
+            <div className="text-center p-6 bg-card rounded-2xl shadow-sm border border-border/10">
               <div className="w-16 h-16 mx-auto mb-4 bg-secondary/10 rounded-full flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-secondary"
@@ -93,7 +93,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <div className="text-center p-6 bg-card rounded-xl shadow-warm">
+            <div className="text-center p-6 bg-card rounded-2xl shadow-sm border border-border/10">
               <div className="w-16 h-16 mx-auto mb-4 bg-accent/10 rounded-full flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-accent"

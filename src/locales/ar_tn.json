@@ -1,239 +1,558 @@
 {
     "nav": {
         "home": "الرئيسية",
-        "products": "السلع",
+        "products": "المنتجات",
         "account": "حسابي",
-        "login": "دخول",
-        "profile": "حسابي",
-        "orders": "طلبياتي",
+        "login": "تسجيل الدخول",
+        "profile": "ملفي الشخصي",
+        "orders": "طلباتي",
         "admin": "الإدارة",
-        "delivery": "فضاء الموصل",
-        "logout": "خروج",
+        "delivery": "فضاء التوصيل",
+        "logout": "تسجيل الخروج",
         "language": "اللغة",
-        "user": "مستعمل"
+        "user": "المستخدم"
+    },
+    "common": {
+        "loading": "جاري التحميل...",
+        "error": "حدث خطأ ما",
+        "confirmDelete": "هل أنت متأكد من حذف هذا العنصر؟",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "delete": "حذف",
+        "edit": "تعديل",
+        "back": "رجوع",
+        "next": "التالي",
+        "submit": "إرسال",
+        "success": "تم بنجاح",
+        "optional": "(اختياري)"
+    },
+    "auth": {
+        "login": {
+            "title": "مرحباً بكم مجدداً",
+            "subtitle": "سجل الدخول للوصول إلى حسابك",
+            "email": "البريد الإلكتروني",
+            "password": "كلمة المرور",
+            "forgotPassword": "نسيت كلمة المرور؟",
+            "submit": "تسجيل الدخول",
+            "loading": "جاري الدخول...",
+            "noAccount": "ليس لديك حساب؟",
+            "register": "إنشاء حساب",
+            "errors": {
+                "emailRequired": "البريد الإلكتروني مطلوب",
+                "emailInvalid": "البريد الإلكتروني غير صالح",
+                "passwordRequired": "كلمة المرور مطلوبة",
+                "passwordShort": "6 أحرف على الأقل",
+                "invalid": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+            }
+        },
+        "register": {
+            "title": "إنشاء حساب",
+            "subtitle": "انضم إلى عائلة جبالي سويت",
+            "firstName": "الاسم الأول",
+            "lastName": "اللقب",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "password": "كلمة المرور",
+            "confirmPassword": "تأكيد كلمة المرور",
+            "address": "العنوان",
+            "city": "المدينة",
+            "postalCode": "الرمز البريدي",
+            "role": "نوع الحساب",
+            "client": "عميل",
+            "delivery": "موصل",
+            "submit": "إنشاء حسابي",
+            "loading": "جاري الإنشاء...",
+            "haveAccount": "مسجل بالفعل؟",
+            "login": "تسجيل الدخول",
+            "terms": "أوافق على {terms} و {privacy}",
+            "shippingAddress": "عنوان الشحن",
+            "placeholders": {
+                "firstName": "الاسم الأول",
+                "lastName": "اللقب",
+                "email": "name@example.com",
+                "phone": "12 34 56 78",
+                "password": "••••••••",
+                "address": "123 نهج الحرية",
+                "city": "المدينة",
+                "postalCode": "1234"
+            },
+            "errors": {
+                "firstName": "الاسم الأول مطلوب",
+                "lastName": "اللقب مطلوب",
+                "email": "البريد الإلكتروني غير صالح",
+                "emailRequired": "البريد الإلكتروني مطلوب",
+                "phone": "هاتف غير صالح (8 أرقام)",
+                "phoneRequired": "الهاتف مطلوب",
+                "password": "8 أحرف على الأقل",
+                "confirmPassword": "كلمات المرور غير متطابقة",
+                "confirmPasswordRequired": "يرجى التأكيد",
+                "address": "العنوان مطلوب",
+                "city": "المدينة مطلوبة",
+                "postalCode": "الرمز البريدي مطلوب",
+                "postalCodeInvalid": "رمز بريدي غير صالح (4 أرقام)",
+                "terms": "يرجى قبول الشروط",
+                "general": "حدث خطأ أثناء التسجيل"
+            },
+            "passwordStrength": {
+                "veryWeak": "ضعيف جداً",
+                "weak": "ضعيف",
+                "medium": "متوسط",
+                "strong": "قوي",
+                "veryStrong": "قوي جداً"
+            },
+            "securityInfo": {
+                "title": "بياناتك محمية",
+                "description": "نحن نستخدم أحدث تقنيات التشفير. لن يتم مشاركة بياناتك أبداً."
+            }
+        },
+        "forgotPassword": {
+            "title": "نسيت كلمة المرور؟",
+            "subtitle": "أدخل بريدك الإلكتروني لتلقي الرمز",
+            "submit": "إرسال الرمز",
+            "backToLogin": "العودة لتسجيل الدخول",
+            "step1": "أدخل بريدك الإلكتروني",
+            "step2": "أدخل رمز OTP",
+            "step3": "كلمة مرور جديدة",
+            "otpLabel": "رمز OTP",
+            "otpPlaceholder": "000000",
+            "newPassword": "كلمة مرور جديدة",
+            "confirmNewPassword": "تأكيد كلمة المرور",
+            "updateSubmit": "تغيير كلمة المرور",
+            "success": "تم تغيير كلمة المرور بنجاح!"
+        }
     },
     "home": {
         "hero": {
-            "title": "ذوق البنة متع جبالي سويت",
-            "subtitle": "جبالي سويت يقدم لك أحسن ما يتآكل مالشكلاطة، الحلو، قاتو و باتيسري أرتيزانال مصنوعة ببرشة حب وخبرة.",
-            "cta": "شوف السلع متاعنا"
+            "title": "اكتشف روعة جبالي سويت",
+            "subtitle": "جبالي سويت – مخبزة تقدم حلويات عربية وعصرية، وكعك من مختلف الأنواع ومجموعة متنوعة من المرطبات اللذيذة.",
+            "cta": "اكتشف منتجاتنا",
+            "badge": "ابتكار أصيل"
         },
         "categories": {
-            "title": "الأصناف متاعنا",
-            "subtitle": "شوف المجموعة الكاملة متع الحلو متاعنا",
-            "empty": "حتى صنف ما لقيناه.",
-            "descriptionDefault": "شوف أحسن ما عندنا من {category}."
+            "title": "أقسامنا",
+            "subtitle": "استكشف مجموعتنا الكاملة من الحلويات التقليدية الفاخرة",
+            "empty": "لم يتم العثور على أي قسم.",
+            "descriptionDefault": "اكتشف تشكيلتنا من {category}."
         },
         "featured": {
-            "title": "السلع الأكثر مبيعا",
-            "subtitle": "شوف أحسن ما يتباع متاعنا والجديد",
-            "empty": "حتى سلعة مشهورة توة."
+            "title": "المنتجات الأكثر مبيعاً",
+            "subtitle": "اكتشف أفضل مبيعاتنا وأحدث منتجاتنا",
+            "empty": "لا توجد منتجات شائعة حالياً."
         },
         "promo": {
-            "title": "أوفير سبيسيال راس العام",
-            "subtitle": "بروفيتي بـ 20% ركسيون على الشكلاطة الكل حتى لـ 31 ديسمبر",
-            "cta": "شوف العروض"
+            "title": "عرض خاص بمناسبة رأس السنة",
+            "subtitle": "استمتع بخصم 20% على جميع أنواع الشوكولاتة وصناديق الهدايا حتى 31 ديسمبر",
+            "cta": "عرض العروض"
         },
         "testimonials": {
-            "title": "آش قالوا الكليونات متاعنا",
-            "subtitle": "شوف رأي الكليونات متاعنا إلي فرحانين بينا",
-            "empty": "حتى كلمة من كليوناتنا توة."
+            "title": "ماذا يقول عملاؤنا",
+            "subtitle": "اكتشف آراء عملائنا الذين نالوا رضانا",
+            "empty": "لا توجد شهادات حالياً."
         },
         "trust": {
             "shipping": {
-                "title": "توصيل فيسع فيسع",
-                "description": "التوصيل بلاش ملفوق الـ 50د"
+                "title": "توصيل سريع",
+                "description": "مجاني للطلبات فوق 50 د.ت"
             },
             "quality": {
                 "title": "جودة مضمونة",
-                "description": "سلعة أرتيزانال متبعة"
+                "description": "منتجات حرفية تقليدية"
             },
             "payment": {
-                "title": "خلاص مأمن",
-                "description": "100% مأمن"
+                "title": "دفع آمن",
+                "description": "آمن بنسبة 100%"
             }
         }
     },
-    "common": {
-        "loading": "قاعد يشرجي...",
-        "error": "فما مشكلة صارت",
-        "confirmDelete": "ثابت تحب تفسخها؟"
-    },
     "catalog": {
-        "title": "السلع",
-        "subtitle": "شوف أحسن ما عندنا من حلويات",
+        "title": "الكتالوج",
+        "subtitle": "اكتشف حلوياتنا الأصيلة",
         "filters": {
-            "title": "فيلترات",
-            "reset": "رجّع من لول",
+            "title": "تصفية",
+            "reset": "إعادة ضبط",
             "categories": "الأصناف",
-            "price": "السوم",
-            "brands": "المركات",
-            "stockOnly": "إلي موجودين توة بركة",
+            "price": "السعر",
+            "brands": "العلامات التجارية",
+            "stockOnly": "متوفر فقط",
             "all": "الكل"
         },
         "sort": {
-            "relevance": "بالأهمية",
-            "priceAsc": "من الرخيص للغالي",
-            "priceDesc": "من الغالي للرخيص",
-            "newest": "الجديد",
-            "bestsellers": "الأكثر مبيعا"
+            "relevance": "الأكثر صلة",
+            "priceAsc": "السعر: من الأقل إلى الأعلى",
+            "priceDesc": "السعر: من الأعلى إلى الأقل",
+            "newest": "الأحدث",
+            "bestsellers": "الأكثر مبيعاً"
         },
         "customCake": {
-            "title": "تحب قاتو سبيسيال؟",
-            "subtitle": "اصنع قاتو أحلامك بيدك.",
-            "cta": "نحب نصنع القاتو متاعي",
-            "exclusive": "حاجة خاصة"
+            "title": "هل تحتاج إلى كعكة فريدة؟",
+            "subtitle": "صمم كعكة أحلامك.",
+            "cta": "تخصيص كعكتي",
+            "exclusive": "حصرياً"
         },
-        "quickView": "نظرة خفيفة",
-        "addToCart": "زيد للحكة",
-        "outOfStock": "وفات السلعة",
-        "popularProducts": "السلع الأكثر مبيعا"
+        "quickView": "عرض سريع",
+        "addToCart": "إضافة إلى السلة",
+        "outOfStock": "نفذت الكمية",
+        "popularProducts": "منتجات شائعة"
     },
     "quickView": {
-        "title": "نظرة خفيفة",
-        "close": "سكر",
-        "outOfStock": "وفات السلعة",
-        "inStock": "موجودة",
-        "reviews": "أراء",
-        "category": "الصنف"
+        "title": "عرض سريع",
+        "close": "إغلاق العرض",
+        "outOfStock": "نفذت الكمية",
+        "inStock": "متوفر",
+        "reviews": "مراجعة",
+        "category": "الصنف",
+        "priceLabel": "سعر التميز",
+        "shipping": "توصيل سريع",
+        "securePayment": "دفع آمن",
+        "added": "تمت الإضافة !",
+        "addToCart": "إضافة إلى السلة"
     },
     "product": {
-        "outOfStock": "وفات السلعة",
-        "addToCart": "زيد",
-        "addToCartAria": "زيد {productName} للحكة",
-        "quickViewProduct": "نظرة خفيفة على {productName}",
-        "customCakeCategory": "Gâteaux"
+        "outOfStock": "نفذت الكمية",
+        "addToCart": "إضافة",
+        "addToCartAria": "إضافة {productName} إلى السلة",
+        "quickViewProduct": "عرض سريع لـ {productName}",
+        "customCakeCategory": "الحلويات",
+        "pricePerPiece": "{price} د.ت / للقطعة",
+        "pricePerKg": "{price} د.ت / للكغ"
     },
     "admin": {
         "orders": {
-            "title": "إدارة الطلبيات",
-            "count": "{count} طلبيات جملة",
-            "searchPlaceholder": "لوج بالرقم، الاسم ولا الإيميل...",
-            "backHome": "ارجع للرئيسية",
+            "title": "إدارة الطلبات",
+            "count": "{count} طلب إجمالي",
+            "searchPlaceholder": "بحث بالرقم، الاسم أو البريد الإلكتروني...",
+            "backHome": "العودة للرئيسية",
             "status": {
                 "all": "الكل",
                 "pending": "قيد الانتظار",
-                "pending_quote": "في استراحة لمراجعة السعر",
-                "confirmed": "موافقة",
-                "assigned": "معطاة لموصل",
-                "in_delivery": "قاعدين نوصلوا",
-                "delivered": "وصلت",
-                "cancelled": "ملغية"
+                "pending_quote": "في انتظار التسعير",
+                "confirmed": "مؤكد",
+                "assigned": "تم التعيين",
+                "in_delivery": "قيد التوصيل",
+                "delivered": "تم التوصيل",
+                "cancelled": "تم الإلغاء"
             },
             "itemsTable": {
-                "title": "السلع إلي مطلوبة:",
-                "priceToQuote": "لازم سوم",
-                "unitPrice": "السوم",
-                "confirmQuote": "وافق على السوم",
-                "note": "ملاحظة الكليون:",
-                "inspiration": "التصويرة:",
-                "viewFull": "شوفها كبيرة"
+                "title": "الأصناف المطلوبة:",
+                "priceToQuote": "طلب تسعير",
+                "unitPrice": "سعر الوحدة",
+                "confirmQuote": "تأكيد التسعير",
+                "note": "ملاحظة العميل:",
+                "inspiration": "الإلهام:",
+                "viewFull": "عرض كامل"
             },
             "shipping": {
                 "address": "عنوان التوصيل:",
-                "driver": "الموصل الحاضر:"
+                "driver": "الموصل المكلف:"
             },
             "actions": {
-                "confirm": "وافق",
-                "assign": "اعطي لموصل",
-                "delivered": "وصلت",
-                "details": "تفاصيل",
-                "cancel": "بطل"
+                "confirm": "تأكيد",
+                "assign": "تعيين موصل",
+                "delivered": "تم التوصيل",
+                "details": "التفاصيل",
+                "cancel": "إلغاء"
             },
-            "statusLabel": "الوضعية:",
-            "confirmDelivered": "ثابت تحب تحطها وصلت؟",
-            "noResults": "حتى طلبية ما فمة",
-            "selectDriver": "اختار موصل",
+            "statusLabel": "الحالة:",
+            "confirmDelivered": "تأكيد التسليم؟",
+            "noResults": "لم يتم العثور على أي طلب",
+            "selectDriver": "اختر موصلاً",
             "quantity": "الكمية",
             "total": "المجموع",
             "modal": {
-                "title": "تفاصيل الطلبية",
-                "items": "السلع",
+                "title": "تفاصيل الطلب",
+                "items": "الأصناف",
                 "shipping": "التوصيل",
-                "payment": "الخلاص"
+                "payment": "الدفع"
             }
         },
         "testimonials": {
-            "title": "إدارة آراء الكليونات",
-            "subtitle": "زيد ولا فصخ آراء الكليونات إلي يظهروا في الصفحة الرئيسية",
-            "backToDashboard": "ارجع للإدارة",
-            "newTitle": "رأي جديد",
-            "clientName": "اسم الكليون",
-            "location": "البلاصة",
-            "rating": "العدد (1-5)",
-            "comment": "الرأي",
-            "placeholderName": "مثال: مريم ديبوا",
+            "title": "إدارة الشهادات",
+            "subtitle": "إضافة أو حذف آراء العملاء المعروضة على الصفحة الرئيسية",
+            "backToDashboard": "العودة للوحة التحكم",
+            "newTitle": "شهادة جديدة",
+            "clientName": "اسم العميل",
+            "location": "الموقع",
+            "rating": "التقييم (1-5)",
+            "comment": "التعليق",
+            "placeholderName": "مثال: مريم",
             "placeholderLocation": "مثال: تونس العاصمة",
-            "placeholderComment": "أكتب الرأي هنا...",
-            "add": "زيد",
-            "empty": "حتى رأي ما لقيناه. زيد واحد!",
+            "placeholderComment": "محتوى الشهادة...",
+            "add": "إضافة",
+            "empty": "لم يتم العثور على أي شهادة. جرب إضافة واحدة!",
             "stars": "نجوم",
-            "successAdd": "الرأي تزاد بنجاح!",
-            "errorAdd": "مشكلة صارت و الرأي ما تزادش.",
-            "errorDelete": "مشكلة صارت و الرأي ما تفسخش."
+            "successAdd": "تم إضافة الشهادة بنجاح!",
+            "errorAdd": "خطأ أثناء إضافة الشهادة.",
+            "errorDelete": "خطأ أثناء الحذف."
         },
         "dashboard": {
-            "totalSales": "جملة المبيعات",
-            "orders": "الطلبيات",
-            "products": "السلع",
-            "customers": "الكليونات"
+            "totalSales": "إجمالي المبيعات",
+            "orders": "الطلبات",
+            "products": "المنتجات",
+            "customers": "العملاء"
         },
         "productManagement": {
-            "title": "إدارة السلع",
-            "count": "{count} سلعة جملة",
-            "addProduct": "زيد سلعة",
-            "searchPlaceholder": "لوج على سلعة...",
-            "allCategories": "كل الأصناف",
-            "inStock": "موجودة",
-            "outOfStock": "وفات",
-            "stock": "الموجود",
-            "modifier": "بدل",
-            "delete": "فصخ",
-            "noResults": "حتى سلعة ما فمة",
+            "title": "إدارة المنتجات",
+            "count": "{count} منتج إجمالي",
+            "addProduct": "إضافة منتج",
+            "searchPlaceholder": "بحث عن منتج...",
+            "allCategories": "جميع الأصناف",
+            "inStock": "متوفر",
+            "outOfStock": "نفذ",
+            "stock": "المخزون",
+            "modifier": "تعديل",
+            "delete": "حذف",
+            "noResults": "لم يتم العثور على أي منتج",
             "modal": {
-                "addTitle": "زيد سلعة جديدة",
-                "editTitle": "بدل السلعة",
-                "name": "اسم السلعة *",
+                "addTitle": "إضافة منتج",
+                "editTitle": "تعديل المنتج",
+                "name": "اسم المنتج *",
                 "description": "الوصف *",
-                "price": "السوم (د.ت) *",
-                "stockQuantity": "قداش فمة في الستوك *",
-                "category": "الصنف *",
-                "brand": "الماركة *",
-                "imagePreview": "التصويرة",
-                "imageUrl": "رابط التصويرة (URL)",
-                "imageHelp": "حط رابط ولا طلع تصويرة من عندك.",
-                "upload": "ولا طلع تصويرة من الحاسوب",
-                "alt": "وصف التصويرة",
-                "inStockCheck": "السلعة موجودة",
-                "isFeaturedCheck": "سلعة مشهورة (الأكثر مبيعا)",
-                "submitAdd": "زيد",
-                "submitEdit": "بدل",
-                "cancel": "بطل",
-                "noImage": "حتى تصويرة ما فمة"
+                "price": "السعر (د.ت) *",
+                "stockQuantity": "الكمية في المخزون *",
+                "category": "القسم *",
+                "brand": "العلامة التجارية *",
+                "imagePreview": "معاينة الصورة",
+                "imageUrl": "رابط الصورة (URL)",
+                "imageHelp": "ألصق الرابط هنا أو ارفع ملفاً.",
+                "upload": "أو رفع ملف محلي",
+                "alt": "النص البديل للصورة",
+                "inStockCheck": "المنتج متوفر",
+                "isFeaturedCheck": "منتج شائع (مميز)",
+                "submitAdd": "إضافة",
+                "submitEdit": "تحديث",
+                "cancel": "إلغاء",
+                "noImage": "لم يتم تحديد أي صورة"
             }
         }
     },
     "cart": {
-        "title": "الحكة متاعي",
-        "continueShopping": "كمل قضياتك",
-        "freeShippingInfo": "توصيل بلاش ملفوق الـ {threshold} د.ت",
+        "title": "سلة المشتريات",
+        "continueShopping": "مواصلة التسوق",
+        "freeShippingInfo": "توصيل مجاني للطلبات فوق {threshold} د.ت",
         "empty": {
-            "title": "الحكة متاعك فارغة",
-            "subtitle": "شوف أحسن ما عندنا و ابدا قضياتك",
-            "cta": "شوف السلع متاعنا"
+            "title": "سلة المشتريات فارغة",
+            "subtitle": "اكتشف حلوياتنا اللذيذة وابدأ التسوق",
+            "cta": "اكتشف منتجاتنا"
         },
         "summary": {
-            "title": "ملخص الطلبية",
-            "subtotal": "المجموع",
+            "title": "ملخص الطلب",
+            "subtotal": "الإجمالي الفرعي",
             "shipping": "التوصيل",
-            "discount": "تخفيض",
-            "total": "المجموع الجملي",
-            "promoCode": "كود برومو",
-            "apply": "استعمل",
-            "invalidCode": "الكود غالط",
-            "successCode": "الكود {code} تخدم !",
-            "checkout": "خلص توة",
-            "customNote": "ثبت إلي السلع إلي تصنعوا باليد ياخذوا شوية وقت."
+            "discount": "الخصم",
+            "total": "الإجمالي",
+            "promoCode": "رمز ترويجي",
+            "apply": "تطبيق",
+            "invalidCode": "رمز ترويجي غير صالح",
+            "successCode": "تم تطبيق الرمز {code}!",
+            "checkout": "إتمام الشراء",
+            "customNote": "يرجى ملاحظة أن الطلبات المخصصة قد تتطلب وقتاً إضافياً."
+        },
+        "item": {
+            "availability": {
+                "in_stock": "متوفر",
+                "low_stock": "نفاذ الكمية قريباً",
+                "out_of_stock": "نفذت الكمية"
+            },
+            "commentLabel": "ملاحظة / تعليمات",
+            "commentPlaceholder": "مثال: تقليل السكر، رسالة 'عيد ميلاد سعيد'...",
+            "unitPrice": "سعر الوحدة",
+            "subtotal": "الإجمالي الفرعي",
+            "remove": "حذف من السلة",
+            "increase": "زيادة الكمية",
+            "decrease": "تقليل الكمية"
+        },
+        "errors": {
+            "sessionExpired": "انتهت صلاحية جلستكم. يرجى تسجيل الدخول مرة أخرى.",
+            "addError": "خطأ أثناء الإضافة إلى السلة: {message}"
         }
+    },
+    "profile": {
+        "title": "حسابي",
+        "personalInfo": "المعلومات الشخصية",
+        "orders": {
+            "title": "طلباتي",
+            "history": "سجل الطلبات",
+            "empty": "ليس لديك أي طلبات حالياً",
+            "noOrders": "لم يتم العثور على أي طلب",
+            "discover": "اكتشف منتجاتنا",
+            "total": "الإجمالي",
+            "date": "تم الطلب بتاريخ",
+            "items": "{count} صنف",
+            "viewDetails": "عرض التفاصيل",
+            "reorder": "إعادة الطلب",
+            "payment": "الدفع",
+            "status": {
+                "confirmed": "مؤكد",
+                "processing": "قيد التحضير",
+                "shipped": "تم الشحن",
+                "delivered": "تم التوصيل",
+                "cancelled": "ملغى"
+            }
+        },
+        "addresses": {
+            "title": "عناوين الشحن",
+            "add": "إضافة عنوان",
+            "edit": "تعديل العنوان",
+            "new": "عنوان جديد",
+            "label": "التسمية",
+            "labelPlaceholder": "المنزل، العمل، إلخ.",
+            "default": "افتراضي",
+            "setDefault": "تعيين كافتراضي",
+            "delete": "حذف",
+            "home": "المنزل",
+            "office": "العمل"
+        },
+        "security": "الأمان",
+        "save": "حفظ التغييرات",
+        "changePassword": "تغيير كلمة المرور",
+        "currentPassword": "كلمة المرور الحالية",
+        "newPassword": "كلمة مرور جديدة",
+        "confirmNewPassword": "تأكيد كلمة المرور",
+        "successUpdate": "تم تحديث الملف الشخصي بنجاح",
+        "pfp": "صورة الملف الشخصي"
+    },
+    "checkout": {
+        "title": "إتمام الطلب",
+        "steps": {
+            "shipping": "التوصيل",
+            "payment": "الدفع",
+            "confirmation": "التأكيد"
+        },
+        "shipping": {
+            "title": "معلومات التوصيل",
+            "fullName": "الاسم الكامل",
+            "firstName": "الاسم الأول",
+            "lastName": "اللقب",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "address": "العنوان",
+            "city": "المدينة",
+            "postalCode": "الرمز البريدي",
+            "additionalInfo": "معلومات إضافية",
+            "additionalInfoPlaceholder": "رمز الدخول، الطابق، إلخ.",
+            "useShippingAsBilling": "استخدام عنوان التوصيل للفاتورة",
+            "method": "طريقة التوصيل",
+            "deliveryTime": "التوصيل خلال 2-3 أيام عمل",
+            "standard": "عادي",
+            "express": "سريع",
+            "pickup": "استلام من المتجر",
+            "inStore": "في المتجر",
+            "free": "مجاني",
+            "soon": "قريباً",
+            "continueToPayment": "المتابعة إلى الدفع"
+        },
+        "payment": {
+            "title": "طريقة الدفع",
+            "card": "بطاقة بنكية",
+            "cardDescription": "فيزا، ماستركارد، أمريكان إكسبريس",
+            "paypal": "بايبال",
+            "paypalDescription": "دفع آمن عبر بايبال",
+            "bank": "تحويل بنكي",
+            "bankDescription": "الدفع عبر تحويل بنكي SEPA",
+            "inStore": "الدفع عند الاستلام",
+            "inStoreDescription": "الدفع عند استلام طلبكم",
+            "quotePending": "الدفع بانتظار التسعير",
+            "quoteInfo": "سلتكم تحتوي على أصناف مخصصة. الدفع غير مطلوب حالياً. بعد مراجعة طلبكم، سيتواصل معكم المسؤول لتحديد السعر النهائي.",
+            "cardNumber": "رقم البطاقة",
+            "cardName": "الاسم على البطاقة",
+            "cardholderPlaceholder": "الاسم الكامل",
+            "expiryDate": "تاريخ الانتهاء",
+            "cvv": "رمز الأمان",
+            "secureInfo": "دفع آمن SSL - بياناتكم محمية",
+            "paypalInfo": "سيتم توجيهك إلى بايبال لإتمام الدفع.",
+            "bankInfo": "قم بإجراء التحويل البنكي إلى:",
+            "back": "رجوع",
+            "placeOrder": "تأكيد الطلب",
+            "submitQuote": "إرسال طلب التسعير",
+            "processing": "جاري المعالجة...",
+            "sendingQuote": "جاري إرسال الطلب..."
+        },
+        "summary": {
+            "title": "ملخص الطلب",
+            "subtotal": "الإجمالي الفرعي",
+            "shipping": "التوصيل",
+            "discount": "الخصم",
+            "total": "الإجمالي",
+            "tax": "الضرائب (20%)",
+            "promoCode": "رمز ترويجي",
+            "apply": "تطبيق",
+            "qty": "الكمية"
+        },
+        "success": {
+            "title": "تم تأكيد الطلب!",
+            "message": "شكراً لطلبكم. ستصلكم رسالة تأكيد على البريد الإلكتروني {email}",
+            "amount": "المبلغ الإجمالي",
+            "toConfirm": "سيتم التأكيد لاحقاً",
+            "quoteAdminInfo": "سيتواصل معكم المسؤول بالسعر النهائي.",
+            "viewOrders": "عرض طلباتي",
+            "backHome": "العودة للرئيسية"
+        },
+        "orderError": "حدث خطأ أثناء الطلب. يرجى المحاولة مرة أخرى."
+    },
+    "delivery": {
+        "dashboard": "لوحة تحكم الموصل",
+        "availableOrders": "الطلبات المتاحة",
+        "myDeliveries": "عمليات التسليم الخاصة بي",
+        "status": {
+            "assigned": "تم التعيين",
+            "in_delivery": "قيد التوصيل",
+            "delivered": "تم التسليم",
+            "cancelled": "تم الإلغاء"
+        },
+        "actions": {
+            "start": "بدء التوصيل",
+            "finish": "تأكيد التسليم",
+            "call": "الاتصال بالعميل"
+        }
+    },
+    "footer": {
+        "about": {
+            "title": "عن جبالي سويت",
+            "description": "جبالي سويت – مخبزة تقدم حلويات عربية وعصرية، وكعك من مختلف الأنواع ومجموعة متنوعة من المرطبات اللذيذة."
+        },
+        "links": {
+            "title": "روابط سريعة",
+            "catalog": "الكتالوج",
+            "account": "حسابي",
+            "orders": "طلباتي",
+            "terms": "شروط الاستخدام",
+            "privacy": "سياسة الخصوصية"
+        },
+        "contact": {
+            "title": "اتصل بنا",
+            "emailButton": "اتصل بنا عبر البريد الإلكتروني",
+            "phoneFallback": "(في حال تعذر الاتصال عبر الهاتف)",
+            "techSupport": "الدعم الفني"
+        },
+        "social": {
+            "title": "تابعونا"
+        },
+        "copy": "جميع الحقوق محفوظة"
+    },
+    "contact": {
+        "modal": {
+            "titleSupport": "الاتصال بالدعم الفني",
+            "titleGeneral": "الاتصال بجبالي سويت",
+            "subtitleSupport": "يرجى وصف مشكلتكم التقنية. سيرد عليكم محمد في أقرب وقت.",
+            "subtitleGeneral": "هل لديكم سؤال أو طلب خاص؟ عايدة في استماعكم.",
+            "successTitle": "تم إرسال الرسالة!",
+            "successMessage": "شكراً لرسالتكم. سنرد عليكم في أقرب وقت ممكن.",
+            "form": {
+                "name": "الاسم الكامل",
+                "namePlaceholder": "اسمكم الكريم",
+                "email": "البريد الإلكتروني",
+                "emailPlaceholder": "name@example.com",
+                "message": "رسالتكم",
+                "messagePlaceholder": "كيف يمكننا مساعدتكم؟",
+                "submit": "إرسال",
+                "submitting": "جاري الإرسال...",
+                "cancel": "إلغاء"
+            }
+        }
+    },
+    "legal": {
+        "terms": "شروط الاستخدام",
+        "privacy": "سياسة الخصوصية",
+        "back": "رجوع"
     }
 }

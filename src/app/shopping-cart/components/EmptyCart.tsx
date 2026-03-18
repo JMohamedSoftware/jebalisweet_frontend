@@ -36,7 +36,7 @@ const EmptyCart = ({ featuredProducts }: EmptyCartProps) => {
 
       <Link
         href="/product-catalog"
-        className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-smooth shadow-warm-md hover:shadow-warm-lg mb-12"
+        className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-primary/20 mb-12"
       >
         <Icon name="ShoppingBagIcon" size={20} />
         {t('cart.empty.cta')}
@@ -51,7 +51,7 @@ const EmptyCart = ({ featuredProducts }: EmptyCartProps) => {
             <Link
               key={product.id}
               href="/product-catalog"
-              className="bg-card rounded-lg shadow-warm overflow-hidden hover:shadow-warm-md transition-smooth group"
+              className="bg-card rounded-2xl shadow-sm border border-border/5 overflow-hidden hover:shadow-xl transition-all duration-300 group"
             >
               <div className="h-48 overflow-hidden">
                 <AppImage

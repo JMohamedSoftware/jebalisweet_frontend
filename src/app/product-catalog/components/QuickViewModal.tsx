@@ -31,7 +31,7 @@ const QuickViewModal = ({
   onClose,
   onAddToCart,
 }: QuickViewModalProps) => {
-  const { t } = useLanguage();
+  const { t, direction, language } = useLanguage();
   const [isAdding, setIsAdding] = useState(false);
   const [isImageExpanded, setIsImageExpanded] = useState(false);
 
@@ -70,18 +70,18 @@ const QuickViewModal = ({
   return (
     <>
       <div
-        className="fixed inset-0 z-500 flex items-end sm:items-center justify-center bg-background/60 backdrop-blur-md animate-fade-in"
+        className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md animate-fade-in"
         onClick={handleBackdropClick}
       >
-        <div className="bg-card w-full max-w-4xl sm:rounded-3xl rounded-t-[2.5rem] shadow-warm-2xl max-h-[92vh] sm:max-h-[90vh] overflow-hidden flex flex-col animate-slide-up relative border-t sm:border border-border/40">
+        <div className="bg-card w-full max-w-4xl sm:rounded-3xl rounded-t-[2.5rem] shadow-warm-2xl max-h-[92vh] sm:max-h-[90vh] overflow-hidden flex flex-col animate-slide-up relative border-t sm:border border-border/40" dir={direction}>
           {/* Mobile Handle */}
           <div className="sm:hidden w-12 h-1.5 bg-muted-foreground/20 rounded-full mx-auto mt-4 mb-2 flex-shrink-0" />
 
           {/* Header */}
-          <div className="bg-card/95 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-border/30 flex-shrink-0">
+          <div className="bg-card/95 backdrop-blur-md px-6 py-5 flex items-center justify-between border-b border-border/30 flex-shrink-0">
             <div className="flex flex-col">
               <span className="text-[10px] uppercase tracking-[0.2em] text-primary/60 font-bold mb-0.5">{product.brand}</span>
-              <h2 className="font-heading text-lg sm:text-xl font-bold text-foreground">
+              <h2 className="font-heading text-xl sm:text-2xl font-bold text-foreground">
                 {t('quickView.title')}
               </h2>
             </div>
@@ -99,13 +99,13 @@ const QuickViewModal = ({
               {/* Image Section */}
               <div className="space-y-4">
                 <div
-                  className="relative h-56 sm:h-96 rounded-3xl overflow-hidden bg-muted/50 border border-border/20 group cursor-zoom-in group shadow-warm-lg transition-transform active:scale-[0.98]"
+                  className="relative h-64 sm:h-[480px] rounded-3xl overflow-hidden bg-muted/20 border border-border/10 group cursor-zoom-in shadow-warm-lg transition-transform active:scale-[0.98] mt-2"
                   onClick={() => setIsImageExpanded(true)}
                 >
                   <AppImage
                     src={product.image}
                     alt={product.alt}
-                    className="w-full h-full object-cover transition-smooth group-hover:scale-110"
+                    className="w-full h-full object-contain p-4 transition-smooth group-hover:scale-105"
                   />
 
                   {/* Zoom Overlay Button */}
@@ -124,7 +124,7 @@ const QuickViewModal = ({
 
                 <p className="text-[11px] text-center text-muted-foreground flex items-center justify-center gap-2 italic">
                   <Icon name="InformationCircleIcon" size={14} className="opacity-50" />
-                  Cliquer sur l'image pour l'agrandir
+                  {language === 'ar_tn' ? 'انقر على الصورة لتكبيرها' : "Cliquer sur l'image pour l'agrandir"}
                 </p>
               </div>
 
@@ -157,9 +157,11 @@ const QuickViewModal = ({
 
                   <div className="py-6 border-y border-border/30 flex items-center justify-between">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-bold mb-1">Prix de délice</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-bold mb-1">
+                        {t('quickView.priceLabel')}
+                      </p>
                       <span className="font-heading text-4xl sm:text-5xl font-black text-primary flex items-baseline">
-                        {formatPrice(product.price)}
+                        {formatPrice(product.price).replace('DT', '').trim()}
                         <span className="text-lg font-medium text-muted-foreground ml-1">DT</span>
                       </span>
                     </div>
@@ -176,7 +178,7 @@ const QuickViewModal = ({
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground font-medium block">
-                        Catégorie: <span className="text-foreground">{product.category}</span>
+                        {t('quickView.category')}: <span className="text-foreground">{product.category}</span>
                       </span>
                     </div>
                   </div>
@@ -197,13 +199,13 @@ const QuickViewModal = ({
                     ) : (
                       <Icon name="ShoppingCartIcon" size={28} className="transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
                     )}
-                    <span className="tracking-tight">{isAdding ? 'Ajouté !' : 'Ajouter au Panier'}</span>
+                    <span className="tracking-tight">{isAdding ? t('quickView.added') : t('quickView.addToCart')}</span>
                   </button>
 
                   <div className="pt-4 flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all">
-                    <Icon name="TruckIcon" size={16} /><span className="text-[10px] font-bold uppercase tracking-widest">Livraison Rapide</span>
+                    <Icon name="TruckIcon" size={16} /><span className="text-[10px] font-bold uppercase tracking-widest">{t('quickView.shipping')}</span>
                     <div className="w-1 h-1 bg-muted-foreground rounded-full" />
-                    <Icon name="LockClosedIcon" size={16} /><span className="text-[10px] font-bold uppercase tracking-widest">Paiement Sécurisé</span>
+                    <Icon name="LockClosedIcon" size={16} /><span className="text-[10px] font-bold uppercase tracking-widest">{t('quickView.securePayment')}</span>
                   </div>
                 </div>
               </div>
@@ -215,7 +217,7 @@ const QuickViewModal = ({
       {/* High-Level Image Expanded Overlay */}
       {isImageExpanded && (
         <div
-          className="fixed inset-0 z-1000 bg-background/95 backdrop-blur-2xl flex flex-col animate-fade-in p-4 sm:p-10"
+          className="fixed inset-0 z-[10000] bg-background/95 backdrop-blur-2xl flex flex-col animate-fade-in p-4 sm:p-10"
           onClick={() => setIsImageExpanded(false)}
         >
           <div className="flex justify-between items-center w-full max-w-7xl mx-auto mb-6">

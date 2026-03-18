@@ -3,6 +3,7 @@
 import React from 'react';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
+import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
 
 interface CartItemData {
@@ -38,10 +39,11 @@ const OrderReviewPanel = ({
   isProcessing,
   isFormValid,
 }: OrderReviewPanelProps) => {
+  const { t } = useLanguage();
   return (
     <div className="bg-card rounded-lg shadow-warm-md p-6 border border-border sticky top-20">
       <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
-        Récapitulatif de commande
+        {t('checkout.summary.title')}
       </h2>
 
       <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
@@ -52,7 +54,7 @@ const OrderReviewPanel = ({
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-sm font-medium text-foreground truncate">{item.name}</h3>
-              <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
+              <p className="text-sm text-muted-foreground">{t('checkout.summary.qty')}: {item.quantity}</p>
               <p className="text-sm font-semibold text-primary data-text">
                 {formatPrice(item.price * item.quantity)}
               </p>
@@ -63,7 +65,7 @@ const OrderReviewPanel = ({
 
       <div className="space-y-3 mb-6 border-t border-border pt-4">
         <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Sous-total</span>
+          <span className="text-muted-foreground">{t('checkout.summary.subtotal')}</span>
           <span className="data-text font-semibold text-foreground">
             {formatPrice(subtotal)}
           </span>
@@ -71,7 +73,7 @@ const OrderReviewPanel = ({
 
 
         <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">TVA (20%)</span>
+          <span className="text-muted-foreground">{t('checkout.summary.tax')}</span>
           <span className="data-text font-semibold text-foreground">
             {formatPrice(taxAmount)}
           </span>
@@ -81,7 +83,7 @@ const OrderReviewPanel = ({
           <div className="flex justify-between items-center text-success">
             <span className="flex items-center gap-2">
               <Icon name="TagIcon" size={16} />
-              Réduction
+              {t('checkout.summary.discount')}
             </span>
             <span className="data-text font-semibold">
               -{formatPrice(discount)}
@@ -91,7 +93,7 @@ const OrderReviewPanel = ({
 
         <div className="border-t border-border pt-3">
           <div className="flex justify-between items-center">
-            <span className="font-heading text-lg font-semibold text-foreground">Total</span>
+            <span className="font-heading text-lg font-semibold text-foreground">{t('checkout.summary.total')}</span>
             <span className="data-text font-bold text-primary text-2xl">
               {formatPrice(total)}
             </span>
@@ -107,12 +109,12 @@ const OrderReviewPanel = ({
         {isProcessing ? (
           <>
             <Icon name="ArrowPathIcon" size={20} className="animate-spin" />
-            Traitement en cours...
+            {t('checkout.payment.processing')}
           </>
         ) : (
           <>
             <Icon name="LockClosedIcon" size={20} />
-            Confirmer le paiement
+            {t('checkout.payment.placeOrder')}
           </>
         )}
       </button>
@@ -120,11 +122,11 @@ const OrderReviewPanel = ({
       <div className="mt-4 space-y-2">
         <div className="flex items-center justify-center gap-2 text-muted-foreground caption">
           <Icon name="ShieldCheckIcon" size={16} />
-          <span>Paiement 100% sécurisé SSL</span>
+          <span>{t('checkout.payment.secureInfo')}</span>
         </div>
         <div className="flex items-center justify-center gap-2 text-muted-foreground caption">
           <Icon name="TruckIcon" size={16} />
-          <span>Livraison sous 2-3 jours ouvrés</span>
+          <span>{t('checkout.shipping.deliveryTime')}</span>
         </div>
       </div>
     </div>

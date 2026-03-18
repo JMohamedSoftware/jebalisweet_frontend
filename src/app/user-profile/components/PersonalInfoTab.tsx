@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface User {
   id?: string;
@@ -22,6 +23,7 @@ interface PersonalInfoTabProps {
 }
 
 const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
+  const { t } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user.firstName || '',
@@ -42,19 +44,19 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Le prénom est requis';
+      newErrors.firstName = t('auth.register.errors.firstName');
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Le nom est requis';
+      newErrors.lastName = t('auth.register.errors.lastName');
     }
 
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = 'Email invalide';
+      newErrors.email = t('auth.register.errors.email');
     }
 
     if (formData.phone && !formData.phone.match(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)) {
-      newErrors.phone = 'Numéro de téléphone invalide';
+      newErrors.phone = t('auth.register.errors.phone');
     }
 
     setErrors(newErrors);
@@ -89,22 +91,22 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
     localStorage.setItem('user', JSON.stringify(updatedUser));
     onUpdateUser(updatedUser);
     setIsEditing(false);
-    setSuccessMessage('Informations mises à jour avec succès');
+    setSuccessMessage(t('profile.successUpdate'));
     setTimeout(() => setSuccessMessage(''), 3000);
   };
 
   const handlePasswordUpdate = () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setErrors({ confirmPassword: 'Les mots de passe ne correspondent pas' });
+      setErrors({ confirmPassword: t('auth.register.errors.confirmPassword') });
       return;
     }
 
     if (passwordData.newPassword.length < 8) {
-      setErrors({ newPassword: 'Le mot de passe doit contenir au moins 8 caractères' });
+      setErrors({ newPassword: t('auth.register.errors.password') });
       return;
     }
 
-    setSuccessMessage('Mot de passe mis à jour avec succès');
+    setSuccessMessage(t('profile.successUpdate'));
     setShowPasswordChange(false);
     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     setTimeout(() => setSuccessMessage(''), 3000);
@@ -121,7 +123,7 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
 
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-2xl font-semibold text-foreground">
-          Informations personnelles
+          {t('profile.personalInfo')}
         </h2>
         {!isEditing && (
           <button
@@ -129,23 +131,22 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth"
           >
             <Icon name="PencilIcon" size={20} />
-            Modifier
+            {t('common.edit')}
           </button>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Prénom</label>
+          <label className="block text-sm font-medium text-foreground">{t('auth.register.firstName')}</label>
           <input
             type="text"
             name="firstName"
             value={formData.firstName}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.firstName ? 'border-error' : 'border-input focus:border-primary'
-            } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.firstName ? 'border-error' : 'border-input focus:border-primary'
+              } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
           />
           {errors.firstName && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -156,16 +157,15 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Nom</label>
+          <label className="block text-sm font-medium text-foreground">{t('auth.register.lastName')}</label>
           <input
             type="text"
             name="lastName"
             value={formData.lastName}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.lastName ? 'border-error' : 'border-input focus:border-primary'
-            } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.lastName ? 'border-error' : 'border-input focus:border-primary'
+              } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
           />
           {errors.lastName && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -176,16 +176,15 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Email</label>
+          <label className="block text-sm font-medium text-foreground">{t('auth.login.email')}</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.email ? 'border-error' : 'border-input focus:border-primary'
-            } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.email ? 'border-error' : 'border-input focus:border-primary'
+              } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
           />
           {errors.email && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -196,17 +195,16 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Téléphone</label>
+          <label className="block text-sm font-medium text-foreground">{t('auth.register.phone')}</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
             disabled={!isEditing}
-            placeholder="06 12 34 56 78"
-            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-              errors.phone ? 'border-error' : 'border-input focus:border-primary'
-            } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+            placeholder={t('auth.register.placeholders.phone')}
+            className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${errors.phone ? 'border-error' : 'border-input focus:border-primary'
+              } ${!isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
           />
           {errors.phone && (
             <p className="text-sm text-error flex items-center gap-1">
@@ -223,7 +221,7 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
             onClick={handleSave}
             className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-smooth"
           >
-            Enregistrer
+            {t('common.save')}
           </button>
           <button
             onClick={() => {
@@ -238,7 +236,7 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
             }}
             className="px-6 py-3 bg-muted text-foreground rounded-lg font-medium hover:bg-muted/80 transition-smooth"
           >
-            Annuler
+            {t('common.cancel')}
           </button>
         </div>
       )}
@@ -249,14 +247,14 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
           className="flex items-center gap-2 text-primary hover:text-secondary transition-smooth font-medium"
         >
           <Icon name="LockClosedIcon" size={20} />
-          Changer le mot de passe
+          {t('profile.changePassword')}
         </button>
 
         {showPasswordChange && (
           <div className="mt-4 space-y-4 p-4 bg-muted rounded-lg">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-foreground">
-                Mot de passe actuel
+                {t('profile.currentPassword')}
               </label>
               <input
                 type="password"
@@ -269,16 +267,14 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-foreground">
-                Nouveau mot de passe
+                {t('profile.newPassword')}
               </label>
               <input
                 type="password"
                 name="newPassword"
                 value={passwordData.newPassword}
                 onChange={handlePasswordChange}
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.newPassword ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                placeholder={t('auth.register.placeholders.password')}
               />
               {errors.newPassword && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -290,16 +286,14 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-foreground">
-                Confirmer le mot de passe
+                {t('profile.confirmNewPassword')}
               </label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={passwordData.confirmPassword}
                 onChange={handlePasswordChange}
-                className={`w-full px-4 py-3 bg-background border rounded-lg transition-smooth focus:outline-none focus:ring-3 focus:ring-ring ${
-                  errors.confirmPassword ? 'border-error' : 'border-input focus:border-primary'
-                }`}
+                placeholder={t('auth.register.placeholders.password')}
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-error flex items-center gap-1">
@@ -314,7 +308,7 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
                 onClick={handlePasswordUpdate}
                 className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-smooth"
               >
-                Mettre à jour
+                {t('common.save')}
               </button>
               <button
                 onClick={() => {
@@ -324,7 +318,7 @@ const PersonalInfoTab = ({ user, onUpdateUser }: PersonalInfoTabProps) => {
                 }}
                 className="px-6 py-2 bg-muted text-foreground rounded-lg font-medium hover:bg-muted/80 transition-smooth"
               >
-                Annuler
+                {t('common.cancel')}
               </button>
             </div>
           </div>

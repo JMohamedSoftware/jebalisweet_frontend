@@ -74,6 +74,7 @@ const UserMenu = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setUser(null);
     setIsOpen(false);
     window.dispatchEvent(new Event('authChanged'));

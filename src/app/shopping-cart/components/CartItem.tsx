@@ -3,6 +3,7 @@
 import React from 'react';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
 
 interface CartItemProps {
@@ -26,6 +27,7 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartItemProps) => {
+  const { t } = useLanguage();
   const handleIncrement = () => {
     if (item.quantity < item.maxQuantity) {
       onUpdateQuantity(item.productId, item.quantity + 1);
@@ -39,16 +41,7 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
   };
 
   const getAvailabilityText = () => {
-    switch (item.availability) {
-      case 'in_stock':
-        return 'En stock';
-      case 'low_stock':
-        return 'Stock limité';
-      case 'out_of_stock':
-        return 'Rupture de stock';
-      default:
-        return '';
-    }
+    return t(`cart.item.availability.${item.availability}`) || item.availability;
   };
 
   const getAvailabilityColor = () => {
@@ -67,7 +60,7 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
   const subtotal = item.price * item.quantity;
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-card rounded-lg shadow-warm border border-border">
+    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-card rounded-2xl shadow-sm border border-border/20">
       <div className="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-md">
         <AppImage
           src={item.customImage || item.image}
@@ -85,11 +78,11 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
             {getAvailabilityText()}
           </p>
           <div className="mt-3">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase mb-1 block">Commentaire / Instructions</label>
+            <label className="text-[10px] font-bold text-muted-foreground uppercase mb-1 block">{t('cart.item.commentLabel')}</label>
             <textarea
               value={item.comment || ''}
               onChange={(e) => onUpdateComment(item.productId, e.target.value)}
-              placeholder="Ex: Pas trop sucré, message 'Joyeux Anniversaire'..."
+              placeholder={t('cart.item.commentPlaceholder')}
               className="w-full bg-muted/20 border border-border rounded-md p-2 text-xs focus:ring-1 ring-primary/30 outline-none min-h-[60px] resize-none"
             />
           </div>
@@ -100,8 +93,8 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
             <button
               onClick={handleDecrement}
               disabled={item.quantity <= 1}
-              className="w-8 h-8 flex items-center justify-center rounded-md bg-muted text-foreground hover:bg-primary hover:text-primary-foreground transition-smooth disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Diminuer la quantité"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-transparent border border-border/40 text-foreground hover:border-primary hover:text-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={t('cart.item.decrease')}
             >
               <Icon name="MinusIcon" size={16} />
             </button>
@@ -111,8 +104,8 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
             <button
               onClick={handleIncrement}
               disabled={item.quantity >= item.maxQuantity}
-              className="w-8 h-8 flex items-center justify-center rounded-md bg-muted text-foreground hover:bg-primary hover:text-primary-foreground transition-smooth disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Augmenter la quantité"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-transparent border border-border/40 text-foreground hover:border-primary hover:text-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={t('cart.item.increase')}
             >
               <Icon name="PlusIcon" size={16} />
             </button>
@@ -120,13 +113,13 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
 
           <div className="flex items-center justify-between sm:justify-end gap-4">
             <div className="text-right">
-              <p className="caption text-muted-foreground">Prix unitaire</p>
+              <p className="caption text-muted-foreground">{t('cart.item.unitPrice')}</p>
               <p className="data-text font-semibold text-foreground">
                 {formatPrice(item.price)}
               </p>
             </div>
             <div className="text-right">
-              <p className="caption text-muted-foreground">Sous-total</p>
+              <p className="caption text-muted-foreground">{t('cart.item.subtotal')}</p>
               <p className="data-text font-bold text-primary text-lg">
                 {formatPrice(subtotal)}
               </p>
@@ -138,7 +131,7 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
       <button
         onClick={() => onRemove(item.productId)}
         className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 p-2 rounded-md text-muted-foreground hover:text-error hover:bg-muted transition-smooth"
-        aria-label="Supprimer du panier"
+        aria-label={t('cart.item.remove')}
       >
         <Icon name="TrashIcon" size={20} />
       </button>

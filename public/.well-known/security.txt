@@ -1,0 +1,7 @@
+Contact: mailto:contact@jebalisweet.tn
+Encryption: https://jebalisweet.tn/pgp-key.txt
+Expires: 2027-03-17T18:00:00.000Z
+Preferred-Languages: fr, en, ar
+Canonical: https://jebalisweet.tn/.well-known/security.txt
+Policy: https://jebalisweet.tn/security-policy
+Hiring: https://jebalisweet.tn/careers

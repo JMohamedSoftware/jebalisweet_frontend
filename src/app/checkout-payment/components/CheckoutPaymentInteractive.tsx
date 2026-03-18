@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/services/api';
 import { formatPrice } from '@/utils/format';
 
@@ -54,6 +55,7 @@ interface PaymentFormData {
 }
 
 const CheckoutPaymentInteractive = () => {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isHydrated, setIsHydrated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -81,11 +83,6 @@ const CheckoutPaymentInteractive = () => {
   const [discount, setDiscount] = useState(0);
   const [isQuoteRequest, setIsQuoteRequest] = useState(false);
 
-  const validPromoCodes: Record<string, number> = {
-    'SWEET10': 10,
-    'NOEL2025': 15,
-    'BIENVENUE': 5,
-  };
 
   useEffect(() => {
     setIsHydrated(true);
@@ -164,11 +161,18 @@ const CheckoutPaymentInteractive = () => {
     }));
   };
 
-  const handleApplyPromoCode = () => {
+  const handleApplyPromoCode = async () => {
     const upperCode = promoCode.toUpperCase();
-    if (validPromoCodes[upperCode]) {
-      const discountAmount = subtotal * validPromoCodes[upperCode] / 100;
+    try {
+      const data = await api.promoCodes.validate(upperCode);
+      const discountAmount = data.type === 'percentage' 
+        ? (subtotal * data.discount / 100) 
+        : data.discount;
       setDiscount(discountAmount);
+      setPromoCode(upperCode);
+    } catch (error) {
+      console.error('Code promo invalide', error);
+      setDiscount(0);
     }
   };
 
@@ -225,7 +229,9 @@ const CheckoutPaymentInteractive = () => {
           paymentMethod === 'paypal' ? 'PayPal' :
             paymentMethod === 'bank' ? 'Virement Bancaire' : 'Paiement en boutique',
         phone: shippingData.phone,
-        deliveryOption
+        deliveryOption,
+        promoCode: discount > 0 ? promoCode : null,
+        discountAmount: discount
       };
 
       await api.orders.create(orderData);
@@ -248,8 +254,7 @@ const CheckoutPaymentInteractive = () => {
     } catch (error) {
       console.error('Failed to place order:', error);
       setIsProcessing(false);
-      // Optional: Add toast or error message for user
-      alert('Une erreur est survenue lors de la commande. Veuillez réessayer.');
+      alert(t('checkout.orderError'));
     }
   };
 
@@ -268,28 +273,28 @@ const CheckoutPaymentInteractive = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="max-w-md w-full mx-6">
-          <div className="bg-card rounded-lg shadow-warm-lg p-8 border border-border text-center animate-fade-in">
+          <div className="bg-card rounded-3xl shadow-xl p-10 border border-border/10 text-center animate-fade-in">
             <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Icon name="CheckCircleIcon" size={48} className="text-success" />
             </div>
             <h1 className="font-heading text-3xl font-bold text-foreground mb-4">
-              Commande Confirmée!
+              {t('checkout.success.title')}
             </h1>
             <p className="text-muted-foreground mb-6">
-              Merci pour votre commande. Vous recevrez un email de confirmation à {shippingData.email}
+              {t('checkout.success.message', { email: shippingData.email })}
             </p>
             <div className="bg-background rounded-lg p-4 mb-6">
               <p className="caption text-muted-foreground mb-2">
-                {isQuoteRequest ? "Estimation du montant" : "Montant total"}
+                {isQuoteRequest ? t('checkout.success.toConfirm') : t('checkout.success.amount')}
               </p>
               <p className="font-heading text-3xl font-bold text-primary">
                 {isQuoteRequest
-                  ? "À confirmer"
+                  ? t('checkout.success.toConfirm')
                   : formatPrice(total)}
               </p>
               {isQuoteRequest && (
                 <p className="caption text-muted-foreground mt-2">
-                  Un administrateur vous contactera avec le prix final.
+                  {t('checkout.success.quoteAdminInfo')}
                 </p>
               )}
             </div>
@@ -298,13 +303,13 @@ const CheckoutPaymentInteractive = () => {
                 href="/orders"
                 className="block w-full py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium"
               >
-                Voir mes commandes
+                {t('checkout.success.viewOrders')}
               </Link>
               <Link
                 href="/"
                 className="block w-full py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
               >
-                Retour à l'accueil
+                {t('checkout.success.backHome')}
               </Link>
             </div>
           </div>
@@ -319,7 +324,7 @@ const CheckoutPaymentInteractive = () => {
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="font-heading text-4xl font-bold text-foreground mb-4">
-              Finaliser la commande
+              {t('checkout.title')}
             </h1>
             <div className="flex items-center gap-4">
               <div className={`flex items-center gap-2 ${currentStep >= 1 ? 'text-primary' : 'text-muted-foreground'
@@ -328,7 +333,7 @@ const CheckoutPaymentInteractive = () => {
                   }`}>
                   1
                 </div>
-                <span className="font-medium">Livraison</span>
+                <span className="font-medium">{t('checkout.steps.shipping')}</span>
               </div>
               <div className="flex-1 h-0.5 bg-border" />
               <div className={`flex items-center gap-2 ${currentStep >= 2 ? 'text-primary' : 'text-muted-foreground'
@@ -337,7 +342,7 @@ const CheckoutPaymentInteractive = () => {
                   }`}>
                   2
                 </div>
-                <span className="font-medium">Paiement</span>
+                <span className="font-medium">{t('checkout.steps.payment')}</span>
               </div>
               <div className="flex-1 h-0.5 bg-border" />
               <div className={`flex items-center gap-2 ${currentStep >= 3 ? 'text-primary' : 'text-muted-foreground'
@@ -346,7 +351,7 @@ const CheckoutPaymentInteractive = () => {
                   }`}>
                   3
                 </div>
-                <span className="font-medium">Confirmation</span>
+                <span className="font-medium">{t('checkout.steps.confirmation')}</span>
               </div>
             </div>
           </div>
@@ -354,15 +359,15 @@ const CheckoutPaymentInteractive = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               {currentStep === 1 && (
-                <div className="bg-card rounded-lg shadow-warm-md p-6 border border-border">
+                <div className="bg-card rounded-2xl shadow-sm p-8 border border-border/20">
                   <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                    Informations de livraison
+                    {t('checkout.shipping.title')}
                   </h2>
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label htmlFor="fullName" className="block caption font-medium text-foreground">
-                          Nom complet *
+                          {t('checkout.shipping.fullName')} *
                         </label>
                         <input
                           type="text"
@@ -371,12 +376,12 @@ const CheckoutPaymentInteractive = () => {
                           value={shippingData.fullName}
                           onChange={handleShippingInputChange}
                           required
-                          className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                          className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                         />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="email" className="block caption font-medium text-foreground">
-                          Email *
+                          {t('checkout.shipping.email')} *
                         </label>
                         <input
                           type="email"
@@ -385,14 +390,14 @@ const CheckoutPaymentInteractive = () => {
                           value={shippingData.email}
                           onChange={handleShippingInputChange}
                           required
-                          className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                          className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <label htmlFor="phone" className="block caption font-medium text-foreground">
-                        Téléphone *
+                        {t('checkout.shipping.phone')} *
                       </label>
                       <input
                         type="tel"
@@ -408,7 +413,7 @@ const CheckoutPaymentInteractive = () => {
 
                     <div className="space-y-2">
                       <label htmlFor="address" className="block caption font-medium text-foreground">
-                        Adresse *
+                        {t('checkout.shipping.address')} *
                       </label>
                       <input
                         type="text"
@@ -417,7 +422,7 @@ const CheckoutPaymentInteractive = () => {
                         value={shippingData.address}
                         onChange={handleShippingInputChange}
                         required
-                        placeholder="Numéro et nom de rue"
+                        placeholder={t('auth.register.placeholders.address')}
                         className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
                       />
                     </div>
@@ -425,7 +430,7 @@ const CheckoutPaymentInteractive = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label htmlFor="city" className="block caption font-medium text-foreground">
-                          Ville *
+                          {t('checkout.shipping.city')} *
                         </label>
                         <input
                           type="text"
@@ -434,12 +439,12 @@ const CheckoutPaymentInteractive = () => {
                           value={shippingData.city}
                           onChange={handleShippingInputChange}
                           required
-                          className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                          className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                         />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="postalCode" className="block caption font-medium text-foreground">
-                          Code postal *
+                          {t('checkout.shipping.postalCode')} *
                         </label>
                         <input
                           type="text"
@@ -449,14 +454,14 @@ const CheckoutPaymentInteractive = () => {
                           onChange={handleShippingInputChange}
                           required
                           maxLength={5}
-                          className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                          className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <label htmlFor="additionalInfo" className="block caption font-medium text-foreground">
-                        Informations complémentaires
+                        {t('checkout.shipping.additionalInfo')}
                       </label>
                       <textarea
                         id="additionalInfo"
@@ -464,16 +469,16 @@ const CheckoutPaymentInteractive = () => {
                         value={shippingData.additionalInfo}
                         onChange={handleShippingInputChange}
                         rows={3}
-                        placeholder="Code d'accès, étage, etc."
+                        placeholder={t('checkout.shipping.additionalInfoPlaceholder')}
                         className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth resize-none"
                       />
                     </div>
 
                     <div className="space-y-4 mt-8">
-                      <h3 className="font-heading text-lg font-semibold text-foreground">Mode de livraison</h3>
+                      <h3 className="font-heading text-lg font-semibold text-foreground">{t('checkout.shipping.method')}</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="relative group">
-                          <label className="cursor-not-allowed border-2 rounded-lg p-4 border-border opacity-50 bg-muted/50 block">
+                          <label className="cursor-not-allowed border-2 rounded-xl p-4 border-border/50 opacity-50 bg-muted/30 block">
                             <input
                               type="radio"
                               name="deliveryOption"
@@ -484,9 +489,9 @@ const CheckoutPaymentInteractive = () => {
                             <div className="flex flex-col items-center text-center gap-2">
                               <Icon name="TruckIcon" size={24} className="text-muted-foreground" />
                               <div>
-                                <p className="font-medium text-muted-foreground">Standard</p>
+                                <p className="font-medium text-muted-foreground">{t('checkout.shipping.standard')}</p>
                                 <p className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold mt-1">
-                                  Bientôt disponible
+                                  {t('checkout.shipping.soon')}
                                 </p>
                               </div>
                             </div>
@@ -494,7 +499,7 @@ const CheckoutPaymentInteractive = () => {
                         </div>
 
                         <div className="relative group">
-                          <label className="cursor-not-allowed border-2 rounded-lg p-4 border-border opacity-50 bg-muted/50 block">
+                          <label className="cursor-not-allowed border-2 rounded-xl p-4 border-border/50 opacity-50 bg-muted/30 block">
                             <input
                               type="radio"
                               name="deliveryOption"
@@ -505,16 +510,16 @@ const CheckoutPaymentInteractive = () => {
                             <div className="flex flex-col items-center text-center gap-2">
                               <Icon name="RocketLaunchIcon" size={24} className="text-muted-foreground" />
                               <div>
-                                <p className="font-medium text-muted-foreground">Express</p>
+                                <p className="font-medium text-muted-foreground">{t('checkout.shipping.express')}</p>
                                 <p className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold mt-1">
-                                  Bientôt disponible
+                                  {t('checkout.shipping.soon')}
                                 </p>
                               </div>
                             </div>
                           </label>
                         </div>
 
-                        <label className={`cursor-pointer border-2 rounded-lg p-4 transition-smooth hover:bg-muted ${deliveryOption === 'pickup' ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                        <label className={`cursor-pointer border-2 rounded-xl p-4 transition-all duration-300 hover:bg-muted/50 ${deliveryOption === 'pickup' ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50'}`}>
                           <input
                             type="radio"
                             name="deliveryOption"
@@ -526,9 +531,9 @@ const CheckoutPaymentInteractive = () => {
                           <div className="flex flex-col items-center text-center gap-2">
                             <Icon name="BuildingStorefrontIcon" size={24} className="text-primary" />
                             <div>
-                              <p className="font-medium text-foreground">Retrait</p>
-                              <p className="caption text-muted-foreground">En boutique</p>
-                              <p className="font-semibold text-primary mt-1">Gratuit</p>
+                              <p className="font-medium text-foreground">{t('checkout.shipping.pickup')}</p>
+                              <p className="caption text-muted-foreground">{t('checkout.shipping.inStore')}</p>
+                              <p className="font-semibold text-primary mt-1">{t('checkout.shipping.free')}</p>
                             </div>
                           </div>
                         </label>
@@ -538,9 +543,9 @@ const CheckoutPaymentInteractive = () => {
                     <button
                       onClick={handleContinueToPayment}
                       disabled={!validateShippingForm()}
-                      className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                      className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-md shadow-primary/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
                     >
-                      Continuer vers le paiement
+                      {t('checkout.shipping.continueToPayment')}
                     </button>
                   </div>
                 </div>
@@ -548,9 +553,9 @@ const CheckoutPaymentInteractive = () => {
 
               {currentStep === 2 && (
                 <div className="space-y-6">
-                  <div className="bg-card rounded-lg shadow-warm-md p-6 border border-border">
+                  <div className="bg-card rounded-2xl shadow-sm p-8 border border-border/20">
                     <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                      Mode de paiement
+                      {t('checkout.payment.title')}
                     </h2>
                     {isQuoteRequest ? (
                       <div className="p-6 bg-primary/5 border border-primary/20 rounded-lg">
@@ -559,17 +564,16 @@ const CheckoutPaymentInteractive = () => {
                             <Icon name="InformationCircleIcon" size={24} className="text-primary" />
                           </div>
                           <div>
-                            <h3 className="font-heading font-semibold text-foreground mb-1">Paiement en attente de devis</h3>
+                            <h3 className="font-heading font-semibold text-foreground mb-1">{t('checkout.payment.quotePending')}</h3>
                             <p className="text-muted-foreground text-sm">
-                              Votre panier contient des articles personnalisés. Le paiement n'est pas requis pour le moment.
-                              Après validation de votre demande, un administrateur fixera le prix et vous pourrez procéder au paiement depuis votre historique de commandes.
+                              {t('checkout.payment.quoteInfo')}
                             </p>
                           </div>
                         </div>
                       </div>
                     ) : (
                       <div className="space-y-4 mb-6">
-                        <label className="flex items-center gap-3 p-4 border-2 rounded-lg cursor-not-allowed border-border opacity-50 bg-muted/50">
+                        <label className="flex items-center gap-3 p-4 border-2 rounded-xl cursor-not-allowed border-border/50 opacity-50 bg-muted/30">
                           <input
                             type="radio"
                             name="paymentMethod"
@@ -579,14 +583,14 @@ const CheckoutPaymentInteractive = () => {
                           />
                           <Icon name="CreditCardIcon" size={24} className="text-muted-foreground" />
                           <div className="flex-1 flex items-center justify-between">
-                            <span className="font-medium text-muted-foreground">Carte bancaire</span>
+                            <span className="font-medium text-muted-foreground">{t('checkout.payment.card')}</span>
                             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                              Bientôt disponible
+                              {t('checkout.shipping.soon')}
                             </span>
                           </div>
                         </label>
 
-                        <label className="flex items-center gap-3 p-4 border-2 rounded-lg cursor-not-allowed border-border opacity-50 bg-muted/50">
+                        <label className="flex items-center gap-3 p-4 border-2 rounded-xl cursor-not-allowed border-border/50 opacity-50 bg-muted/30">
                           <input
                             type="radio"
                             name="paymentMethod"
@@ -596,14 +600,14 @@ const CheckoutPaymentInteractive = () => {
                           />
                           <Icon name="BanknotesIcon" size={24} className="text-muted-foreground" />
                           <div className="flex-1 flex items-center justify-between">
-                            <span className="font-medium text-muted-foreground">PayPal</span>
+                            <span className="font-medium text-muted-foreground">{t('checkout.payment.paypal')}</span>
                             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                              Bientôt disponible
+                              {t('checkout.shipping.soon')}
                             </span>
                           </div>
                         </label>
 
-                        <label className="flex items-center gap-3 p-4 border-2 rounded-lg cursor-not-allowed border-border opacity-50 bg-muted/50">
+                        <label className="flex items-center gap-3 p-4 border-2 rounded-xl cursor-not-allowed border-border/50 opacity-50 bg-muted/30">
                           <input
                             type="radio"
                             name="paymentMethod"
@@ -613,14 +617,14 @@ const CheckoutPaymentInteractive = () => {
                           />
                           <Icon name="BuildingLibraryIcon" size={24} className="text-muted-foreground" />
                           <div className="flex-1 flex items-center justify-between">
-                            <span className="font-medium text-muted-foreground">Virement bancaire</span>
+                            <span className="font-medium text-muted-foreground">{t('checkout.payment.bank')}</span>
                             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                              Bientôt disponible
+                              {t('checkout.shipping.soon')}
                             </span>
                           </div>
                         </label>
 
-                        <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-smooth hover:bg-muted ${paymentMethod === 'in_store' ? 'border-primary bg-primary/5' : 'border-border'
+                        <label className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 hover:bg-muted/50 ${paymentMethod === 'in_store' ? 'border-primary bg-primary/5 shadow-sm' : 'border-border/50'
                           }`}>
                           <input
                             type="radio"
@@ -631,7 +635,7 @@ const CheckoutPaymentInteractive = () => {
                             className="w-5 h-5"
                           />
                           <Icon name="BuildingStorefrontIcon" size={24} className="text-foreground" />
-                          <span className="font-medium text-foreground">Paiement en boutique</span>
+                          <span className="font-medium text-foreground">{t('checkout.payment.inStore')}</span>
                         </label>
                       </div>
                     )}
@@ -640,7 +644,7 @@ const CheckoutPaymentInteractive = () => {
                       <div className="space-y-6">
                         <div className="space-y-2">
                           <label htmlFor="cardNumber" className="block caption font-medium text-foreground">
-                            Numéro de carte *
+                            {t('checkout.payment.cardNumber')} *
                           </label>
                           <input
                             type="text"
@@ -650,13 +654,13 @@ const CheckoutPaymentInteractive = () => {
                             onChange={handlePaymentInputChange}
                             placeholder="1234 5678 9012 3456"
                             maxLength={19}
-                            className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                            className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                           />
                         </div>
 
                         <div className="space-y-2">
                           <label htmlFor="cardName" className="block caption font-medium text-foreground">
-                            Nom sur la carte *
+                            {t('checkout.payment.cardName')} *
                           </label>
                           <input
                             type="text"
@@ -665,14 +669,14 @@ const CheckoutPaymentInteractive = () => {
                             value={paymentData.cardName}
                             onChange={handlePaymentInputChange}
                             placeholder="JEAN DUPONT"
-                            className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                            className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <label htmlFor="expiryDate" className="block caption font-medium text-foreground">
-                              Date d'expiration *
+                              {t('checkout.payment.expiryDate')} *
                             </label>
                             <input
                               type="text"
@@ -682,12 +686,12 @@ const CheckoutPaymentInteractive = () => {
                               onChange={handlePaymentInputChange}
                               placeholder="MM/AA"
                               maxLength={5}
-                              className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                              className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                             />
                           </div>
                           <div className="space-y-2">
                             <label htmlFor="cvv" className="block caption font-medium text-foreground">
-                              CVV *
+                              {t('checkout.payment.cvv')} *
                             </label>
                             <input
                               type="text"
@@ -697,7 +701,7 @@ const CheckoutPaymentInteractive = () => {
                               onChange={handlePaymentInputChange}
                               placeholder="123"
                               maxLength={3}
-                              className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                              className="w-full px-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                             />
                           </div>
                         </div>
@@ -707,7 +711,7 @@ const CheckoutPaymentInteractive = () => {
                     {paymentMethod === 'paypal' && (
                       <div className="p-4 bg-background rounded-lg">
                         <p className="text-muted-foreground caption">
-                          Vous serez redirigé vers PayPal pour finaliser votre paiement.
+                          {t('checkout.payment.paypalInfo')}
                         </p>
                       </div>
                     )}
@@ -715,7 +719,7 @@ const CheckoutPaymentInteractive = () => {
                     {!isQuoteRequest && paymentMethod === 'bank' && (
                       <div className="p-4 bg-background rounded-lg">
                         <p className="text-muted-foreground caption mb-2">
-                          Effectuez un virement bancaire vers:
+                          {t('checkout.payment.bankInfo')}
                         </p>
                         <p className="data-text text-foreground">IBAN: FR76 1234 5678 9012 3456 7890 123</p>
                         <p className="data-text text-foreground">BIC: ABCDEFGH</p>
@@ -728,20 +732,20 @@ const CheckoutPaymentInteractive = () => {
                       onClick={() => setCurrentStep(1)}
                       className="px-6 py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
                     >
-                      Retour
+                      {t('checkout.payment.back')}
                     </button>
                     <button
                       onClick={handlePlaceOrder}
                       disabled={isProcessing || !validatePaymentForm()}
-                      className="flex-1 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-md shadow-primary/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isProcessing ? (
                         <span className="flex items-center justify-center gap-2">
                           <Icon name="ArrowPathIcon" size={20} className="animate-spin" />
-                          {isQuoteRequest ? 'Envoi de la demande...' : 'Traitement en cours...'}
+                          {isQuoteRequest ? t('checkout.payment.sendingQuote') : t('checkout.payment.processing')}
                         </span>
                       ) : (
-                        isQuoteRequest ? 'Soumettre la demande de devis' : 'Confirmer la commande'
+                        isQuoteRequest ? t('checkout.payment.submitQuote') : t('checkout.payment.placeOrder')
                       )}
                     </button>
                   </div>
@@ -750,16 +754,16 @@ const CheckoutPaymentInteractive = () => {
             </div>
 
             <div>
-              <div className="bg-card rounded-lg shadow-warm-md p-6 border border-border sticky top-20">
+              <div className="bg-card rounded-3xl shadow-lg p-8 border border-border/10 sticky top-20">
                 <h2 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                  Récapitulatif
+                  {t('checkout.summary.title')}
                 </h2>
                 <div className="space-y-4 mb-6">
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex gap-3">
                       <div className="flex-1">
                         <p className="font-medium text-foreground caption">{item.name}</p>
-                        <p className="text-muted-foreground caption">Qté: {item.quantity}</p>
+                        <p className="text-muted-foreground caption">{t('checkout.summary.qty')}: {item.quantity}</p>
                       </div>
                       <p className="data-text font-semibold text-foreground">
                         {formatPrice(item.price * item.quantity)}
@@ -770,21 +774,21 @@ const CheckoutPaymentInteractive = () => {
 
                 <div className="border-t border-border pt-4 space-y-3 mb-6">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground caption">Sous-total</span>
+                    <span className="text-muted-foreground caption">{t('checkout.summary.subtotal')}</span>
                     <span className="data-text text-foreground">
                       {formatPrice(subtotal)}
                     </span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-success">
-                      <span className="caption">Réduction</span>
+                      <span className="caption">{t('checkout.summary.discount')}</span>
                       <span className="data-text">
                         -{formatPrice(discount)}
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between pt-3 border-t border-border">
-                    <span className="font-heading text-lg font-semibold text-foreground">Total</span>
+                    <span className="font-heading text-lg font-semibold text-foreground">{t('checkout.summary.total')}</span>
                     <span className="font-heading text-2xl font-bold text-primary">
                       {formatPrice(total)}
                     </span>
@@ -794,7 +798,7 @@ const CheckoutPaymentInteractive = () => {
                 {currentStep === 1 && (
                   <div className="space-y-2">
                     <label htmlFor="promoCodeSummary" className="caption font-medium text-foreground">
-                      Code promo
+                      {t('checkout.summary.promoCode')}
                     </label>
                     <div className="flex gap-2">
                       <input

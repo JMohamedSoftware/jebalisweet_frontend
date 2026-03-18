@@ -134,7 +134,7 @@ function AppImage({
 
     if (fill) {
         return (
-            <div className={`relative ${className}`}>
+            <div className={`relative ${className}`} style={{ width: width || '100%', height: height || '100%' }}>
                 <Image
                     {...imageProps}
                     fill

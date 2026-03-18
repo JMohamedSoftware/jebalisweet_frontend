@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
+import HomepageSkeleton from '@/components/ui/HomepageSkeleton';
 
 interface Category {
   id: string;
@@ -60,6 +61,14 @@ const HomepageInteractive = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [activePromotion, setActivePromotion] = useState<Promotion | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Force scroll to top on mount to fix refresh issue
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // As a backup for slower loading content
+    const timeoutId = setTimeout(() => window.scrollTo(0, 0), 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -123,28 +132,21 @@ const HomepageInteractive = () => {
     } catch (error: any) {
       console.error('Error adding to backend cart:', error);
       if (error.message.includes('Token') || error.message.includes('Accès refusé')) {
-        alert("Votre session a expiré. Veuillez vous reconnecter.");
+        alert(t('cart.errors.sessionExpired'));
         router.push('/login');
       } else {
-        alert(`Erreur: ${error.message || 'Problème de connexion au panier'}`);
+        alert(t('cart.errors.addError', { message: error.message || t('common.error') }));
       }
     }
   };
 
   if (!isHydrated || isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-muted-foreground font-medium animate-pulse">{t('common.loading')}</p>
-        </div>
-      </div>
-    );
+    return <HomepageSkeleton />;
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-6 py-8 space-y-16">
+      <div className="py-4 sm:py-8 space-y-12 sm:space-y-16">
         <HeroSection
           title={t('home.hero.title')}
           subtitle={t('home.hero.subtitle')}
@@ -154,54 +156,71 @@ const HomepageInteractive = () => {
           backgroundAlt="Hero Background" />
 
 
-        <section>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('home.categories.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.categories.subtitle')}
-            </p>
-          </div>
+        {/* Categories Section */}
+        <section id="categories" className="py-10 sm:py-20 bg-background relative overflow-hidden">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="flex flex-col items-center text-center mb-10 sm:mb-16 reveal">
+              <h2 className="text-3xl sm:text-fluid-h2 font-heading font-bold text-foreground mb-4">
+                {t('home.categories.title')}
+              </h2>
+              <div className="h-1 w-20 bg-primary/20 rounded-full mb-6" />
+              <p className="text-muted-foreground max-w-2xl font-sans text-sm sm:text-lg px-4 italic">
+                {t('home.categories.subtitle')}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
             {categories.length > 0 ? (
-              categories.map((category, index) =>
-                <div
-                  key={category.id}
-                  className="animate-in fade-in slide-in-from-bottom duration-700 fill-mode-both"
-                  style={{ animationDelay: `${index * 150}ms` }}
-                >
-                  <CategoryCard {...category} />
-                </div>
-              )
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                {categories.map((category, index) => (
+                  <div key={category.id} className="reveal" style={{ animationDelay: `${index * 100}ms` }}>
+                    <CategoryCard
+                      id={category.id}
+                      name={category.name}
+                      description={category.description}
+                      image={category.image}
+                      alt={category.name}
+                      productCount={category.productCount || 0}
+                    />
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p className="text-center col-span-3 text-muted-foreground">{t('home.categories.empty')}</p>
+              <div className="text-center py-10 reveal">
+                <p className="text-muted-foreground">{t('home.categories.empty')}</p>
+              </div>
             )}
           </div>
         </section>
 
-        <section>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('home.featured.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.featured.subtitle')}
-            </p>
-          </div>
+        {/* Featured Products Section */}
+        <section id="featured" className="py-10 sm:py-20 bg-muted/30">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="flex flex-col items-center text-center mb-10 sm:mb-16 reveal">
+              <h2 className="text-3xl sm:text-fluid-h2 font-heading font-bold text-foreground mb-4">
+                {t('home.featured.title')}
+              </h2>
+              <div className="h-1 w-20 bg-primary/20 rounded-full mb-6" />
+              <p className="text-muted-foreground max-w-2xl font-sans text-sm sm:text-lg px-4 italic">
+                {t('home.featured.subtitle')}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {featuredProducts.length > 0 ? (
-              featuredProducts.map((product) =>
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={() => handleAddToCart(product)}
-                  onQuickView={() => router.push(`/product-catalog?category=${product.category}`)} />
-              )
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+                {featuredProducts.map((product, index) => (
+                  <div key={product.id} className="reveal" style={{ animationDelay: `${(index % 3) * 150}ms` }}>
+                    <ProductCard
+                      product={product}
+                      onAddToCart={() => handleAddToCart(product)}
+                      onQuickView={() => { /* Handled by catalog */ }}
+                    />
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p className="text-center w-full text-muted-foreground">{t('home.featured.empty')}</p>
+              <div className="text-center py-10 reveal">
+                <p className="text-muted-foreground">{t('home.featured.empty')}</p>
+              </div>
             )}
           </div>
         </section>
@@ -218,19 +237,19 @@ const HomepageInteractive = () => {
         )}
 
 
-        <section>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('home.testimonials.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.testimonials.subtitle')}
-            </p>
-          </div>
+        {testimonials.length > 0 && (
+          <section>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+                {t('home.testimonials.title')}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('home.testimonials.subtitle')}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.length > 0 ? (
-              testimonials.map((testimonial) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {testimonials.map((testimonial) => (
                 <TestimonialCard
                   key={testimonial.id}
                   name={testimonial.name}
@@ -239,12 +258,10 @@ const HomepageInteractive = () => {
                   comment={testimonial.comment}
                   date={testimonial.date}
                 />
-              ))
-            ) : (
-              <p className="text-center col-span-full text-muted-foreground">{t('home.testimonials.empty')}</p>
-            )}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
       </div >
     </div >

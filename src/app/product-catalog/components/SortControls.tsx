@@ -32,7 +32,7 @@ const SortControls = ({
   ];
 
   return (
-    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-card rounded-2xl shadow-warm p-4 border border-border/50">
+    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-card rounded-2xl shadow-sm p-4 border border-border/20">
       <div className="flex items-center gap-2 flex-1 relative group">
         <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors">
           <Icon name="MagnifyingGlassIcon" size={20} />

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/context/LanguageContext';
 import Icon from '@/components/ui/AppIcon';
 import { API_ENDPOINT } from '@/config/api';
 
@@ -33,6 +34,7 @@ interface FormErrors {
 }
 
 const RegistrationForm = () => {
+    const { t } = useLanguage();
     const router = useRouter();
     const [isHydrated, setIsHydrated] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -83,11 +85,11 @@ const RegistrationForm = () => {
         if (/[^a-zA-Z0-9]/.test(password)) score++;
 
         const labels = [
-            { label: 'Très faible', color: 'bg-error' },
-            { label: 'Faible', color: 'bg-warning' },
-            { label: 'Moyen', color: 'bg-warning' },
-            { label: 'Fort', color: 'bg-success' },
-            { label: 'Très fort', color: 'bg-success' },
+            { label: t('auth.register.passwordStrength.veryWeak'), color: 'bg-error' },
+            { label: t('auth.register.passwordStrength.weak'), color: 'bg-warning' },
+            { label: t('auth.register.passwordStrength.medium'), color: 'bg-warning' },
+            { label: t('auth.register.passwordStrength.strong'), color: 'bg-success' },
+            { label: t('auth.register.passwordStrength.veryStrong'), color: 'bg-success' },
         ];
 
         return { score, ...labels[Math.min(score, 4)] };
@@ -112,55 +114,55 @@ const RegistrationForm = () => {
         const newErrors: FormErrors = {};
 
         if (!formData.firstName.trim()) {
-            newErrors.firstName = 'Le prénom est requis';
+            newErrors.firstName = t('auth.register.errors.firstName');
         }
 
         if (!formData.lastName.trim()) {
-            newErrors.lastName = 'Le nom est requis';
+            newErrors.lastName = t('auth.register.errors.lastName');
         }
 
         if (!formData.email.trim()) {
-            newErrors.email = "L'email est requis";
+            newErrors.email = t('auth.register.errors.emailRequired');
         } else if (!validateEmail(formData.email)) {
-            newErrors.email = 'Format email invalide';
+            newErrors.email = t('auth.register.errors.email');
         }
 
         if (!formData.phone.trim()) {
-            newErrors.phone = 'Le téléphone est requis';
+            newErrors.phone = t('auth.register.errors.phoneRequired');
         } else if (!validatePhone(formData.phone)) {
-            newErrors.phone = 'Format téléphone invalide (ex: 06 12 34 56 78)';
+            newErrors.phone = t('auth.register.errors.phone');
         }
 
         if (!formData.password) {
-            newErrors.password = 'Le mot de passe est requis';
+            newErrors.password = t('auth.register.errors.password');
         } else if (formData.password.length < 8) {
-            newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
+            newErrors.password = t('auth.register.errors.password');
         }
 
         if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Veuillez confirmer le mot de passe';
+            newErrors.confirmPassword = t('auth.register.errors.confirmPasswordRequired');
         } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
+            newErrors.confirmPassword = t('auth.register.errors.confirmPassword');
         }
 
         if (showAddressFields) {
             if (!formData.address.trim()) {
-                newErrors.address = "L'adresse est requise";
+                newErrors.address = t('auth.register.errors.address');
             }
 
             if (!formData.city.trim()) {
-                newErrors.city = 'La ville est requise';
+                newErrors.city = t('auth.register.errors.city');
             }
 
             if (!formData.postalCode.trim()) {
-                newErrors.postalCode = 'Le code postal est requis';
+                newErrors.postalCode = t('auth.register.errors.postalCode');
             } else if (!validatePostalCode(formData.postalCode)) {
-                newErrors.postalCode = 'Code postal invalide (4 chiffres)';
+                newErrors.postalCode = t('auth.register.errors.postalCodeInvalid');
             }
         }
 
         if (!formData.termsAccepted) {
-            newErrors.termsAccepted = 'Vous devez accepter les conditions générales';
+            newErrors.termsAccepted = t('auth.register.errors.terms');
         }
 
         setErrors(newErrors);
@@ -219,7 +221,7 @@ const RegistrationForm = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                setErrors({ email: data.message || "Une erreur s'est produite lors de l'inscription" });
+                setErrors({ email: data.message || t('auth.register.errors.general') });
                 setIsSubmitting(false);
                 return;
             }
@@ -228,7 +230,7 @@ const RegistrationForm = () => {
             // Determine redirect or action
             if (formData.role === 'livreur') {
                 // Drivers are pending
-                alert("Votre compte livreur a été créé avec succès et est en attente de validation.");
+                // alert removed
             }
 
             if (data.token && data.user) {
@@ -238,12 +240,7 @@ const RegistrationForm = () => {
                 // Trigger storage event for other components (like Header)
                 window.dispatchEvent(new Event('storage'));
 
-                // Custom success message
-                const welcomeMsg = formData.role === 'livreur'
-                    ? 'Inscription réussie ! Votre compte est en attente de validation.'
-                    : `Bienvenue, ${formData.firstName} ! Votre compte a été créé avec succès.`;
-
-                alert(welcomeMsg);
+                // alert removed
 
                 // Redirect based on role
                 if (formData.role === 'livreur') {
@@ -252,12 +249,12 @@ const RegistrationForm = () => {
                     router.push('/');
                 }
             } else {
-                alert('Inscription réussie ! Veuillez vous connecter.');
+                // alert removed
                 router.push('/login');
             }
         } catch (error) {
             console.error('Registration error:', error);
-            setErrors({ email: "Une erreur s'est produite lors de l'inscription" });
+            setErrors({ email: t('auth.register.errors.general') });
             setIsSubmitting(false);
         }
     };
@@ -282,13 +279,13 @@ const RegistrationForm = () => {
     return (
         <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto">
-                <div className="bg-card rounded-xl shadow-warm-lg p-8">
+                <div className="bg-card rounded-3xl shadow-xl p-8 border border-border/10">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-foreground mb-2">
-                            Créer un compte
+                            {t('auth.register.title')}
                         </h1>
                         <p className="text-muted-foreground">
-                            Rejoignez Jebali Sweet et découvrez nos délicieuses confiseries
+                            {t('auth.register.subtitle')}
                         </p>
                     </div>
 
@@ -299,7 +296,7 @@ const RegistrationForm = () => {
                                     htmlFor="firstName"
                                     className="block text-sm font-medium text-foreground mb-2"
                                 >
-                                    Prénom <span className="text-error">*</span>
+                                    {t('auth.register.firstName')} <span className="text-error">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -307,9 +304,9 @@ const RegistrationForm = () => {
                                     name="firstName"
                                     value={formData.firstName}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg border ${errors.firstName ? 'border-error' : 'border-input'
-                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="Prénom"
+                                    className={`w-full px-4 py-3 rounded-xl border ${errors.firstName ? 'border-error' : 'border-input/50'
+                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                    placeholder={t('auth.register.placeholders.firstName')}
                                 />
                                 {errors.firstName && (
                                     <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -324,7 +321,7 @@ const RegistrationForm = () => {
                                     htmlFor="lastName"
                                     className="block text-sm font-medium text-foreground mb-2"
                                 >
-                                    Nom <span className="text-error">*</span>
+                                    {t('auth.register.lastName')} <span className="text-error">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -332,9 +329,9 @@ const RegistrationForm = () => {
                                     name="lastName"
                                     value={formData.lastName}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg border ${errors.lastName ? 'border-error' : 'border-input'
-                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="nom"
+                                    className={`w-full px-4 py-3 rounded-xl border ${errors.lastName ? 'border-error' : 'border-input/50'
+                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                    placeholder={t('auth.register.placeholders.lastName')}
                                 />
                                 {errors.lastName && (
                                     <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -350,7 +347,7 @@ const RegistrationForm = () => {
                                 htmlFor="email"
                                 className="block text-sm font-medium text-foreground mb-2"
                             >
-                                Email <span className="text-error">*</span>
+                                {t('auth.register.email')} <span className="text-error">*</span>
                             </label>
                             <input
                                 type="email"
@@ -358,9 +355,9 @@ const RegistrationForm = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-error' : 'border-input'
+                                className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-error' : 'border-input/50'
                                     } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                placeholder="nomPrénom@example.com"
+                                placeholder={t('auth.register.placeholders.email')}
                             />
                             {errors.email && (
                                 <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -375,7 +372,7 @@ const RegistrationForm = () => {
                                 htmlFor="phone"
                                 className="block text-sm font-medium text-foreground mb-2"
                             >
-                                Téléphone <span className="text-error">*</span>
+                                {t('auth.register.phone')} <span className="text-error">*</span>
                             </label>
                             <input
                                 type="tel"
@@ -383,9 +380,9 @@ const RegistrationForm = () => {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-error' : 'border-input'
+                                className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-error' : 'border-input/50'
                                     } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                placeholder="12 34 56 78"
+                                placeholder={t('auth.register.placeholders.phone')}
                             />
                             {errors.phone && (
                                 <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -400,7 +397,7 @@ const RegistrationForm = () => {
                                 htmlFor="password"
                                 className="block text-sm font-medium text-foreground mb-2"
                             >
-                                Mot de passe <span className="text-error">*</span>
+                                {t('auth.register.password')} <span className="text-error">*</span>
                             </label>
                             <div className="relative">
                                 <input
@@ -409,9 +406,9 @@ const RegistrationForm = () => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 pr-12 rounded-lg border ${errors.password ? 'border-error' : 'border-input'
-                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="••••••••"
+                                    className={`w-full px-4 py-3 pr-12 rounded-xl border ${errors.password ? 'border-error' : 'border-input/50'
+                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                    placeholder={t('auth.register.placeholders.password')}
                                 />
                                 <button
                                     type="button"
@@ -452,7 +449,7 @@ const RegistrationForm = () => {
                                 htmlFor="confirmPassword"
                                 className="block text-sm font-medium text-foreground mb-2"
                             >
-                                Confirmer le mot de passe <span className="text-error">*</span>
+                                {t('auth.register.confirmPassword')} <span className="text-error">*</span>
                             </label>
                             <div className="relative">
                                 <input
@@ -461,9 +458,9 @@ const RegistrationForm = () => {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 pr-12 rounded-lg border ${errors.confirmPassword ? 'border-error' : 'border-input'
-                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                    placeholder="••••••••"
+                                    className={`w-full px-4 py-3 pr-12 rounded-xl border ${errors.confirmPassword ? 'border-error' : 'border-input/50'
+                                        } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                    placeholder={t('auth.register.placeholders.password')}
                                 />
                                 <button
                                     type="button"
@@ -487,7 +484,7 @@ const RegistrationForm = () => {
                         {showAddressFields && (
                             <div className="space-y-6 pt-6 border-t border-border animate-fade-in">
                                 <h3 className="text-lg font-semibold text-foreground">
-                                    Adresse de livraison
+                                    {t('auth.register.shippingAddress')}
                                 </h3>
 
                                 <div>
@@ -495,7 +492,7 @@ const RegistrationForm = () => {
                                         htmlFor="address"
                                         className="block text-sm font-medium text-foreground mb-2"
                                     >
-                                        Adresse <span className="text-error">*</span>
+                                        {t('auth.register.address')} <span className="text-error">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -503,9 +500,9 @@ const RegistrationForm = () => {
                                         name="address"
                                         value={formData.address}
                                         onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 rounded-lg border ${errors.address ? 'border-error' : 'border-input'
-                                            } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                        placeholder="123 Rue de la Paix"
+                                        className={`w-full px-4 py-3 rounded-xl border ${errors.address ? 'border-error' : 'border-input/50'
+                                            } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                        placeholder={t('auth.register.placeholders.address')}
                                     />
                                     {errors.address && (
                                         <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -521,7 +518,7 @@ const RegistrationForm = () => {
                                             htmlFor="city"
                                             className="block text-sm font-medium text-foreground mb-2"
                                         >
-                                            Ville <span className="text-error">*</span>
+                                            {t('auth.register.city')} <span className="text-error">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -529,9 +526,9 @@ const RegistrationForm = () => {
                                             name="city"
                                             value={formData.city}
                                             onChange={handleInputChange}
-                                            className={`w-full px-4 py-3 rounded-lg border ${errors.city ? 'border-error' : 'border-input'
-                                                } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                            placeholder="Paris"
+                                            className={`w-full px-4 py-3 rounded-xl border ${errors.city ? 'border-error' : 'border-input/50'
+                                                } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                            placeholder={t('auth.register.placeholders.city')}
                                         />
                                         {errors.city && (
                                             <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -546,7 +543,7 @@ const RegistrationForm = () => {
                                             htmlFor="postalCode"
                                             className="block text-sm font-medium text-foreground mb-2"
                                         >
-                                            Code postal <span className="text-error">*</span>
+                                            {t('auth.register.postalCode')} <span className="text-error">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -555,9 +552,9 @@ const RegistrationForm = () => {
                                             value={formData.postalCode}
                                             onChange={handleInputChange}
                                             maxLength={5}
-                                            className={`w-full px-4 py-3 rounded-lg border ${errors.postalCode ? 'border-error' : 'border-input'
-                                                } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth`}
-                                            placeholder="2013"
+                                            className={`w-full px-4 py-3 rounded-xl border ${errors.postalCode ? 'border-error' : 'border-input/50'
+                                                } bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium`}
+                                            placeholder={t('auth.register.placeholders.postalCode')}
                                         />
                                         {errors.postalCode && (
                                             <p className="mt-1 text-sm text-error flex items-center gap-1">
@@ -575,17 +572,17 @@ const RegistrationForm = () => {
                                 htmlFor="role"
                                 className="block text-sm font-medium text-foreground mb-2"
                             >
-                                Type de compte
+                                {t('auth.register.role')}
                             </label>
                             <select
                                 id="role"
                                 name="role"
                                 value={formData.role}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                                className="w-full px-4 py-3 rounded-xl border border-input/50 bg-background text-foreground focus:outline-none focus:ring-3 focus:ring-primary/20 transition-all font-medium"
                             >
-                                <option value="client">Client</option>
-                                <option value="livreur">Livreur</option>
+                                <option value="client">{t('auth.register.client')}</option>
+                                <option value="livreur">{t('auth.register.delivery')}</option>
                             </select>
                         </div>
 
@@ -599,14 +596,15 @@ const RegistrationForm = () => {
                                     className="mt-1 w-5 h-5 rounded border-input text-primary focus:ring-3 focus:ring-ring cursor-pointer"
                                 />
                                 <span className="text-sm text-foreground group-hover:text-primary transition-smooth">
-                                    J'accepte les{' '}
-                                    <a href="#" className="text-primary hover:underline font-medium">
-                                        conditions générales d'utilisation
-                                    </a>{' '}
-                                    et la{' '}
-                                    <a href="#" className="text-primary hover:underline font-medium">
-                                        politique de confidentialité
-                                    </a>
+                                    {t('auth.register.terms').split(/({terms}|{privacy})/).map((part, i) => {
+                                        if (part === '{terms}') {
+                                            return <a key={i} href="/terms" className="text-primary hover:underline font-medium">{t('legal.terms')}</a>;
+                                        }
+                                        if (part === '{privacy}') {
+                                            return <a key={i} href="/privacy" className="text-primary hover:underline font-medium">{t('legal.privacy')}</a>;
+                                        }
+                                        return part;
+                                    })}
                                 </span>
                             </label>
                             {errors.termsAccepted && (
@@ -620,48 +618,46 @@ const RegistrationForm = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full px-6 py-4 bg-primary text-primary-foreground rounded-lg font-semibold transition-smooth hover:opacity-90 focus:outline-none focus:ring-3 focus:ring-ring focus:ring-offset-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full px-6 py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>
                                     <Icon name="ArrowPathIcon" size={20} className="animate-spin" />
-                                    Création en cours...
+                                    {t('auth.register.loading')}
                                 </>
                             ) : (
                                 <>
                                     <Icon name="UserPlusIcon" size={20} />
-                                    Créer le compte
+                                    {t('auth.register.submit')}
                                 </>
                             )}
                         </button>
 
                         <div className="text-center pt-4 border-t border-border">
                             <p className="text-sm text-muted-foreground">
-                                Vous avez déjà un compte ?{' '}
+                                {t('auth.register.haveAccount')}{' '}
                                 <a
                                     href="/login"
                                     className="text-primary hover:underline font-medium transition-smooth"
                                 >
-                                    Retour à la connexion
+                                    {t('auth.register.login')}
                                 </a>
                             </p>
                         </div>
                     </form>
                 </div>
 
-                <div className="mt-8 bg-card rounded-xl shadow-warm p-6">
+                <div className="mt-8 bg-card rounded-2xl shadow-sm border border-border/20 p-6">
                     <div className="flex items-start gap-4">
                         <div className="flex-shrink-0">
                             <Icon name="ShieldCheckIcon" size={32} className="text-success" />
                         </div>
                         <div>
                             <h3 className="font-semibold text-foreground mb-2">
-                                Vos données sont sécurisées
+                                {t('auth.register.securityInfo.title')}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                                Nous utilisons les dernières technologies de cryptage pour protéger
-                                vos informations personnelles. Vos données ne seront jamais partagées
-                                avec des tiers sans votre consentement.
+                                {t('auth.register.securityInfo.description')}
                             </p>
                         </div>
                     </div>

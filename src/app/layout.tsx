@@ -1,6 +1,8 @@
 import React from 'react';
 import '../styles/index.css';
 import { LanguageProvider } from '@/context/LanguageContext';
+import StructuredData from '@/components/common/StructuredData';
+import type { Metadata } from 'next';
 
 export const viewport = {
   width: 'device-width',
@@ -13,9 +15,23 @@ export const metadata = {
     default: 'Jebali Sweet - Pâtisserie & Chocolaterie Fine par Chef Aida Jebali',
     template: '%s | Jebali Sweet'
   },
-  description: 'Découvrez les délices de Jebali Sweet : chocolats artisanaux, gâteaux personnalisés et salés raffinés par Chef Aida Jebali en Tunisie. Qualité premium pour tous vos événements.',
-  keywords: 'chef aida jebali, aida jebali, jebali sweet, jebali sweet tunisie, pâtisserie tunisie, chocolat artisanal, gâteau sur mesure, gâteau anniversaire, salés tunisiens, pâtisserie fine, jebalisweet.tn, commande gâteau en ligne',
+  description: 'Jebali Sweet - Pâtisserie & Chocolaterie Fine par Chef Aida Jebali en Tunisie. Découvrez nos chocolats artisanaux, gâteaux personnalisés sur mesure et salés raffinés. Qualité premium et livraison à domicile. جبالي سويت - حلويات راقية بتونس.',
+  keywords: [
+    // Brand name variations
+    'jebalisweet', 'jebali sweet', 'jebali', 'sweet jebali', 'jebalis', 'jebali sweet tunisie',
+    'jebalisweet.tn', 'chef aida jebali', 'aida jebali',
+    // Arabic
+    'جبالي سويت', 'جبالي', 'حلويات جبالي',
+    // Products
+    'pâtisserie tunisie', 'chocolat artisanal tunis', 'gâteau sur mesure tunis',
+    'gâteau anniversaire personnalisé', 'salés tunisiens raffinés', 'pâtisserie fine tunisie',
+    'commande gâteau en ligne tunisie', 'meilleur pâtissier tunisie', 'box chocolat tunisie',
+    'gâteau livraison tunis', 'chocolaterie tunisie', 'confiserie tunisie',
+    'حلويات تونسية', 'كعك تونس', 'شوكولاطة تونس'
+  ],
   authors: [{ name: 'Chef Aida Jebali' }],
+  category: 'Pâtisserie & Chocolaterie',
+  classification: 'Business',
   alternates: {
     canonical: '/',
   },
@@ -37,7 +53,7 @@ export const metadata = {
     siteName: 'Jebali Sweet',
     images: [
       {
-        url: '/og-image.jpg', // Ensure this exists or fallback to a default
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Jebali Sweet - Pâtisserie Fine',
@@ -50,7 +66,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Jebali Sweet - Pâtisserie Fine',
     description: 'Chocolats artisanaux et gâteaux personnalisés en Tunisie.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   icons: {
     icon: [
@@ -74,9 +90,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body>
+    <html lang="fr" className="smooth-scroll">
+      <head>
+        {/* Google Fonts preconnect and link for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@400;500&family=Nunito+Sans:wght@400;500&display=swap"
+        />
+        {/* Preload hero background for optimal LCP */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/17189029461596829888opals_3200x1200.jpg"
+          type="image/jpeg"
+        />
+      </head>
+      <body suppressHydrationWarning>
         <LanguageProvider>
+          <StructuredData />
           {children}
         </LanguageProvider>
       </body>

@@ -33,22 +33,23 @@ interface FeaturedProduct {
   alt: string;
 }
 
-const validPromoCodes: Record<string, number> = {
-  'SWEET10': 10,
-  'NOEL2025': 15,
-  'BIENVENUE': 5
-};
-
 const ShoppingCartInteractive = () => {
   const { t } = useLanguage();
   const [isHydrated, setIsHydrated] = useState(false);
   const [cartItems, setCartItems] = useState<CartItemData[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<FeaturedProduct[]>([]);
   const [promoCode, setPromoCode] = useState('');
+  const [promoDiscount, setPromoDiscount] = useState<{ value: number, type: 'percentage' | 'fixed' } | null>(null);
   const [promoCodeError, setPromoCodeError] = useState('');
   const [promoCodeSuccess, setPromoCodeSuccess] = useState('');
 
   const fetchCart = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      setCartItems([]);
+      return;
+    }
+
     try {
       const response = await api.cart.get();
       const mappedItems = response.items.map((item: any) => ({
@@ -62,8 +63,10 @@ const ShoppingCartInteractive = () => {
         maxQuantity: Math.max(0, item.stockQuantity || 0)
       }));
       setCartItems(mappedItems);
-    } catch (error) {
-      console.error('Error fetching cart:', error);
+    } catch (error: any) {
+      if (!error.message?.includes('Token')) {
+        console.error('Error fetching cart:', error);
+      }
     }
   };
 
@@ -128,16 +131,20 @@ const ShoppingCartInteractive = () => {
     }
   };
 
-  const handleApplyPromoCode = (code: string) => {
+  const handleApplyPromoCode = async (code: string) => {
+    setPromoCodeError('');
+    setPromoCodeSuccess('');
     const upperCode = code.toUpperCase();
-    if (validPromoCodes[upperCode]) {
+    
+    try {
+      const data = await api.promoCodes.validate(upperCode);
       setPromoCode(upperCode);
+      setPromoDiscount({ value: data.discount, type: data.type });
       setPromoCodeSuccess(t('cart.summary.successCode', { code: upperCode }));
-      setPromoCodeError('');
-    } else {
-      setPromoCodeError(t('cart.summary.invalidCode'));
-      setPromoCodeSuccess('');
+    } catch (error: any) {
+      setPromoCodeError(error.message || t('cart.summary.invalidCode'));
       setPromoCode('');
+      setPromoDiscount(null);
     }
   };
 
@@ -162,7 +169,9 @@ const ShoppingCartInteractive = () => {
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const discount = (promoCode && validPromoCodes[promoCode]) ? (subtotal * validPromoCodes[promoCode] / 100) : 0;
+  const discount = (promoCode && promoDiscount) 
+    ? (promoDiscount.type === 'percentage' ? (subtotal * promoDiscount.value / 100) : promoDiscount.value) 
+    : 0;
   const deliveryCost = 0;
   const total = subtotal + deliveryCost - discount;
   const hasCustomItems = cartItems.some(item => item.customImage || (item.customOptions && item.customOptions.isCustom));

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface PaymentMethodSelectorProps {
   selectedMethod: 'card' | 'paypal' | 'bank' | 'in_store';
@@ -9,29 +10,31 @@ interface PaymentMethodSelectorProps {
 }
 
 const PaymentMethodSelector = ({ selectedMethod, onSelectMethod }: PaymentMethodSelectorProps) => {
+  const { t } = useLanguage();
+
   const paymentMethods = [
     {
       id: 'card' as const,
-      label: 'Carte bancaire',
-      description: 'Visa, Mastercard, American Express',
+      label: t('checkout.payment.card'),
+      description: t('checkout.payment.cardDescription'),
       icon: 'CreditCardIcon',
     },
     {
       id: 'paypal' as const,
-      label: 'PayPal',
-      description: 'Paiement sécurisé via PayPal',
+      label: t('checkout.payment.paypal'),
+      description: t('checkout.payment.paypalDescription'),
       icon: 'BanknotesIcon',
     },
     {
       id: 'bank' as const,
-      label: 'Virement bancaire',
-      description: 'Paiement par virement SEPA',
+      label: t('checkout.payment.bank'),
+      description: t('checkout.payment.bankDescription'),
       icon: 'BuildingLibraryIcon',
     },
     {
       id: 'in_store' as const,
-      label: 'Paiement en boutique',
-      description: 'Payez lors du retrait de votre commande',
+      label: t('checkout.payment.inStore'),
+      description: t('checkout.payment.inStoreDescription'),
       icon: 'BuildingStorefrontIcon',
     },
   ];

@@ -2,7 +2,7 @@
     "nav": {
         "home": "Accueil",
         "products": "Produits",
-        "account": "Mon Compte",
+        "account": "Connexion",
         "login": "Connexion",
         "profile": "Mon Profil",
         "orders": "Mes Commandes",
@@ -12,11 +12,121 @@
         "language": "Langue",
         "user": "Utilisateur"
     },
+    "common": {
+        "loading": "Chargement...",
+        "error": "Une erreur est survenue",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "back": "Retour",
+        "next": "Suivant",
+        "submit": "Envoyer",
+        "success": "Succès",
+        "optional": "(optionnel)"
+    },
+    "auth": {
+        "login": {
+            "title": "Bon retour parmi nous",
+            "subtitle": "Connectez-vous pour accéder à votre compte",
+            "email": "Adresse Email",
+            "password": "Mot de passe",
+            "forgotPassword": "Mot de passe oublié ?",
+            "submit": "Se connecter",
+            "loading": "Connexion...",
+            "noAccount": "Pas de compte ?",
+            "register": "Créer un compte",
+            "errors": {
+                "emailRequired": "L'email est requis",
+                "emailInvalid": "Email invalide",
+                "passwordRequired": "Mot de passe requis",
+                "passwordShort": "Au moins 6 caractères",
+                "invalid": "Email ou mot de passe incorrect"
+            }
+        },
+        "register": {
+            "title": "Créer un compte",
+            "subtitle": "Rejoignez la famille Jebali Sweet",
+            "firstName": "Prénom",
+            "lastName": "Nom",
+            "email": "Adresse Email",
+            "phone": "Téléphone",
+            "password": "Mot de passe",
+            "confirmPassword": "Confirmer le mot de passe",
+            "address": "Adresse",
+            "city": "Ville",
+            "postalCode": "Code Postal",
+            "role": "Type de compte",
+            "client": "Client",
+            "delivery": "Livreur",
+            "submit": "Créer mon compte",
+            "loading": "Création...",
+            "haveAccount": "Déjà inscrit ?",
+            "login": "Se connecter",
+            "terms": "J'accepte les {terms} et la {privacy}",
+            "shippingAddress": "Adresse de livraison",
+            "placeholders": {
+                "firstName": "Prénom",
+                "lastName": "Nom",
+                "email": "nom@exemple.com",
+                "phone": "12 34 56 78",
+                "password": "••••••••",
+                "address": "123 Rue de la Paix",
+                "city": "Ville",
+                "postalCode": "1234"
+            },
+            "errors": {
+                "firstName": "Prénom requis",
+                "lastName": "Nom requis",
+                "email": "Email invalide",
+                "emailRequired": "L'email est requis",
+                "phone": "Téléphone invalide (8 chiffres)",
+                "phoneRequired": "Téléphone requis",
+                "password": "Au moins 8 caractères",
+                "confirmPassword": "Mots de passe non identiques",
+                "confirmPasswordRequired": "Veuillez confirmer",
+                "address": "Adresse requise",
+                "city": "Ville requise",
+                "postalCode": "Code postal requis",
+                "postalCodeInvalid": "Code postal invalide (4 chiffres)",
+                "terms": "Veuillez accepter les conditions",
+                "general": "Une erreur est survenue lors de l'inscription"
+            },
+            "passwordStrength": {
+                "veryWeak": "Très faible",
+                "weak": "Faible",
+                "medium": "Moyen",
+                "strong": "Fort",
+                "veryStrong": "Très fort"
+            },
+            "securityInfo": {
+                "title": "Vos données sont sécurisées",
+                "description": "Nous utilisons les dernières technologies de cryptage. Vos données ne seront jamais partagées."
+            }
+        },
+        "forgotPassword": {
+            "title": "Mot de passe oublié ?",
+            "subtitle": "Entrez votre email pour recevoir un code",
+            "submit": "Envoyer le code",
+            "backToLogin": "Retour à la connexion",
+            "step1": "Entrez votre email",
+            "step2": "Entrez le code OTP",
+            "step3": "Nouveau mot de passe",
+            "otpLabel": "Code OTP",
+            "otpPlaceholder": "000000",
+            "newPassword": "Nouveau mot de passe",
+            "confirmNewPassword": "Confirmer le mot de passe",
+            "updateSubmit": "Changer le mot de passe",
+            "success": "Mot de passe modifié !"
+        }
+    },
     "home": {
         "hero": {
             "title": "Découvrez l'Excellence Sucrée",
-            "subtitle": "Jebali Sweet vous propose une sélection raffinée de chocolats, bonbons, gâteaux et pâtisseries artisanales préparés avec passion et savoir-faire.",
-            "cta": "Découvrir nos produits"
+            "subtitle": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de douceurs sucrées.",
+            "cta": "Découvrir nos produits",
+            "badge": "Création Originale"
         },
         "categories": {
             "title": "Nos Catégories",
@@ -54,11 +164,6 @@
             }
         }
     },
-    "common": {
-        "loading": "Chargement...",
-        "error": "Une erreur est survenue",
-        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?"
-    },
     "catalog": {
         "title": "Catalogue",
         "subtitle": "Découvrez nos douceurs authentiques",
@@ -95,14 +200,21 @@
         "outOfStock": "Rupture de stock",
         "inStock": "En stock",
         "reviews": "avis",
-        "category": "Catégorie"
+        "category": "Catégorie",
+        "priceLabel": "Prix de délice",
+        "shipping": "Livraison Rapide",
+        "securePayment": "Paiement Sécurisé",
+        "added": "Ajouté !",
+        "addToCart": "Ajouter au Panier"
     },
     "product": {
         "outOfStock": "Rupture de stock",
         "addToCart": "Ajouter",
         "addToCartAria": "Ajouter {productName} au panier",
         "quickViewProduct": "Aperçu rapide de {productName}",
-        "customCakeCategory": "Gâteaux"
+        "customCakeCategory": "Gâteaux",
+        "pricePerPiece": "{price} DT / pièce",
+        "pricePerKg": "{price} DT / kg"
     },
     "admin": {
         "orders": {
@@ -234,25 +346,213 @@
             "successCode": "Code {code} appliqué !",
             "checkout": "Passer à la caisse",
             "customNote": "Veuillez noter que les articles personnalisés peuvent nécessiter un délai supplémentaire."
+        },
+        "item": {
+            "availability": {
+                "in_stock": "En stock",
+                "low_stock": "Stock limité",
+                "out_of_stock": "Rupture de stock"
+            },
+            "commentLabel": "Commentaire / Instructions",
+            "commentPlaceholder": "Ex: Pas trop sucré, message 'Joyeux Anniversaire'...",
+            "unitPrice": "Prix unitaire",
+            "subtotal": "Sous-total",
+            "remove": "Supprimer du panier",
+            "increase": "Augmenter la quantité",
+            "decrease": "Diminuer la quantité"
+        },
+        "errors": {
+            "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+            "addError": "Erreur lors de l'ajout au panier : {message}"
+        }
+    },
+    "profile": {
+        "title": "Mon Compte",
+        "personalInfo": "Infos personnelles",
+        "orders": {
+            "title": "Mes Commandes",
+            "history": "Historique des Commandes",
+            "empty": "Vous n'avez pas encore passé de commande",
+            "noOrders": "Aucune commande trouvée",
+            "discover": "Découvrir nos produits",
+            "total": "Total",
+            "date": "Commandé le",
+            "items": "{count} article(s)",
+            "viewDetails": "Voir détails",
+            "reorder": "Recommander",
+            "payment": "Paiement",
+            "status": {
+                "confirmed": "Confirmée",
+                "processing": "En préparation",
+                "shipped": "Expédiée",
+                "delivered": "Livrée",
+                "cancelled": "Annulée"
+            }
+        },
+        "addresses": {
+            "title": "Adresses de Livraison",
+            "add": "Ajouter une adresse",
+            "edit": "Modifier l'adresse",
+            "new": "Nouvelle adresse",
+            "label": "Libellé",
+            "labelPlaceholder": "Domicile, Bureau, etc.",
+            "default": "Par défaut",
+            "setDefault": "Définir par défaut",
+            "delete": "Supprimer",
+            "home": "Domicile",
+            "office": "Bureau"
+        },
+        "security": "Sécurité",
+        "save": "Enregistrer les modifications",
+        "changePassword": "Changer le mot de passe",
+        "currentPassword": "Mot de passe actuel",
+        "newPassword": "Nouveau mot de passe",
+        "confirmNewPassword": "Confirmer le mot de passe",
+        "successUpdate": "Profil mis à jour",
+        "pfp": "Photo de profil"
+    },
+    "checkout": {
+        "title": "Finaliser la commande",
+        "steps": {
+            "shipping": "Livraison",
+            "payment": "Paiement",
+            "confirmation": "Confirmation"
+        },
+        "shipping": {
+            "title": "Informations de livraison",
+            "fullName": "Nom complet",
+            "firstName": "Prénom",
+            "lastName": "Nom",
+            "email": "Email",
+            "phone": "Téléphone",
+            "address": "Adresse",
+            "city": "Ville",
+            "postalCode": "Code postal",
+            "additionalInfo": "Informations complémentaires",
+            "additionalInfoPlaceholder": "Code d'accès, étage, etc.",
+            "useShippingAsBilling": "Utiliser l'adresse de livraison pour la facturation",
+            "method": "Mode de livraison",
+            "deliveryTime": "Livraison sous 2-3 jours ouvrés",
+            "standard": "Standard",
+            "express": "Express",
+            "pickup": "Retrait",
+            "inStore": "En boutique",
+            "free": "Gratuit",
+            "soon": "Bientôt disponible",
+            "continueToPayment": "Continuer vers le paiement"
+        },
+        "payment": {
+            "title": "Mode de paiement",
+            "card": "Carte bancaire",
+            "cardDescription": "Visa, Mastercard, American Express",
+            "paypal": "PayPal",
+            "paypalDescription": "Paiement sécurisé via PayPal",
+            "bank": "Virement bancaire",
+            "bankDescription": "Paiement par virement SEPA",
+            "inStore": "Paiement en boutique",
+            "inStoreDescription": "Payez lors du retrait de votre commande",
+            "quotePending": "Paiement en attente de devis",
+            "quoteInfo": "Votre panier contient des articles personnalisés. Le paiement n'est pas requis pour le moment. Après validation de votre demande, un administrateur fixera le prix.",
+            "cardNumber": "Numéro de carte",
+            "cardName": "Nom sur la carte",
+            "cardholderPlaceholder": "JEAN DUPONT",
+            "expiryDate": "Date d'expiration",
+            "cvv": "CVV",
+            "secureInfo": "Paiement sécurisé SSL - Vos données sont protégées",
+            "paypalInfo": "Vous serez redirigé vers PayPal pour finaliser votre paiement.",
+            "bankInfo": "Effectuez un virement bancaire vers:",
+            "back": "Retour",
+            "placeOrder": "Confirmer la commande",
+            "submitQuote": "Soumettre la demande de devis",
+            "processing": "Traitement en cours...",
+            "sendingQuote": "Envoi de la demande..."
+        },
+        "summary": {
+            "title": "Récapitulatif de commande",
+            "subtotal": "Sous-total",
+            "shipping": "Livraison",
+            "discount": "Réduction",
+            "total": "Total",
+            "tax": "TVA (20%)",
+            "promoCode": "Code promo",
+            "apply": "Appliquer",
+            "qty": "Qté"
+        },
+        "success": {
+            "title": "Commande Confirmée!",
+            "message": "Merci pour votre commande. Vous recevrez un email de confirmation à {email}",
+            "amount": "Montant total",
+            "toConfirm": "À confirmer",
+            "quoteAdminInfo": "Un administrateur vous contactera avec le prix final.",
+            "viewOrders": "Voir mes commandes",
+            "backHome": "Retour à l'accueil"
+        },
+        "orderError": "Une erreur est survenue lors de la commande. Veuillez réessayer."
+    },
+    "delivery": {
+        "dashboard": "Tableau de bord Livreur",
+        "availableOrders": "Commandes disponibles",
+        "myDeliveries": "Mes livraisons",
+        "status": {
+            "assigned": "Assigné",
+            "in_delivery": "En livraison",
+            "delivered": "Livré",
+            "cancelled": "Annulé"
+        },
+        "actions": {
+            "start": "Démarrer livraison",
+            "finish": "Confirmer livraison",
+            "call": "Appeler client"
         }
     },
     "footer": {
         "about": {
             "title": "À Propos",
-            "description": "Jebali Sweet est votre destination privilégiée pour des douceurs artisanales de haute qualité, alliant tradition et innovation sucrée."
+            "description": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de douceurs sucrées."
         },
         "links": {
             "title": "Liens Rapides",
             "catalog": "Catalogue",
             "account": "Mon Compte",
-            "orders": "Mes Commandes"
+            "orders": "Mes Commandes",
+            "terms": "Conditions d'utilisation",
+            "privacy": "Politique de confidentialité"
         },
         "contact": {
-            "title": "Contact"
+            "title": "Contact",
+            "emailButton": "Nous contacter par e-mail",
+            "phoneFallback": "(Si injoignable par téléphone)",
+            "techSupport": "Support Technique"
         },
         "social": {
             "title": "Suivez-nous"
         },
         "copy": "Tous droits réservés"
+    },
+    "contact": {
+        "modal": {
+            "titleSupport": "Contacter le Support Technique",
+            "titleGeneral": "Contacter Jebali Sweet",
+            "subtitleSupport": "Décrivez votre problème technique. Mohamed vous répondra rapidement.",
+            "subtitleGeneral": "Une question, une commande spéciale ? Aida est à votre écoute.",
+            "successTitle": "Message envoyé !",
+            "successMessage": "Merci pour votre message. Nous vous répondrons dans les plus brefs délais.",
+            "form": {
+                "name": "Nom complet",
+                "namePlaceholder": "Votre nom",
+                "email": "Email de contact",
+                "emailPlaceholder": "votre@email.com",
+                "message": "Votre message",
+                "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+                "submit": "Envoyer",
+                "submitting": "Envoi...",
+                "cancel": "Annuler"
+            }
+        }
+    },
+    "legal": {
+        "terms": "Conditions d'utilisation",
+        "privacy": "Politique de confidentialité",
+        "back": "Retour"
     }
 }
