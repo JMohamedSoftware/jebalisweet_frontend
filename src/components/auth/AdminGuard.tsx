@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import PageLoader from '@/components/ui/PageLoader';
 
 interface AdminGuardProps {
     children: React.ReactNode;
@@ -41,11 +42,7 @@ const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
 
     // Loading state
     if (isAuthorized === null) {
-        return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            </div>
-        );
+        return <PageLoader />;
     }
 
     return isAuthorized ? <>{children}</> : null;

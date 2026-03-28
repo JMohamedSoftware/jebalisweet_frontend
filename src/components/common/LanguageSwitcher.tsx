@@ -7,21 +7,22 @@ const LanguageSwitcher = () => {
     const { language, setLanguage } = useLanguage();
 
     return (
-        <div className="flex items-center p-1.5 bg-secondary/30 backdrop-blur-md rounded-full border border-primary/10 shadow-inner group">
+        <div className="flex items-center gap-2 px-2 py-1">
             <button
                 onClick={() => setLanguage('fr')}
-                className={`flex-1 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest transition-all duration-300 ${language === 'fr'
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105'
-                    : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/5'
+                className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-primary ${language === 'fr'
+                    ? 'text-primary'
+                    : 'text-foreground/30'
                     }`}
             >
                 FR
             </button>
+            <span className="h-3 w-[1px] bg-border/20" />
             <button
                 onClick={() => setLanguage('ar_tn')}
-                className={`flex-1 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest transition-all duration-300 ${language === 'ar_tn'
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105'
-                    : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/5'
+                className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-primary ${language === 'ar_tn'
+                    ? 'text-primary font-black'
+                    : 'text-foreground/30'
                     }`}
             >
                 AR

@@ -6,6 +6,7 @@ import Icon from '@/components/ui/AppIcon';
 import { API_ENDPOINT } from '@/config/api';
 import { useLanguage } from '@/context/LanguageContext';
 import ForgotPasswordWizard from './ForgotPasswordWizard';
+import PageLoader from '@/components/ui/PageLoader';
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -152,18 +153,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
   };
 
   if (!isHydrated) {
-    return (
-      <div className="w-full max-w-md mx-auto p-8 bg-card rounded-3xl shadow-xl border border-border/10">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-muted rounded w-3/4 mx-auto" />
-          <div className="space-y-4">
-            <div className="h-12 bg-muted rounded" />
-            <div className="h-12 bg-muted rounded" />
-            <div className="h-12 bg-muted rounded" />
-          </div>
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (

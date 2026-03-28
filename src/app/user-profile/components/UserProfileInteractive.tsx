@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 
 
@@ -136,7 +137,7 @@ const UserProfileInteractive = () => {
   const handleCancel = () => {
     if (user) {
       setFormData({
-        name: user.name || '',
+        name: user.username || user.name || '',
         email: user.email || '',
         role: user.role || '',
         phone: user.phone || '',
@@ -150,14 +151,7 @@ const UserProfileInteractive = () => {
   };
 
   if (!isHydrated || !user) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-center">
-          <div className="h-8 w-48 bg-muted rounded mx-auto mb-4" />
-          <div className="h-4 w-32 bg-muted rounded mx-auto" />
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (

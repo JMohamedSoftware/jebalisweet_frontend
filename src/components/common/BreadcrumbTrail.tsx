@@ -13,37 +13,36 @@ interface BreadcrumbItem {
 
 const BreadcrumbTrail = () => {
   const pathname = usePathname();
+  const { t, language } = useLanguage();
+  const isRtl = language === 'ar_tn';
 
-  const routeLabels: Record<string, string> = {
-    '/homepage': 'Accueil',
-    '/product-catalog': 'Produits',
-    '/shopping-cart': 'Panier',
-    '/login': 'Connexion',
-    '/register': 'Inscription',
-    '/profile': 'Mon Profil',
-    '/user-profile': 'Mon Profil',
-    '/orders': 'Mes Commandes',
-    '/admin': 'Administration',
-    '/admin-dashboard': 'Tableau de Bord Admin',
-    '/admin-product-management': 'Gestion des Produits',
-    '/admin-order-management': 'Gestion des Commandes',
-    '/checkout-payment': 'Paiement',
-  };
+  if (pathname === '/' || pathname === '/homepage') {
+    return null;
+  }
 
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
     const paths = pathname.split('/').filter(Boolean);
     const breadcrumbs: BreadcrumbItem[] = [
-      { label: 'Accueil', path: '/' },
+      { label: t('nav.home'), path: '/' },
     ];
-
-    if (pathname === '/homepage') {
-      return breadcrumbs;
-    }
 
     let currentPath = '';
     paths.forEach((path) => {
       currentPath += `/${path}`;
-      const label = routeLabels[currentPath] || path;
+      
+      // Use translation keys based on path
+      let label = path;
+      if (currentPath === '/product-catalog') label = t('nav.products');
+      else if (currentPath === '/shopping-cart') label = t('cart.title');
+      else if (currentPath === '/checkout-payment') label = t('checkout.title');
+      else if (currentPath === '/user-profile') label = t('nav.account');
+      else if (currentPath === '/orders') label = t('nav.orders');
+      else if (currentPath === '/login') label = t('nav.login');
+      else if (currentPath === '/register') label = t('auth.register.title');
+      else if (currentPath === '/terms') label = t('nav.terms') || 'Terms';
+      else if (currentPath === '/privacy') label = t('nav.privacy') || 'Privacy';
+      else if (currentPath.startsWith('/admin')) label = t('nav.admin');
+
       breadcrumbs.push({ label, path: currentPath });
     });
 
@@ -52,47 +51,46 @@ const BreadcrumbTrail = () => {
 
   const breadcrumbs = generateBreadcrumbs();
 
-  if (breadcrumbs.length <= 1) {
-    return null;
-  }
-
   return (
     <nav
-      aria-label="Fil d'Ariane"
-      className="py-4 px-6 bg-background"
+      aria-label="Breadcrumb"
+      className="py-4 px-6 bg-background border-b border-border/5"
     >
-      <ol className="flex items-center gap-2 text-sm flex-wrap">
-        {breadcrumbs.map((crumb, index) => {
-          const isLast = index === breadcrumbs.length - 1;
-          const isFirst = index === 0;
+      <div className="container mx-auto">
+        <ol className="flex items-center gap-2 text-sm flex-wrap">
+          {breadcrumbs.map((crumb, index) => {
+            const isLast = index === breadcrumbs.length - 1;
+            const isFirst = index === 0;
 
-          return (
-            <li key={crumb.path} className="flex items-center gap-2">
-              {!isFirst && (
-                <Icon
-                  name="ChevronRightIcon"
-                  size={16}
-                  className="text-muted-foreground"
-                />
-              )}
-              {isLast ? (
-                <span className="font-medium text-foreground caption">
-                  {crumb.label}
-                </span>
-              ) : (
-                <Link
-                  href={crumb.path}
-                  className="text-muted-foreground hover:text-primary transition-smooth caption"
-                >
-                  {crumb.label}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ol>
+            return (
+              <li key={crumb.path} className="flex items-center gap-2">
+                {!isFirst && (
+                  <Icon
+                    name={isRtl ? "ChevronLeftIcon" : "ChevronRightIcon"}
+                    size={14}
+                    className="text-muted-foreground/40"
+                  />
+                )}
+                {isLast ? (
+                  <span className="font-semibold text-foreground">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link
+                    href={crumb.path}
+                    className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                  >
+                    {isFirst && <Icon name="HomeIcon" size={14} className="opacity-70" />}
+                    {crumb.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </nav>
   );
 };
 
-export default BreadcrumbTrail;
+export default BreadcrumbTrail;

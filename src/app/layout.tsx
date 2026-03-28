@@ -1,6 +1,9 @@
 import React from 'react';
 import '../styles/index.css';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { CartProvider } from '@/context/CartContext';
+import { WishlistProvider } from '@/context/WishlistContext';
+import CartDrawer from '@/components/common/CartDrawer';
 import StructuredData from '@/components/common/StructuredData';
 import type { Metadata } from 'next';
 
@@ -109,8 +112,13 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <LanguageProvider>
-          <StructuredData />
-          {children}
+          <WishlistProvider>
+            <CartProvider>
+              <StructuredData />
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </WishlistProvider>
         </LanguageProvider>
       </body>
     </html>

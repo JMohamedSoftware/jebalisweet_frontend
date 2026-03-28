@@ -1,50 +1,62 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useWishlist } from '@/context/WishlistContext';
 import AppImage from '@/components/ui/AppImage';
+import Icon from '@/components/ui/AppIcon';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
-import { formatPrice } from '@/utils/format';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  alt: string;
-  category: string;
-  inStock: boolean;
-  stockQuantity?: number;
-}
+import { Product } from '@/types/product';
 
 interface ProductCardProps {
   product: Product;
   onAddToCart: () => void;
-  onQuickView?: () => void;
 }
 
-const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) => {
+const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   const { t } = useLanguage();
+  const router = useRouter();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const [isAdding, setIsAdding] = useState(false);
 
+  const isWishlisted = isInWishlist(product.id);
+
   const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
+    e.stopPropagation();
     if (!product.inStock || isAdding) return;
     setIsAdding(true);
     await onAddToCart();
     setTimeout(() => setIsAdding(false), 1200);
   };
 
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleWishlist({
+      ...product,
+      description: product.description || '',
+      alt: product.alt || product.name
+    } as any);
+  };
+
+  const handleCardClick = () => {
+    router.push(`/product/${product.id}`);
+  };
+
   const stockQty = Math.max(0, product.stockQuantity || 0);
   const isLowStock = stockQty > 0 && stockQty <= 5;
 
   return (
-    <div className="group relative flex flex-col bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-warm-sm border border-white/20 hover:-translate-y-2 hover:shadow-warm-xl transition-all duration-500">
+    <div 
+      className="group relative flex flex-col bg-transparent transition-all duration-500 cursor-pointer"
+      onClick={handleCardClick}
+    >
 
       {/* ── Image Container - Professional 4:3 Aspect Ratio ── */}
       <Link
-        href={`/product-catalog?category=${product.category}`}
-        className="relative block overflow-hidden"
+        href={`/product/${product.id}`}
+        className="relative block overflow-hidden rounded-xl border border-border/5"
         style={{ aspectRatio: '4/3' }}
       >
         <AppImage
@@ -61,17 +73,24 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
         {/* Subtle Shine effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
 
-        {/* Minimalist Badge: Category */}
-        <div className="absolute top-3 left-3 px-3 py-1 rounded-md bg-white/90 backdrop-blur-sm text-foreground font-bold text-[9px] sm:text-[10px] tracking-[0.1em] uppercase shadow-sm">
-          {product.category}
-        </div>
 
         {/* Low Stock Indicator - Understated */}
         {isLowStock && product.inStock && (
-          <div className="absolute top-3 right-3 px-3 py-1 rounded-md bg-accent/90 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] tracking-wider animate-pulse shadow-sm">
+          <div className="absolute top-3 left-3 px-3 py-1 rounded-md bg-accent/90 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] tracking-wider animate-pulse shadow-sm z-20">
             PIÈCES LIMITÉES
           </div>
         )}
+
+        {/* Jadour (Wishlist) Button */}
+        <button 
+          onClick={handleToggleWishlist}
+          className={`absolute top-3 right-3 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 shadow-md transform hover:scale-110 active:scale-95 ${
+            isWishlisted ? 'bg-error text-white' : 'bg-white/70 backdrop-blur-md text-foreground hover:bg-white hover:text-error'
+          }`}
+          aria-label={isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"}
+        >
+          <Icon name="HeartIcon" size={18} variant={isWishlisted ? 'solid' : 'outline'} />
+        </button>
 
         {/* Out of stock - High-end style */}
         {!product.inStock && (
@@ -82,59 +101,49 @@ const ProductCard = ({ product, onAddToCart, onQuickView }: ProductCardProps) =>
           </div>
         )}
 
-        {/* Quick View Button - High Level design */}
-        {onQuickView && product.inStock && (
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickView(); }}
-            className="absolute bottom-4 left-4 right-4 py-3 bg-white text-foreground font-bold text-[11px] tracking-[0.1em] uppercase shadow-warm opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-foreground hover:text-white"
-          >
-            Aperçu rapide
-          </button>
-        )}
+        {/* Subtle Shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
       </Link>
 
-      {/* ── Product Info - Clean and Classy ── */}
-      <div className="flex flex-col flex-1 p-4 sm:p-5">
-        <Link href={`/product-catalog?category=${product.category}`}>
-          <h3 className="font-heading font-semibold text-sm sm:text-lg text-foreground mb-3 line-clamp-2 leading-tight group-hover:text-primary transition-colors duration-300 tracking-tight">
-            {product.name}
-          </h3>
-        </Link>
+      {/* ── Product Info - High-Density Minimalist ── */}
+      <div className="flex flex-col p-3 sm:p-4 space-y-3">
+        <div className="flex flex-col space-y-1">
+          <Link href={`/product/${product.id}`}>
+            <h3 className="font-heading font-semibold text-sm sm:text-lg text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors duration-300 tracking-tight min-h-[40px]">
+              {product.name}
+            </h3>
+          </Link>
+          
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl sm:text-2xl font-heading font-black text-foreground tracking-tighter">
+                {product.price.toFixed(2).replace('.', ',')}
+              </span>
+              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                DT
+              </span>
+            </div>
 
-        <div className="flex items-end justify-between gap-3 mt-auto">
-          <div className="flex flex-col leading-none">
-            <span className="text-2xl sm:text-3xl font-bold text-primary tracking-tight">
-              {formatPrice(product.price)}
-            </span>
-          </div>
-
-          <button
-            onClick={handleAddToCart}
-            disabled={!product.inStock || isAdding}
-            aria-label={t('product.addToCartAria', { productName: product.name })}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all duration-300 shadow-sm ${isAdding
-                ? 'bg-accent text-white scale-95'
-                : product.inStock
-                  ? 'bg-primary text-white hover:bg-primary/95 hover:shadow-md hover:scale-105 active:scale-95'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed opacity-40'
-              }`}
-          >
-            {isAdding ? (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <button
+              onClick={handleAddToCart}
+              disabled={!product.inStock || isAdding}
+              aria-label={t('product.addToCartAria', { productName: product.name })}
+              className={`flex items-center justify-center p-2 rounded-lg transition-all duration-300 shadow-sm ${isAdding
+                  ? 'bg-success text-white scale-90'
+                  : product.inStock
+                    ? 'bg-primary text-white hover:bg-black hover:scale-110 active:scale-95'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed opacity-30'
+                }`}
+            >
+              {isAdding ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span className="hidden sm:inline uppercase tracking-widest">OK</span>
-              </>
-            ) : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span className="hidden sm:inline uppercase tracking-widest">{t('product.addToCart')}</span>
-              </>
-            )}
-          </button>
+              ) : (
+                <Icon name="ShoppingBagIcon" size={20} variant="outline" strokeWidth={2.5} />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -7,7 +7,6 @@ import Icon from '@/components/ui/AppIcon';
 import FilterPanel from './FilterPanel';
 import SortControls from './SortControls';
 import ProductGrid from './ProductGrid';
-import QuickViewModal from './QuickViewModal';
 import LoadingSkeleton from './LoadingSkeleton';
 import { useLanguage } from '@/context/LanguageContext';
 import { CATEGORY_ALL, ITEMS_PER_PAGE } from '@/constants';
@@ -16,14 +15,14 @@ import { formatPrice } from '@/utils/format';
 interface Product {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
   image: string;
   alt: string;
-  rating: number;
-  reviewCount: number;
+  rating?: number;
+  reviewCount?: number;
   category: string;
-  brand: string;
+  brand?: string;
   inStock: boolean;
   stockQuantity?: number;
   priceUnit?: string;
@@ -61,7 +60,6 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
   const [searchQuery, setSearchQuery] = useState('');
 
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(!initialData);
   const searchParams = useSearchParams();
   const hasInitialized = useRef(false);
@@ -164,13 +162,14 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
   if (!isHydrated && !initialData) return <LoadingSkeleton />;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="animate-reveal">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mb-8">
         <h1 className="font-heading text-4xl font-bold text-foreground mb-2">{t('catalog.title')}</h1>
         <p className="text-muted-foreground">{t('catalog.subtitle')}</p>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-2">
         <SortControls
           sortBy={sortBy}
           onSortChange={(s) => { setSortBy(s); setCurrentPage(1); }}
@@ -180,6 +179,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
           onSearchChange={(q) => { setSearchQuery(q); setCurrentPage(1); }}
         />
       </div>
+
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-6">
         <aside className="hidden lg:block">
@@ -223,7 +223,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
           {isLoading ? <LoadingSkeleton /> : (
             <div className="space-y-8 animate-in fade-in duration-500">
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                <ProductGrid products={products} onAddToCart={handleAddToCart} onQuickView={setSelectedProduct} />
+                <ProductGrid products={products} onAddToCart={handleAddToCart} />
               </div>
               {totalPages > 1 && (
                 <div className="flex justify-center gap-2 mt-8">
@@ -276,7 +276,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
         </div>
       )}
 
-      <QuickViewModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAddToCart={handleAddToCart} />
+      </div>
     </div>
   );
 };

@@ -7,9 +7,10 @@ import Icon from '@/components/ui/AppIcon';
 import CartIndicator from '@/components/common/CartIndicator';
 import UserMenu from '@/components/common/UserMenu';
 import MobileNavToggle from '@/components/common/MobileNavToggle';
-import MobileAuthControl from '@/components/common/MobileAuthControl';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { useLanguage } from '@/context/LanguageContext';
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 
 interface NavigationItem {
   label: string;
@@ -19,15 +20,20 @@ interface NavigationItem {
 }
 
 const Header = () => {
+  const { t } = useLanguage();
+  const { wishlist } = useWishlist();
+  const { setIsDrawerOpen } = useCart();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const { t } = useLanguage();
+
+  const favoritesCount = wishlist.length;
 
   const navigationItems: NavigationItem[] = [
     { label: t('nav.home'), path: '/', icon: 'HomeIcon', roles: ['public', 'admin', 'livreur'] },
     { label: t('nav.products'), path: '/product-catalog', icon: 'ShoppingBagIcon', roles: ['public', 'admin'] },
+    { label: t('nav.wishlist') || 'Favoris', path: '/wishlist', icon: 'HeartIcon', roles: ['public', 'admin'] },
     { label: t('nav.account'), path: '/login', icon: 'UserIcon', roles: ['public'] },
   ];
 
@@ -53,10 +59,10 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -84,33 +90,69 @@ const Header = () => {
     return pathname === path;
   };
 
+  const isHomePage = pathname === '/' || pathname === '/fr' || pathname === '/ar';
+
   return (
     <>
       <header
-        className={`sticky top-0 z-100 transition-all duration-300 ${isScrolled ? 'bg-card shadow-md border-b border-border/20' : 'bg-card'
-          }`}
+        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out ${
+          isHomePage 
+            ? `${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-warm-lg py-2 border-b border-black/[0.03]' : 'bg-transparent py-4 border-b border-transparent'}`
+            : `bg-white/95 backdrop-blur-2xl border-b border-black/[0.03] py-2 shadow-sm`
+        }`}
       >
-        <div className="container mx-auto">
-          <div className="flex items-center justify-between h-14 md:h-16 px-4 md:px-6">
-            <div className="flex items-center gap-8">
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
+          {/* Mobile Header */}
+          <div className="flex md:hidden items-center justify-between h-14 relative">
+            <div className="flex items-center">
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onToggle={handleMobileMenuToggle}
+              />
+            </div>
+
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <Link
                 href="/"
-                className="flex items-center gap-3 transition-smooth hover:opacity-80"
+                className="flex items-center transition-smooth hover:opacity-80"
                 onClick={closeMobileMenu}
               >
                 <img
                   src="/images/jebali_sweet_logo.png"
                   alt="Jebali Sweet Logo"
-                  width="45"
-                  height="45"
-                  className="rounded-full object-cover transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md border border-primary/10"
+                  width="40"
+                  height="40"
+                  className="rounded-full object-cover shadow-sm"
                 />
-                <span className="font-heading text-2xl font-semibold text-primary hidden sm:block">
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <CartIndicator />
+            </div>
+          </div>
+
+          {/* Desktop Header */}
+          <div className="hidden md:flex items-center justify-between h-16">
+            <div className="flex items-center gap-12">
+              <Link
+                href="/"
+                className="flex items-center gap-4 transition-smooth hover:opacity-80"
+                onClick={closeMobileMenu}
+              >
+                <img
+                  src="/images/jebali_sweet_logo.png"
+                  alt="Jebali Sweet Logo"
+                  width="48"
+                  height="48"
+                  className="rounded-full object-cover shadow-sm transition-transform duration-500 hover:rotate-12"
+                />
+                <span className={`font-heading text-2xl font-black tracking-tighter transition-colors duration-500 text-primary`}>
                   Jebali Sweet
                 </span>
               </Link>
 
-              <nav className="hidden md:flex items-center gap-1">
+              <nav className="flex items-center gap-2">
                 {navigationItems
                   .filter(item => {
                     if (userRole === 'livreur') {
@@ -118,65 +160,68 @@ const Header = () => {
                     }
                     return true;
                   })
-                  .slice(0, 2)
+                  .slice(0, 3)
                   .map((item) => (
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 font-medium ${isActivePath(item.path)
-                        ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
-                        : 'text-foreground hover:bg-primary/5 hover:text-primary'
+                      className={`relative px-5 py-2 flex items-center group transition-all duration-500 ${isActivePath(item.path)
+                        ? 'text-primary'
+                        : isScrolled ? 'text-foreground/70 hover:text-primary' : 'text-foreground/80 hover:text-primary font-medium'
                         }`}
                     >
-                      <Icon name={item.icon as any} size={20} />
-                      <span>{item.label}</span>
+                      <span className="text-[10px] font-black tracking-[0.3em] uppercase leading-none">
+                        {item.label}
+                      </span>
+                      <span className={`absolute bottom-0 left-5 right-5 h-[1.5px] bg-primary transition-all duration-500 origin-left ${isActivePath(item.path) ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100'}`} />
+
+                      {item.path === '/wishlist' && favoritesCount > 0 && (
+                        <span className="ml-2 flex items-center justify-center min-w-[14px] h-[14px] rounded-full bg-primary/20 text-primary text-[8px] font-black">
+                          {favoritesCount}
+                        </span>
+                      )}
                     </Link>
                   ))}
               </nav>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:block">
+            <div className="flex items-center gap-6">
+              <div className="scale-90 opacity-80 hover:opacity-100 transition-opacity">
                 <LanguageSwitcher />
               </div>
               {userRole !== 'livreur' && <CartIndicator />}
-              <div className="hidden md:flex items-center gap-4">
-                <UserMenu />
-              </div>
-              <div className="md:hidden flex items-center">
-                <MobileAuthControl />
-              </div>
-              <MobileNavToggle
-                isOpen={isMobileMenuOpen}
-                onToggle={handleMobileMenuToggle}
-              />
+              <UserMenu />
             </div>
           </div>
         </div>
       </header>
 
+      {/* Spacer to push content down on non-homepage routes fix fixed position covering content */}
+      {!isHomePage && <div className="h-16 md:h-20" />}
+
+      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-300 md:hidden"
+          className="fixed inset-0 z-[300] md:hidden"
           onClick={closeMobileMenu}
         >
-          <div className="absolute inset-0 bg-background" />
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-md" />
           <nav
-            className="absolute top-16 right-0 bottom-0 w-80 bg-card shadow-warm-2xl animate-slide-in-right overflow-y-auto"
+            className="absolute top-0 right-0 bottom-0 w-80 bg-background shadow-2xl animate-fade-in-right overflow-y-auto border-l border-border/10"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 space-y-2">
+            <div className="p-6 flex justify-between items-center border-b border-border/5">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Menu Principal</span>
+              <button onClick={closeMobileMenu} className="p-2 hover:bg-muted rounded-full transition-colors">
+                <Icon name="XMarkIcon" size={24} />
+              </button>
+            </div>
+            
+            <div className="py-4">
               {navigationItems
                 .filter(item => {
-                  // Always hide the Login/Account link from the mobile menu
-                  // because it is already handled by the MobileAuthControl icon in the header
-                  if (item.path === '/login') {
-                    return false;
-                  }
-
-                  if (userRole === 'livreur') {
-                    return item.path === '/';
-                  }
+                  if (item.path === '/login') return false;
+                  if (userRole === 'livreur') return item.path === '/';
                   return true;
                 })
                 .map((item) => (
@@ -184,21 +229,19 @@ const Header = () => {
                     key={item.path}
                     href={item.path}
                     onClick={closeMobileMenu}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth font-medium ${isActivePath(item.path)
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-foreground hover:bg-muted'
-                      }`}
+                    className={`flex items-center justify-between px-8 py-5 border-b border-border/5 transition-all ${
+                      isActivePath(item.path) ? 'bg-primary/5 text-primary text-xl font-black' : 'text-foreground/80'
+                    }`}
                   >
-                    <Icon name={item.icon as any} size={24} />
-                    <span className="text-lg">{item.label}</span>
+                    <span className="text-sm font-bold tracking-widest uppercase">{item.label}</span>
+                    <Icon name="ChevronRightIcon" size={16} className="opacity-30" />
                   </Link>
                 ))}
-              <div className="px-4 py-2 border-b border-muted">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-4">{t('nav.language')}</p>
-                <div className="flex justify-center">
-                  <LanguageSwitcher />
-                </div>
-              </div>
+            </div>
+
+            <div className="p-8 mt-4 border-t border-border/5">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 mb-6">Paramètres</p>
+              <LanguageSwitcher />
             </div>
           </nav>
         </div>

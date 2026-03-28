@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -87,11 +88,7 @@ const AdminTestimonialManagementInteractive = () => {
         }
     };
 
-    if (!isHydrated) return (
-        <div className="min-h-screen bg-background flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-        </div>
-    );
+    if (!isHydrated) return <PageLoader />;
 
     return (
         <div className="min-h-screen bg-background">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import { api } from '@/services/api';
+import PageLoader from '@/components/ui/PageLoader';
 import { useLanguage } from '@/context/LanguageContext';
 
 import { TrashIcon, EyeIcon } from "@heroicons/react/24/outline";
@@ -109,14 +110,7 @@ const AdminUserManagementInteractive = () => {
     });
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="w-12 h-12 bg-primary/20 rounded-full mb-4"></div>
-                    <div className="h-4 w-48 bg-muted rounded"></div>
-                </div>
-            </div>
-        );
+        return <PageLoader />;
     }
 
     if (!isAuthorized) {

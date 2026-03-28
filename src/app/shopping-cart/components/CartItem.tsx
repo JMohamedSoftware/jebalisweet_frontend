@@ -60,7 +60,7 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
   const subtotal = item.price * item.quantity;
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-card rounded-2xl shadow-sm border border-border/20">
+    <div className="relative flex flex-col sm:flex-row gap-4 p-4 bg-card rounded-2xl shadow-sm border border-border/20">
       <div className="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-md">
         <AppImage
           src={item.customImage || item.image}
@@ -130,10 +130,10 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
 
       <button
         onClick={() => onRemove(item.productId)}
-        className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 p-2 rounded-md text-muted-foreground hover:text-error hover:bg-muted transition-smooth"
+        className="absolute top-3 right-3 sm:relative sm:top-0 sm:right-0 p-3 rounded-full text-muted-foreground hover:text-error hover:bg-error/10 active:scale-90 transition-all duration-200 z-20 bg-card/80 backdrop-blur-md shadow-sm sm:shadow-none sm:bg-transparent border border-border/20 sm:border-none"
         aria-label={t('cart.item.remove')}
       >
-        <Icon name="TrashIcon" size={20} />
+        <Icon name="TrashIcon" size={20} className="sm:w-5 sm:h-5" />
       </button>
     </div>
   );

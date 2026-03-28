@@ -1,3 +1,0 @@
-flat-cache is required by: node_modules/file-entry-cache
-@next/eslint-plugin-next is required by: node_modules/eslint-config-next
-eslint is required by: ROOT

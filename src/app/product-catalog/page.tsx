@@ -9,8 +9,10 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Catalogue Pâtisserie & Chocolaterie - Jebali Sweet',
-  description: 'Découvrez notre collection complète : chocolats artisanaux, gâteaux personnalisés sur mesure et salés raffinés. Achetez en ligne vos gourmandises préférées de chez Chef Aida Jebali.',
+  description: 'Découvrez notre collection complète : chocolats artisanaux, gâteaux personnalisés sur mesure et salés raffinés. Achetez en ligne vos créations Jebali Sweet préférées de chez Chef Aida Jebali.',
 };
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function getInitialData(params: { [key: string]: string | string[] | undefined }) {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://jebalisweet-backend.onrender.com/api';
@@ -25,7 +27,7 @@ async function getInitialData(params: { [key: string]: string | string[] | undef
   if (category) queryParams.append('category', category);
 
   try {
-    const [productsRes, categoriesRes, metadataRes] = await Promise.all([
+    const [productsRes, categoriesRes, metadataRes, _] = await Promise.all([
       fetch(`${apiBaseUrl}/products?${queryParams.toString()}`, {
         cache: 'no-store',
         headers: { 'ngrok-skip-browser-warning': 'true' }
@@ -37,7 +39,8 @@ async function getInitialData(params: { [key: string]: string | string[] | undef
       fetch(`${apiBaseUrl}/products/metadata`, {
         cache: 'no-store',
         headers: { 'ngrok-skip-browser-warning': 'true' }
-      })
+      }),
+      delay(500) // Branded intro delay
     ]);
 
     if (!productsRes.ok || !categoriesRes.ok || !metadataRes.ok) {
@@ -72,9 +75,10 @@ async function getInitialData(params: { [key: string]: string | string[] | undef
 export default async function ProductCatalogPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const initialData = await getInitialData(searchParams);
+  const sParams = await searchParams;
+  const initialData = await getInitialData(sParams);
 
   return (
     <>

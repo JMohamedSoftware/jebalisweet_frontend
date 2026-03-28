@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import HeroSection from './HeroSection';
+import ThematicCategorySection from './ThematicCategorySection';
 import CategoryCard from './CategoryCard';
 import ProductCard from './ProductCard';
 import TestimonialCard from './TestimonialCard';
@@ -21,16 +22,7 @@ interface Category {
   productCount: number;
 }
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  alt: string;
-  category: string;
-  inStock: boolean;
-  stockQuantity?: number;
-}
+import { Product } from '@/types/product';
 
 interface Testimonial {
   id: string;
@@ -75,8 +67,8 @@ const HomepageInteractive = () => {
       try {
         const [cats, productsData, testimonialsData, promoData] = await Promise.all([
           api.categories.getAll(),
-          api.products.getAll(1, 6, { featured: true }),
-          api.testimonials.getAll().catch(() => []), // Fallback to empty if fails
+          api.products.getAll(1, 20),
+          api.testimonials.getAll().catch(() => []), 
           api.promotions.getActive().catch(() => null)
         ]);
 
@@ -89,7 +81,7 @@ const HomepageInteractive = () => {
           id: c.id || c._id,
           name: c.name,
           description: c.description || t('home.categories.descriptionDefault', { category: c.name }),
-          image: c.image || "/images/portioned-chocolate-cake-garnished-with-berries-chocolate.jpg",
+          image: c.image || "/images/17189029461596829888opals_3200x1200.jpg",
           alt: c.name,
           productCount: c.productCount || 0
         }));
@@ -146,31 +138,26 @@ const HomepageInteractive = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="py-4 sm:py-8 space-y-12 sm:space-y-16">
+      <div className="flex flex-col">
         <HeroSection
           title={t('home.hero.title')}
           subtitle={t('home.hero.subtitle')}
-          ctaText={t('home.hero.cta')}
-          ctaLink="/product-catalog"
-          backgroundImage="/images/17189029461596829888opals_3200x1200.jpg"
-          backgroundAlt="Hero Background" />
+          categories={categories}
+        />
 
-
-        {/* Categories Section */}
-        <section id="categories" className="py-10 sm:py-20 bg-background relative overflow-hidden">
+        {/* Quick Access Category Grid - High Visibility Position */}
+        <section id="category-grid" className="pt-20 pb-12 bg-background relative overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="flex flex-col items-center text-center mb-10 sm:mb-16 reveal">
-              <h2 className="text-3xl sm:text-fluid-h2 font-heading font-bold text-foreground mb-4">
-                {t('home.categories.title')}
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60 mb-3">Découvrez nos univers</span>
+              <h2 className="text-3xl sm:text-5xl font-heading font-black text-foreground tracking-tight">
+                {t('home.categories.title') || 'Nos Créations'}
               </h2>
-              <div className="h-1 w-20 bg-primary/20 rounded-full mb-6" />
-              <p className="text-muted-foreground max-w-2xl font-sans text-sm sm:text-lg px-4 italic">
-                {t('home.categories.subtitle')}
-              </p>
+              <div className="h-1.5 w-24 bg-primary/20 rounded-full mt-6" />
             </div>
 
             {categories.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                 {categories.map((category, index) => (
                   <div key={category.id} className="reveal" style={{ animationDelay: `${index * 100}ms` }}>
                     <CategoryCard
@@ -184,16 +171,29 @@ const HomepageInteractive = () => {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="text-center py-10 reveal">
-                <p className="text-muted-foreground">{t('home.categories.empty')}</p>
-              </div>
-            )}
+            ) : null}
           </div>
         </section>
 
-        {/* Featured Products Section */}
-        <section id="featured" className="py-10 sm:py-20 bg-muted/30">
+        <div className="py-8 sm:py-16 space-y-12 sm:space-y-16">
+
+        {/* Immersive Thematic Sections (Les Galets Inspired) */}
+        <div className="space-y-0">
+          {categories.slice(1, 4).map((category) => {
+            const categoryProducts = featuredProducts.filter(p => p.category === category.name);
+            return (
+              <ThematicCategorySection
+                key={category.id}
+                category={category}
+                products={categoryProducts}
+                onAddToCart={handleAddToCart}
+              />
+            );
+          })}
+        </div>
+
+        {/* Featured Products Section (Secondary Selection) */}
+        <section id="featured" className="py-10 sm:py-20 bg-muted/10">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="flex flex-col items-center text-center mb-10 sm:mb-16 reveal">
               <h2 className="text-3xl sm:text-fluid-h2 font-heading font-bold text-foreground mb-4">
@@ -212,7 +212,6 @@ const HomepageInteractive = () => {
                     <ProductCard
                       product={product}
                       onAddToCart={() => handleAddToCart(product)}
-                      onQuickView={() => { /* Handled by catalog */ }}
                     />
                   </div>
                 ))}
@@ -225,14 +224,15 @@ const HomepageInteractive = () => {
           </div>
         </section>
 
+
         {activePromotion && (
           <PromotionalBanner
-            title={activePromotion.title}
-            description={activePromotion.subtitle}
-            ctaText={activePromotion.ctaText}
-            ctaLink={activePromotion.ctaLink}
-            backgroundImage={activePromotion.backgroundImage}
-            backgroundAlt={activePromotion.title}
+            title={activePromotion.title || ''}
+            description={activePromotion.subtitle || ''}
+            ctaText={activePromotion.ctaText || ''}
+            ctaLink={activePromotion.ctaLink || '/product-catalog'}
+            backgroundImage={activePromotion.backgroundImage || ''}
+            backgroundAlt={activePromotion.title || 'Promotion'}
             discount={activePromotion.discount} />
         )}
 
@@ -263,6 +263,7 @@ const HomepageInteractive = () => {
           </section>
         )}
 
+        </div >
       </div >
     </div >
   );

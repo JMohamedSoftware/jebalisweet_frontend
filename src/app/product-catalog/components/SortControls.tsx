@@ -32,17 +32,17 @@ const SortControls = ({
   ];
 
   return (
-    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-card rounded-2xl shadow-sm p-4 border border-border/20">
+    <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white/40 backdrop-blur-md rounded-3xl shadow-sm p-3 border border-border/10">
       <div className="flex items-center gap-2 flex-1 relative group">
-        <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors">
+        <div className="absolute left-4 text-primary/40 group-focus-within:text-primary transition-colors">
           <Icon name="MagnifyingGlassIcon" size={20} />
         </div>
         <input
           type="text"
-          placeholder={t('Rechercher un délice...')}
+          placeholder={t('catalog.filters.search') || 'Rechercher un délice...'}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 bg-muted/30 border-2 border-transparent focus:border-primary/20 focus:bg-background rounded-xl text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+          className="w-full pl-12 pr-4 py-3 bg-white/50 border border-border/5 focus:border-primary/20 focus:bg-white rounded-2xl text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all font-medium text-sm"
         />
       </div>
 
@@ -55,16 +55,16 @@ const SortControls = ({
           <span>Filtres</span>
         </button>
 
-        <div className="flex items-center gap-3 min-w-[200px]">
-          <label htmlFor="sort-select" className="text-sm font-bold text-muted-foreground uppercase tracking-wider hidden sm:block whitespace-nowrap">
-            {t('Trier par:')}
+        <div className="flex items-center gap-3 min-w-[220px]">
+          <label htmlFor="sort-select" className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em] hidden sm:block whitespace-nowrap">
+            {t('catalog.sort.label') || 'Trier par:'}
           </label>
           <div className="relative flex-1">
             <select
               id="sort-select"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
-              className="w-full pl-4 pr-10 py-3 bg-muted/30 border-2 border-transparent focus:border-primary/20 focus:bg-background rounded-xl text-foreground focus:outline-none focus:ring-4 focus:ring-primary/5 cursor-pointer font-bold appearance-none transition-all"
+              className="w-full pl-4 pr-10 py-3 bg-white/50 border border-border/5 focus:border-primary/20 focus:bg-white rounded-2xl text-foreground focus:outline-none focus:ring-4 focus:ring-primary/5 cursor-pointer font-bold text-sm appearance-none transition-all"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>

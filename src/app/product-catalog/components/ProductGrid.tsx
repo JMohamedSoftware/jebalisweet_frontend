@@ -3,28 +3,14 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  alt: string;
-  rating: number;
-  reviewCount: number;
-  category: string;
-  brand: string;
-  inStock: boolean;
-  priceUnit?: string;
-}
+import { Product } from '@/types/product';
 
 interface ProductGridProps {
   products: Product[];
   onAddToCart: (product: Product) => void;
-  onQuickView: (product: Product) => void;
 }
 
-const ProductGrid = ({ products, onAddToCart, onQuickView }: ProductGridProps) => {
+const ProductGrid = ({ products, onAddToCart }: ProductGridProps) => {
   if (products.length === 0) {
     return (
       <div className="col-span-full flex flex-col items-center justify-center py-16 space-y-4">
@@ -60,7 +46,6 @@ const ProductGrid = ({ products, onAddToCart, onQuickView }: ProductGridProps) =
           key={product.id}
           product={product}
           onAddToCart={onAddToCart}
-          onQuickView={onQuickView}
         />
       ))}
     </>

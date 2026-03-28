@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -88,7 +89,7 @@ const AdminCategoryManagementInteractive = () => {
         }
     };
 
-    if (!isHydrated) return null;
+    if (!isHydrated) return <PageLoader />;
 
     return (
         <div className="min-h-screen bg-background">

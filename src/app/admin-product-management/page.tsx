@@ -7,7 +7,11 @@ export const metadata = {
   description: 'Gérez les produits de votre boutique',
 };
 
-const AdminProductManagementPage = () => {
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const AdminProductManagementPage = async () => {
+  await delay(500); // Branded intro delay
+  
   return (
     <AdminGuard>
       <AdminProductManagementInteractive />

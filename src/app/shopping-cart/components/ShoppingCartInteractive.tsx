@@ -8,6 +8,7 @@ import OrderSummary from './OrderSummary';
 import EmptyCart from './EmptyCart';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
+import PageLoader from '@/components/ui/PageLoader';
 import { formatPrice } from '@/utils/format';
 
 interface CartItemData {
@@ -74,6 +75,9 @@ const ShoppingCartInteractive = () => {
     setIsHydrated(true);
     fetchCart();
 
+    // Clear promo code if it exists but the cart is empty (this happens later if fetchCart returns empty)
+    // For now, just load it from localStorage if we wanted (optional, usually user enters it)
+
     const fetchFeatured = async () => {
       try {
         const data = await api.products.getAll(1, 3, { featured: true });
@@ -121,9 +125,9 @@ const ShoppingCartInteractive = () => {
     }
   };
 
-  const handleRemoveItem = async (productId: string, customOptions?: any, customImage?: string) => {
+  const handleRemoveItem = async (productId: string, customOptions?: any, customImage?: string, comment?: string) => {
     try {
-      await api.cart.remove(productId, customOptions, customImage);
+      await api.cart.remove(productId, customOptions, customImage, comment);
       fetchCart();
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (error) {
@@ -140,32 +144,18 @@ const ShoppingCartInteractive = () => {
       const data = await api.promoCodes.validate(upperCode);
       setPromoCode(upperCode);
       setPromoDiscount({ value: data.discount, type: data.type });
+      localStorage.setItem('currentPromoCode', upperCode);
       setPromoCodeSuccess(t('cart.summary.successCode', { code: upperCode }));
     } catch (error: any) {
       setPromoCodeError(error.message || t('cart.summary.invalidCode'));
       setPromoCode('');
       setPromoDiscount(null);
+      localStorage.removeItem('currentPromoCode');
     }
   };
 
   if (!isHydrated) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-6 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-muted rounded w-48 mb-8"></div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-4">
-                {[1, 2, 3].map((i) =>
-                  <div key={i} className="h-40 bg-muted rounded-lg"></div>
-                )}
-              </div>
-              <div className="h-96 bg-muted rounded-lg"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -210,7 +200,7 @@ const ShoppingCartInteractive = () => {
                 item={item}
                 onUpdateQuantity={(pid, q) => handleUpdateQuantity(pid, q, item.customOptions, item.customImage)}
                 onUpdateComment={(pid, c) => handleUpdateComment(pid, c, item.customOptions, item.customImage)}
-                onRemove={(pid) => handleRemoveItem(pid, item.customOptions, item.customImage)}
+                onRemove={(pid) => handleRemoveItem(pid, item.customOptions, item.customImage, item.comment)}
               />
             ))}
           </div>

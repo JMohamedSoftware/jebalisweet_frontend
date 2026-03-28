@@ -10,7 +10,9 @@
         "delivery": "Espace Livreur",
         "logout": "Déconnexion",
         "language": "Langue",
-        "user": "Utilisateur"
+        "user": "Utilisateur",
+        "wishlist": "Ma Sélection",
+        "topBarAnnouncement": "Livraison gratuite à partir de 100 DT ! 🍰"
     },
     "common": {
         "loading": "Chargement...",
@@ -124,7 +126,7 @@
     "home": {
         "hero": {
             "title": "Découvrez l'Excellence Sucrée",
-            "subtitle": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de douceurs sucrées.",
+            "subtitle": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de créations Jebali Sweet.",
             "cta": "Découvrir nos produits",
             "badge": "Création Originale"
         },
@@ -166,7 +168,7 @@
     },
     "catalog": {
         "title": "Catalogue",
-        "subtitle": "Découvrez nos douceurs authentiques",
+        "subtitle": "Découvrez nos créations Jebali Sweet authentiques",
         "filters": {
             "title": "Filtres",
             "reset": "Réinitialiser",
@@ -208,9 +210,11 @@
         "addToCart": "Ajouter au Panier"
     },
     "product": {
-        "outOfStock": "Rupture de stock",
+        "outOfStock": "Épuisé",
         "addToCart": "Ajouter",
         "addToCartAria": "Ajouter {productName} au panier",
+        "new": "Nouveau",
+        "promo": "Promotion",
         "quickViewProduct": "Aperçu rapide de {productName}",
         "customCakeCategory": "Gâteaux",
         "pricePerPiece": "{price} DT / pièce",
@@ -250,8 +254,11 @@
                 "assign": "Assigner livreur",
                 "delivered": "Livrée",
                 "details": "Détails",
-                "cancel": "Annuler"
+                "cancel": "Annuler",
+                "delete": "Supprimer"
             },
+            "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette commande ? Cette action est irréversible.",
+            "deleteError": "Erreur lors de la suppression de la commande.",
             "statusLabel": "Statut :",
             "confirmDelivered": "Confirmer la livraison ?",
             "noResults": "Aucune commande trouvée",
@@ -508,7 +515,7 @@
     "footer": {
         "about": {
             "title": "À Propos",
-            "description": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de douceurs sucrées."
+            "description": "Jebali Sweet – Pâtisserie proposant des pâtisseries arabes, modernes, des gâteaux de toutes sortes et une grande variété de créations Jebali Sweet."
         },
         "links": {
             "title": "Liens Rapides",
@@ -554,5 +561,12 @@
         "terms": "Conditions d'utilisation",
         "privacy": "Politique de confidentialité",
         "back": "Retour"
+    },
+    "wishlist": {
+        "title": "Mes Coups de Cœur",
+        "subtitle": "Retrouvez ici toutes vos créations Jadour préférées.",
+        "empty": "Votre liste est vide",
+        "emptyText": "Parcourez notre catalogue et cliquez sur le cœur pour enregistrer vos créations préférées.",
+        "shopNow": "Découvrir nos créations"
     }
 }

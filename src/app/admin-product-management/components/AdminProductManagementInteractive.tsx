@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
@@ -15,6 +16,7 @@ interface Product {
   description: string;
   price: number;
   image: string;
+  images?: string[];
   alt: string;
   categoryName: string;
   brand: string;
@@ -22,6 +24,12 @@ interface Product {
   stockQuantity: number;
   isFeatured: boolean;
   priceUnit: string;
+  sku?: string;
+  approxPieces?: string;
+  onOrderOnly?: boolean;
+  leadTime?: string;
+  conservation?: string;
+  ingredients?: string;
 }
 
 interface ProductFormData {
@@ -29,6 +37,7 @@ interface ProductFormData {
   description: string;
   price: string;
   image: string;
+  images: string[];
   alt: string;
   categoryName: string;
   brand: string;
@@ -36,6 +45,12 @@ interface ProductFormData {
   stockQuantity: string;
   isFeatured: boolean;
   priceUnit: string;
+  sku: string;
+  approxPieces: string;
+  onOrderOnly: boolean;
+  leadTime: string;
+  conservation: string;
+  ingredients: string;
 }
 
 const AdminProductManagementInteractive = () => {
@@ -50,6 +65,7 @@ const AdminProductManagementInteractive = () => {
     description: '',
     price: '',
     image: '',
+    images: [],
     alt: '',
     categoryName: '',
     brand: 'Jebali Sweet',
@@ -57,6 +73,12 @@ const AdminProductManagementInteractive = () => {
     stockQuantity: '0',
     isFeatured: false,
     priceUnit: 'pièce',
+    sku: '',
+    approxPieces: '',
+    onOrderOnly: false,
+    leadTime: '',
+    conservation: '',
+    ingredients: '',
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState(CATEGORY_ALL);
@@ -84,7 +106,14 @@ const AdminProductManagementInteractive = () => {
         inStock: p.inStock ?? (p.stockQuantity > 0),
         stockQuantity: p.stockQuantity || 0,
         isFeatured: p.isFeatured || false,
-        priceUnit: p.priceUnit || 'pièce'
+        priceUnit: p.priceUnit || 'pièce',
+        sku: p.sku || '',
+        approxPieces: p.approxPieces || '',
+        onOrderOnly: p.onOrderOnly || false,
+        leadTime: p.leadTime || '',
+        conservation: p.conservation || '',
+        ingredients: p.ingredients || '',
+        images: p.images || []
       }));
       setProducts(mappedProducts);
 
@@ -130,6 +159,7 @@ const AdminProductManagementInteractive = () => {
         description: product.description,
         price: product.price.toString(),
         image: product.image,
+        images: product.images || [],
         alt: product.alt,
         categoryName: product.categoryName,
         brand: product.brand,
@@ -137,6 +167,12 @@ const AdminProductManagementInteractive = () => {
         stockQuantity: product.stockQuantity.toString(),
         isFeatured: product.isFeatured,
         priceUnit: product.priceUnit || 'pièce',
+        sku: product.sku || '',
+        approxPieces: product.approxPieces || '',
+        onOrderOnly: product.onOrderOnly || false,
+        leadTime: product.leadTime || '',
+        conservation: product.conservation || '',
+        ingredients: product.ingredients || '',
       });
     } else {
       setEditingProduct(null);
@@ -145,6 +181,7 @@ const AdminProductManagementInteractive = () => {
         description: '',
         price: '',
         image: '',
+        images: [],
         alt: '',
         categoryName: categories[0] || '',
         brand: 'Jebali Sweet',
@@ -152,6 +189,12 @@ const AdminProductManagementInteractive = () => {
         stockQuantity: '0',
         isFeatured: false,
         priceUnit: 'pièce',
+        sku: '',
+        approxPieces: '',
+        onOrderOnly: false,
+        leadTime: '',
+        conservation: '',
+        ingredients: '',
       });
     }
     setIsModalOpen(true);
@@ -172,19 +215,26 @@ const AdminProductManagementInteractive = () => {
     }));
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setIsUploading(true);
-      try {
-        const response = await api.files.upload(file);
-        setFormData(prev => ({ ...prev, image: response.url }));
-      } catch (error) {
-        console.error("Upload failed", error);
-        alert("Erreur lors de l'upload de l'image. Veuillez réessayer.");
-      } finally {
-        setIsUploading(false);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, isGallery: boolean = false) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const uploadPromises = Array.from(files).map(file => api.files.upload(file));
+      const results = await Promise.all(uploadPromises);
+      const urls = results.map(r => r.url);
+      
+      if (isGallery) {
+        setFormData(prev => ({ ...prev, images: [...prev.images, ...urls] }));
+      } else {
+        setFormData(prev => ({ ...prev, image: urls[0] }));
       }
+    } catch (error) {
+      console.error("Upload failed", error);
+      alert("Erreur lors de l'upload. Veuillez réessayer.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -201,7 +251,14 @@ const AdminProductManagementInteractive = () => {
       stockQuantity: parseInt(formData.stockQuantity),
       inStock: formData.inStock,
       isFeatured: formData.isFeatured,
-      priceUnit: formData.priceUnit
+      priceUnit: formData.priceUnit,
+      sku: formData.sku,
+      approxPieces: formData.approxPieces,
+      onOrderOnly: formData.onOrderOnly,
+      leadTime: formData.leadTime,
+      conservation: formData.conservation,
+      ingredients: formData.ingredients,
+      images: formData.images
     };
 
     try {
@@ -236,11 +293,7 @@ const AdminProductManagementInteractive = () => {
   });
 
   if (!isHydrated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
@@ -505,6 +558,92 @@ const AdminProductManagementInteractive = () => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block caption font-medium text-foreground italic">
+                    UGS (SKU)
+                  </label>
+                  <input
+                    type="text"
+                    name="sku"
+                    value={formData.sku}
+                    onChange={handleInputChange}
+                    placeholder="Ex: 136"
+                    className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block caption font-medium text-foreground italic">
+                    Nombre de pièces approx.
+                  </label>
+                  <input
+                    type="text"
+                    name="approxPieces"
+                    value={formData.approxPieces}
+                    onChange={handleInputChange}
+                    placeholder="Ex: 45 pièces"
+                    className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block caption font-medium text-foreground italic">
+                    Délai de préparation
+                  </label>
+                  <input
+                    type="text"
+                    name="leadTime"
+                    value={formData.leadTime}
+                    onChange={handleInputChange}
+                    placeholder="Ex: 4 jours"
+                    className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
+                  />
+                </div>
+
+                <div className="flex items-center gap-3 pt-6">
+                  <input
+                    type="checkbox"
+                    id="onOrderOnly"
+                    name="onOrderOnly"
+                    checked={formData.onOrderOnly}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 rounded border-input text-primary focus:ring-3 focus:ring-ring"
+                  />
+                  <label htmlFor="onOrderOnly" className="caption font-medium text-foreground italic">
+                    Uniquement sur commande
+                  </label>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block caption font-medium text-foreground italic">
+                  Mode de conservation
+                </label>
+                <textarea
+                  name="conservation"
+                  value={formData.conservation}
+                  onChange={handleInputChange}
+                  rows={2}
+                  className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth resize-none"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block caption font-medium text-foreground italic">
+                  Ingrédients
+                </label>
+                <textarea
+                  name="ingredients"
+                  value={formData.ingredients}
+                  onChange={handleInputChange}
+                  rows={2}
+                  className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth resize-none"
+                />
+              </div>
+
               <div className="space-y-4">
                 <label className="block caption font-medium text-foreground">
                   {t('admin.productManagement.modal.imagePreview')}
@@ -565,10 +704,47 @@ const AdminProductManagementInteractive = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    onChange={(e) => handleFileChange(e, false)}
                     className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
                   />
                 </div>
+              </div>
+
+              {/* Gallery Support */}
+              <div className="space-y-4 pt-4 border-t border-border">
+                  <label className="block caption font-black uppercase tracking-widest text-primary">
+                    Galerie d'images
+                  </label>
+                  
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {formData.images.map((img, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-border group">
+                        <AppImage src={img} alt={`Gallery ${idx}`} fill className="object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setFormData(prev => ({ 
+                            ...prev, 
+                            images: prev.images.filter((_, i) => i !== idx) 
+                          }))}
+                          className="absolute top-1 right-1 p-1.5 bg-error text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          <Icon name="XMarkIcon" size={14} />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    <label className="aspect-square rounded-xl border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group">
+                      <Icon name="PlusIcon" size={24} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-[10px] font-bold uppercase mt-2 text-muted-foreground group-hover:text-primary transition-colors">Ajouter</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => handleFileChange(e, true)}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
               </div>
 
               <div className="flex items-center gap-3">

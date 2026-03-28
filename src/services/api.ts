@@ -60,7 +60,8 @@ export const api = {
 
             return fetch(`${API_BASE_URL}/products?${params.toString()}`, { headers: getPublicHeaders() }).then(handleResponse);
         },
-        getById: (id: string | number) => fetch(`${API_BASE_URL}/products/${id}`, { headers: getPublicHeaders() }).then(handleResponse),
+        getById: (id: string | number) => fetch(`${API_BASE_URL}/products/${id}`, { headers: getPublicHeaders(), cache: 'no-store' }).then(handleResponse),
+        getRelated: (id: string | number) => fetch(`${API_BASE_URL}/products/related/${id}`, { headers: getPublicHeaders() }).then(handleResponse),
         getFeatured: () => fetch(`${API_BASE_URL}/products?featured=true`, { headers: getPublicHeaders() }).then(handleResponse), // Assuming backend supports filtering or we filter clientside
         create: (data: any) => fetch(`${API_BASE_URL}/products`, {
             method: 'POST',
@@ -100,11 +101,11 @@ export const api = {
                 headers: getAuthHeaders(),
                 body: JSON.stringify({ productId, quantity, customOptions, comment, customImage, isAbsolute })
             }).then(handleResponse),
-        remove: (productId: string | number, customOptions?: any, customImage?: string) =>
+        remove: (productId: string | number, customOptions?: any, customImage?: string, comment?: string) =>
             fetch(`${API_BASE_URL}/cart`, {
                 method: 'DELETE',
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ productId, customOptions, customImage })
+                body: JSON.stringify({ productId, customOptions, customImage, comment })
             }).then(handleResponse),
     },
     orders: {
@@ -136,6 +137,11 @@ export const api = {
                 method: 'PUT',
                 headers: getAuthHeaders(),
                 body: JSON.stringify({ items })
+            }).then(handleResponse),
+        delete: (orderId: string | number) =>
+            fetch(`${API_BASE_URL}/orders/${orderId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
             }).then(handleResponse),
     },
     users: {

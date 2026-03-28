@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import PageLoader from '@/components/ui/PageLoader';
 import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/services/api';
 import { formatPrice } from '@/utils/format';
@@ -26,6 +27,11 @@ interface OrderItem {
   name: string;
   quantity: number;
   price: number;
+}
+
+interface PromoDiscount {
+  value: number;
+  type: 'percentage' | 'fixed';
 }
 
 interface User {
@@ -114,6 +120,23 @@ const CheckoutPaymentInteractive = () => {
           })));
 
           setIsQuoteRequest(data.items.some((item: any) => item.customImage));
+          
+          // Load and auto-apply promo code from localStorage
+          const savedPromoCode = localStorage.getItem('currentPromoCode');
+          if (savedPromoCode) {
+            try {
+              const promoData = await api.promoCodes.validate(savedPromoCode);
+              const subtotalVal = data.items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+              const discountAmount = promoData.type === 'percentage' 
+                ? (subtotalVal * promoData.discount / 100) 
+                : promoData.discount;
+              setDiscount(discountAmount);
+              setPromoCode(savedPromoCode);
+            } catch (pError) {
+              console.error('Saved promo code invalid or expired', pError);
+              localStorage.removeItem('currentPromoCode');
+            }
+          }
         } else {
           router.push('/shopping-cart');
         }
@@ -236,6 +259,9 @@ const CheckoutPaymentInteractive = () => {
 
       await api.orders.create(orderData);
 
+      // Clear promo code from localStorage
+      localStorage.removeItem('currentPromoCode');
+
       // Cart is cleared on the backend during order creation
       // Small timeout ensures backend operations are fully completed before frontend refresh
       setTimeout(() => {
@@ -259,14 +285,7 @@ const CheckoutPaymentInteractive = () => {
   };
 
   if (!isHydrated || !user) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-center">
-          <div className="h-8 w-48 bg-muted rounded mx-auto mb-4" />
-          <div className="h-4 w-32 bg-muted rounded mx-auto" />
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (currentStep === 3) {
@@ -283,31 +302,58 @@ const CheckoutPaymentInteractive = () => {
             <p className="text-muted-foreground mb-6">
               {t('checkout.success.message', { email: shippingData.email })}
             </p>
-            <div className="bg-background rounded-lg p-4 mb-6">
-              <p className="caption text-muted-foreground mb-2">
-                {isQuoteRequest ? t('checkout.success.toConfirm') : t('checkout.success.amount')}
-              </p>
-              <p className="font-heading text-3xl font-bold text-primary">
-                {isQuoteRequest
-                  ? t('checkout.success.toConfirm')
-                  : formatPrice(total)}
-              </p>
-              {isQuoteRequest && (
-                <p className="caption text-muted-foreground mt-2">
-                  {t('checkout.success.quoteAdminInfo')}
-                </p>
-              )}
+            <div className="bg-background rounded-2xl p-6 mb-8 text-left border border-border/10">
+              <h3 className="font-heading text-lg font-semibold text-foreground mb-4 pb-2 border-b border-border/10">
+                {t('checkout.success.summaryTitle') || 'Détails de la commande'}
+              </h3>
+              
+              <div className="space-y-3 mb-6">
+                {cartItems.map((item, idx) => (
+                  <div key={idx} className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">
+                      {item.name} <span className="text-xs">× {item.quantity}</span>
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
+                  </div>
+                ))}
+                <div className="pt-2 border-t border-border/10 flex justify-between font-bold text-base">
+                  <span className="text-foreground">{t('checkout.summary.total')}</span>
+                  <span className="text-primary">{formatPrice(total)}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border/10">
+                <div>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">
+                    {t('checkout.shipping.title')}
+                  </p>
+                  <p className="text-xs text-foreground leading-relaxed">
+                    {deliveryOption === 'pickup' ? t('checkout.delivery.pickup') : `${shippingData.address}, ${shippingData.city}`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">
+                    {t('checkout.shipping.phone')}
+                  </p>
+                  <p className="text-xs text-foreground font-medium" dir="ltr">
+                    {shippingData.phone}
+                  </p>
+                </div>
+              </div>
             </div>
+
             <div className="space-y-3">
               <Link
                 href="/orders"
-                className="block w-full py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium"
+                className="block w-full py-3.5 bg-primary text-primary-foreground rounded-xl hover:opacity-90 shadow-md shadow-primary/20 transition-all font-bold"
               >
                 {t('checkout.success.viewOrders')}
               </Link>
               <Link
                 href="/"
-                className="block w-full py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-smooth font-medium"
+                className="block w-full py-3.5 bg-muted text-foreground rounded-xl hover:bg-muted/80 transition-all font-medium"
               >
                 {t('checkout.success.backHome')}
               </Link>
@@ -407,6 +453,7 @@ const CheckoutPaymentInteractive = () => {
                         onChange={handleShippingInputChange}
                         required
                         placeholder="+216 -- --- ---"
+                        dir="ltr"
                         className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-3 focus:ring-ring transition-smooth"
                       />
                     </div>

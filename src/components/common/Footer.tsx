@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import ContactModal from './ContactModal';
 import { useLanguage } from '@/context/LanguageContext';
+import AppImage from '@/components/ui/AppImage';
 
 const Footer = () => {
     const { t } = useLanguage();
@@ -20,36 +21,46 @@ const Footer = () => {
     return (
         <footer className="bg-card border-t border-border/10 mt-12 py-16 px-6 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 pointer-events-none" />
+
+            {/* Premium Botanical Watermark (3oref) */}
+            <div className="absolute -bottom-20 -right-20 w-[600px] h-[600px] opacity-[0.03] pointer-events-none z-0">
+                <AppImage
+                    src="/images/botanical_branch.png"
+                    alt="Botanical Decoration"
+                    fill
+                    className="object-contain"
+                />
+            </div>
             <div className="container mx-auto relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* About Section */}
-                    <div className="space-y-4">
-                        <h3 className="font-heading text-xl font-bold text-foreground">
+                    <div className="space-y-6">
+                        <h3 className="font-heading text-xl font-black text-primary tracking-tight uppercase">
                             {getT('footer.about.title', 'À Propos')}
                         </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                            {getT('footer.about.description', 'Jebali Sweet est votre destination privilégiée pour des douceurs artisanales de haute qualité, alliant tradition et innovation sucrée.')}
+                        <p className="text-muted-foreground leading-relaxed text-sm">
+                            {getT('footer.about.description', 'Jebali Sweet est votre destination privilégiée pour des créations Jebali Sweet de haute qualité, alliant tradition et innovation sucrée.')}
                         </p>
                     </div>
 
                     {/* Quick Links */}
-                    <div className="space-y-4">
-                        <h3 className="font-heading text-xl font-bold text-foreground">
+                    <div className="space-y-6">
+                        <h3 className="font-heading text-xl font-black text-primary tracking-tight uppercase">
                             {getT('footer.links.title', 'Liens Rapides')}
                         </h3>
-                        <ul className="space-y-2">
+                        <ul className="space-y-3">
                             <li>
-                                <Link href="/product-catalog" className="text-muted-foreground hover:text-primary transition-colors">
+                                <Link href="/product-catalog" className="text-sm text-muted-foreground hover:text-primary transition-colors font-bold">
                                     {getT('footer.links.catalog', 'Catalogue')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/user-profile" className="text-muted-foreground hover:text-primary transition-colors">
+                                <Link href="/user-profile" className="text-sm text-muted-foreground hover:text-primary transition-colors font-bold">
                                     {getT('footer.links.account', 'Mon Compte')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/orders" className="text-muted-foreground hover:text-primary transition-colors">
+                                <Link href="/orders" className="text-sm text-muted-foreground hover:text-primary transition-colors font-bold">
                                     {getT('footer.links.orders', 'Mes Commandes')}
                                 </Link>
                             </li>
@@ -57,16 +68,16 @@ const Footer = () => {
                     </div>
 
                     {/* Contact Section */}
-                    <div className="space-y-4">
-                        <h3 className="font-heading text-xl font-bold text-foreground">
+                    <div className="space-y-6">
+                        <h3 className="font-heading text-xl font-black text-primary tracking-tight uppercase">
                             {getT('footer.contact.title', 'Contact')}
                         </h3>
-                        <ul className="space-y-3">
+                        <ul className="space-y-4">
                             <li className="flex items-center gap-3 text-muted-foreground pb-2">
                                 <Icon name="PhoneIcon" size={20} className="text-primary flex-shrink-0" />
-                                <span className="font-semibold text-foreground text-lg tracking-wide">+216 46 340 400</span>
+                                <span className="font-black text-foreground text-xl tracking-tight" dir="ltr">+216 46 340 400</span>
                             </li>
-                            <li className="flex items-start gap-3 text-muted-foreground group">
+                            <li className="flex items-start gap-4 text-muted-foreground group">
                                 <Icon name="MapPinIcon" size={20} className="text-primary mt-1 flex-shrink-0" />
                                 <a
                                     href="https://www.google.com/maps/place/Patisserie+Jebali+Sweet/@37.013526,10.9507302,348m/data=!3m2!1e3!4b1!4m6!3m5!1s0x131d4796ea4aeaff:0x295bb8f35d8502a2!8m2!3d37.013526!4d10.9520177!16s%2Fg%2F11mvj5rgdy?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D"
@@ -74,20 +85,21 @@ const Footer = () => {
                                     rel="noopener noreferrer"
                                     className="hover:text-primary transition-colors leading-relaxed"
                                 >
-                                    <span className="block text-foreground font-medium text-base mb-0.5">Patisserie Jebali Sweet</span>
-                                    <span className="text-sm font-light text-muted-foreground group-hover:text-primary/70 transition-colors">Saheb Jebal</span>
+                                    <span className="block text-foreground font-black text-base mb-0.5 tracking-tight uppercase">Patisserie Jebali Sweet</span>
+                                    <span className="text-xs font-bold text-muted-foreground/60 group-hover:text-primary/70 transition-colors uppercase tracking-[0.1em]">Saheb Jebal</span>
                                 </a>
                             </li>
 
-                            <li className="pt-3 border-t border-border/10">
+                            <li className="pt-4 border-t border-border/10">
                                 <button
                                     onClick={() => setShowEmails(!showEmails)}
-                                    className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium text-sm group"
+                                    className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-black text-xs uppercase tracking-widest group"
                                 >
-                                    <Icon name="EnvelopeIcon" size={20} className="group-hover:-translate-y-0.5 transition-transform" />
+                                    <Icon name="EnvelopeIcon" size={18} className="group-hover:-translate-y-0.5 transition-transform" />
                                     <span>{getT('footer.contact.emailButton', 'Nous contacter par e-mail')}</span>
                                     <Icon name={showEmails ? "ChevronUpIcon" : "ChevronDownIcon"} size={16} className={`transition-transform duration-300 ${showEmails ? 'rotate-180' : ''}`} />
                                 </button>
+                                {/* ... rest of email logic stays same ... */}
 
                                 {showEmails && (
                                     <div className="mt-4 pl-7 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">

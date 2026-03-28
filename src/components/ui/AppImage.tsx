@@ -40,6 +40,11 @@ function AppImage({
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
+    React.useEffect(() => {
+        setImageSrc(src);
+        setHasError(false);
+    }, [src]);
+
     // More reliable external URL detection
     const isExternal = imageSrc.startsWith('http://') || imageSrc.startsWith('https://');
     const isLocal = imageSrc.startsWith('/') || imageSrc.startsWith('./') || imageSrc.startsWith('data:');
@@ -125,7 +130,6 @@ function AppImage({
         quality,
         placeholder,
         blurDataURL,
-        unoptimized: true,
         onError: handleError,
         onLoad: handleLoad,
         onClick,

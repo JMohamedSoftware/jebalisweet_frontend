@@ -15,11 +15,10 @@ const CategoryCard = ({ name, description, image, alt, productCount }: CategoryC
   return (
     <Link
       href={`/product-catalog?category=${encodeURIComponent(name)}`}
-      className="group relative block overflow-hidden rounded-2xl shadow-warm-md border border-white/10 transition-all duration-500 hover:shadow-warm-xl"
-      style={{ minHeight: '220px' }}
+      className="group relative flex flex-col bg-transparent transition-all duration-500 overflow-hidden cursor-pointer"
     >
-      {/* Background Image - with a subtle overlay for text readability */}
-      <div className="absolute inset-0">
+      {/* Image Container */}
+      <div className="relative aspect-[4/5] sm:aspect-square overflow-hidden rounded-2xl border border-border/5 mb-4 group-hover:shadow-lg transition-all duration-500">
         <AppImage
           src={image}
           alt={alt}
@@ -27,31 +26,27 @@ const CategoryCard = ({ name, description, image, alt, productCount }: CategoryC
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 30vw"
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        {/* Ombre légère uniquement en bas pour rendre le texte lisible, l'image reste très lumineuse */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent transition-all duration-300 group-hover:h-2/3" />
+        {/* Subtle Product Count - High Level styling */}
+        <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-xl text-foreground font-medium text-[9px] sm:text-xs tracking-wider border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10">
+          {productCount}
+        </div>
       </div>
 
-      {/* Content - Sophisticated and Minimalist */}
-      <div className="relative flex flex-col justify-end h-full p-4 sm:p-6" style={{ minHeight: '220px' }}>
-
-        {/* Subtle Product Count - "High Level" styling */}
-        <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-white/5 backdrop-blur-xl text-white font-medium text-[9px] sm:text-xs tracking-wider border border-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-          {productCount} CRÉATIONS
-        </div>
-
-        <div className="space-y-1.5 sm:space-y-2 transform transition-transform duration-500 group-hover:-translate-y-1">
-          <h3 className="font-heading font-bold text-white text-base sm:text-2xl leading-tight tracking-wide drop-shadow-md">
+      {/* Content - Below Image */}
+      <div className="flex flex-col space-y-2 p-1">
+        <div className="space-y-1">
+          <h3 className="font-heading font-bold text-foreground text-lg sm:text-2xl leading-tight tracking-wide group-hover:text-primary transition-colors">
             {name}
           </h3>
-          <p className="text-white/80 text-[10px] sm:text-[13px] line-clamp-2 leading-relaxed font-sans max-w-[90%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
+          <p className="text-muted-foreground text-[11px] sm:text-[13px] line-clamp-2 leading-relaxed font-light">
             {description}
           </p>
         </div>
 
-        {/* Action Indicator - "Classy" arrow */}
-        <div className="flex items-center gap-2 mt-3 sm:mt-5 text-accent font-bold text-[10px] sm:text-sm uppercase tracking-[0.15em] transition-all duration-300 group-hover:text-white">
+        {/* Action Indicator */}
+        <div className="flex items-center gap-2 pt-1 text-primary font-bold text-[10px] sm:text-xs uppercase tracking-[0.15em] transition-all duration-300">
           <span>Découvrir</span>
-          <div className="h-px w-6 bg-accent group-hover:bg-white group-hover:w-10 transition-all duration-300" />
+          <div className="h-px w-6 bg-primary/30 group-hover:bg-primary group-hover:w-10 transition-all duration-300" />
         </div>
       </div>
     </Link>

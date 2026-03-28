@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -113,7 +114,7 @@ const AdminPromoCodesInteractive = () => {
         }
     };
 
-    if (!isHydrated || isLoading) return <div className="p-10 text-center">Chargement...</div>;
+    if (!isHydrated || isLoading) return <PageLoader />;
 
     return (
         <div className="container mx-auto px-6 py-12 max-w-5xl">

@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from '@/components/common/Header';
+import BreadcrumbTrail from '@/components/common/BreadcrumbTrail';
 import CheckoutPaymentInteractive from './components/CheckoutPaymentInteractive';
 
 export const metadata = {
@@ -7,7 +9,13 @@ export const metadata = {
 };
 
 const CheckoutPaymentPage = () => {
-  return <CheckoutPaymentInteractive />;
+  return (
+    <>
+      <Header />
+      <BreadcrumbTrail />
+      <CheckoutPaymentInteractive />
+    </>
+  );
 };
 
 export default CheckoutPaymentPage;

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import PageLoader from '@/components/ui/PageLoader';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
@@ -178,6 +179,20 @@ const AdminOrderManagementInteractive = () => {
     }
   };
 
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!window.confirm(t('admin.orders.confirmDelete'))) return;
+    try {
+      await api.orders.delete(orderId);
+      setOrders(prev => prev.filter(o => o.id !== orderId));
+      if (selectedOrder?.id === orderId) {
+        setSelectedOrder(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete order', error);
+      alert(t('admin.orders.deleteError'));
+    }
+  };
+
   const getStatusLabel = (status: string) => {
     return t(`admin.orders.status.${status}`);
   };
@@ -205,11 +220,7 @@ const AdminOrderManagementInteractive = () => {
   });
 
   if (!isHydrated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
@@ -384,7 +395,7 @@ const AdminOrderManagementInteractive = () => {
                         <option value="">{t('admin.orders.selectDriver')}</option>
                         {drivers.map((driver) => (
                           <option key={driver.id} value={driver.id}>
-                            {driver.username} - {driver.phone}
+                            {driver.username} - <span dir="ltr">{driver.phone}</span>
                           </option>
                         ))}
                       </select>
@@ -437,6 +448,17 @@ const AdminOrderManagementInteractive = () => {
                         >
                           <Icon name="CheckIcon" size={16} />
                           {t('admin.orders.actions.delivered')}
+                        </button>
+                      )}
+
+                      {(order.status === 'pending' || order.status === 'pending_quote') && (
+                        <button
+                          onClick={() => handleDeleteOrder(order.id)}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-error text-error-foreground rounded-lg hover:opacity-90 transition-smooth font-medium caption min-w-[40px]"
+                          title={t('admin.orders.actions.delete')}
+                        >
+                          <Icon name="TrashIcon" size={16} />
+                          <span className="hidden sm:inline">{t('admin.orders.actions.delete')}</span>
                         </button>
                       )}
 

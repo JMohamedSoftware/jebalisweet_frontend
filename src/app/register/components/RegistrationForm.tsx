@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import Icon from '@/components/ui/AppIcon';
 import { API_ENDPOINT } from '@/config/api';
+import PageLoader from '@/components/ui/PageLoader';
 
 interface FormData {
     firstName: string;
@@ -260,20 +261,7 @@ const RegistrationForm = () => {
     };
 
     if (!isHydrated) {
-        return (
-            <div className="min-h-screen bg-background flex items-center justify-center p-4">
-                <div className="w-full max-w-2xl bg-card rounded-xl shadow-warm-lg p-8">
-                    <div className="animate-pulse space-y-6">
-                        <div className="h-8 bg-muted rounded w-3/4 mx-auto" />
-                        <div className="space-y-4">
-                            <div className="h-12 bg-muted rounded" />
-                            <div className="h-12 bg-muted rounded" />
-                            <div className="h-12 bg-muted rounded" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        return <PageLoader />;
     }
 
     return (

@@ -5,7 +5,7 @@ import Footer from '@/components/common/Footer';
 
 export const metadata: Metadata = {
     title: 'Accueil - Jebali Sweet',
-    description: 'Découvrez Jebali Sweet, votre destination pour des chocolats artisanaux, bonbons, gâteaux et pâtisseries de qualité supérieure. Livraison rapide en France.',
+    description: 'Découvrez Jebali Sweet, votre destination pour des chocolats artisanaux, bonbons, gâteaux et pâtisseries de qualité supérieure. Livraison rapide en Tunisie.',
 };
 
 export default function HomePage() {
