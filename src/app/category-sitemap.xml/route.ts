@@ -15,7 +15,7 @@ function escapeXml(unsafe: string) {
 
 export async function GET() {
     const baseUrl = 'https://jebalisweet.tn';
-    const apiBaseUrl = 'https://jebalisweet-backend.onrender.com/api';
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
     try {
         const response = await fetch(`${apiBaseUrl}/categories`, {

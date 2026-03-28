@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function getInitialData(params: { [key: string]: string | string[] | undefined }) {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://jebalisweet-backend.onrender.com/api';
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   const page = params.page ? Number(params.page) : 1;
   const category = params.category as string | undefined;
