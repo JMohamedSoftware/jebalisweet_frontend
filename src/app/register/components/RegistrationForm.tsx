@@ -234,23 +234,19 @@ const RegistrationForm = () => {
                 // alert removed
             }
 
-            if (data.token && data.user) {
+            if (data.status === 'pending_verification') {
+                router.push(`/verify-email?userId=${data.userId}&email=${data.email}`);
+            } else if (data.token && data.user) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-
-                // Trigger storage event for other components (like Header)
                 window.dispatchEvent(new Event('storage'));
 
-                // alert removed
-
-                // Redirect based on role
                 if (formData.role === 'livreur') {
-                    router.push('/login'); // Drivers still need to wait for approval
+                    router.push('/login');
                 } else {
                     router.push('/');
                 }
             } else {
-                // alert removed
                 router.push('/login');
             }
         } catch (error) {

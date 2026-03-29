@@ -109,28 +109,20 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
       const data = await response.json();
 
       if (response.ok) {
+        // ... (successful login logic)
         if (isHydrated) {
-          // Store minimal user info
           localStorage.setItem('user', JSON.stringify({
             ...data.user,
-            name: data.user.username // for compatibility with components using .name
+            name: data.user.username
           }));
           localStorage.setItem('token', data.token);
-
-          // Sync token to cookie for Next.js Middleware Route Protection
-          // Secure flag is important if HTTPS is used
           document.cookie = `auth_token=${data.token}; path=/; max-age=604800; SameSite=Lax; Secure`;
-
           if (formData.rememberMe) {
             localStorage.setItem('rememberMe', 'true');
           }
-
           window.dispatchEvent(new Event('authChanged'));
         }
-
         onSuccess();
-
-        // Redirect based on role
         if (data.user.role === 'admin') {
           router.push('/admin-dashboard');
         } else if (data.user.role === 'livreur') {
@@ -138,6 +130,8 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
         } else {
           router.push('/');
         }
+      } else if (data.status === 'pending_verification') {
+        router.push(`/verify-email?userId=${data.userId}&email=${data.email}`);
       } else {
         setErrors({
           general: data.message || t('auth.login.errors.invalid')
