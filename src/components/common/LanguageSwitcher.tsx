@@ -3,7 +3,11 @@
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
-const LanguageSwitcher = () => {
+interface LanguageSwitcherProps {
+  inverse?: boolean;
+}
+
+const LanguageSwitcher = ({ inverse }: LanguageSwitcherProps) => {
     const { language, setLanguage } = useLanguage();
 
     return (
@@ -12,17 +16,17 @@ const LanguageSwitcher = () => {
                 onClick={() => setLanguage('fr')}
                 className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-primary ${language === 'fr'
                     ? 'text-primary'
-                    : 'text-foreground/30'
+                    : inverse ? 'text-white/50' : 'text-foreground/30'
                     }`}
             >
                 FR
             </button>
-            <span className="h-3 w-[1px] bg-border/20" />
+            <span className={`h-3 w-[1px] ${inverse ? 'bg-white/20' : 'bg-border/20'}`} />
             <button
                 onClick={() => setLanguage('ar_tn')}
                 className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 hover:text-primary ${language === 'ar_tn'
                     ? 'text-primary font-black'
-                    : 'text-foreground/30'
+                    : inverse ? 'text-white/50' : 'text-foreground/30'
                     }`}
             >
                 AR

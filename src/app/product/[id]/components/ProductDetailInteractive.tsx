@@ -56,11 +56,6 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
   }, [product.id]);
 
   const handleAddToCart = async () => {
-    if (!localStorage.getItem('user')) {
-      router.push('/login');
-      return;
-    }
-    
     setIsAdding(true);
     try {
       await addItem(product, quantity);
@@ -129,8 +124,10 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`relative w-24 h-24 bg-[#F8F8F8] overflow-hidden transition-all duration-500 flex-shrink-0 snap-start ${
-                      activeImage === img ? 'opacity-100 border-b-2 border-primary' : 'opacity-50 hover:opacity-100'
+                    className={`relative w-24 h-24 bg-[#F8F8F8] overflow-hidden transition-all duration-500 flex-shrink-0 snap-start rounded-xl ${
+                      activeImage === img 
+                      ? 'opacity-100 ring-2 ring-primary ring-offset-2 scale-95' 
+                      : 'opacity-40 hover:opacity-100 hover:scale-105'
                     }`}
                   >
                     <AppImage src={img} alt={`${product.name} vue ${idx + 1}`} fill className="object-cover" />
@@ -143,8 +140,16 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
           {/* Right Column: Product Details & Actions */}
           <div className="flex flex-col animate-fade-in duration-1000 mt-2 lg:mt-8">
             
-            {/* Nav & Title */}
+            {/* Nav & Title & Back Button */}
             <div className="flex flex-col gap-6">
+              <button 
+                onClick={() => router.back()}
+                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-colors w-fit mb-2"
+              >
+                <Icon name="ArrowLeftIcon" size={12} strokeWidth={2.5} />
+                <span>{direction === 'rtl' ? 'رجوع' : 'Retour'}</span>
+              </button>
+
               <div className="flex items-center justify-between">
                 <nav className="flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
                   <span className="text-primary font-medium">{product.category}</span>
@@ -175,7 +180,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
             <div className="mt-8 flex items-baseline gap-4">
               <div className="flex items-baseline gap-2">
                 <span className="font-heading text-3xl font-light text-foreground">
-                  {formatPrice(Number(product.price)).replace('DT', '').trim() || '0,00'}
+                  {formatPrice(Number(product.price) * quantity).replace('DT', '').trim() || '0,00'}
                 </span>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-primary uppercase tracking-widest">DT</span>
@@ -220,23 +225,23 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
             )}
 
             {/* Action Area: Sleek Quantity & Cart */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-auto">
+            <div className="flex flex-col gap-4 mt-auto">
               {product.inStock ? (
                 <>
                   {/* Fine Quantity Selector */}
-                  <div className="flex items-center justify-between border-b border-border hover:border-foreground transition-colors h-14 w-full sm:w-32 bg-transparent">
+                  <div className="flex items-center justify-between border border-border hover:border-foreground transition-colors h-14 w-full bg-transparent">
                     <button 
                       onClick={decrementQty}
-                      className="px-4 h-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                      className="px-6 h-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <Icon name="MinusIcon" size={14} strokeWidth={1} />
+                      <Icon name="MinusIcon" size={16} strokeWidth={1.5} />
                     </button>
-                    <span className="w-8 text-center font-heading text-lg">{quantity}</span>
+                    <span className="w-12 text-center font-heading text-xl">{quantity}</span>
                     <button 
                       onClick={incrementQty}
-                      className="px-4 h-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                      className="px-6 h-full flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <Icon name="PlusIcon" size={14} strokeWidth={1} />
+                      <Icon name="PlusIcon" size={16} strokeWidth={1.5} />
                     </button>
                   </div>
 
@@ -244,7 +249,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
                   <button 
                     onClick={handleAddToCart}
                     disabled={isAdding}
-                    className={`flex-1 h-14 flex items-center justify-center transition-all duration-700 uppercase tracking-[0.2em] text-[10px] font-bold ${
+                    className={`h-16 w-full flex items-center justify-center transition-all duration-700 uppercase tracking-[0.2em] text-[12px] font-bold ${
                       isAdding 
                       ? 'bg-success/10 text-success border border-success/20 cursor-default' 
                       : 'bg-foreground text-background hover:bg-foreground/90 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-0.5'
@@ -254,7 +259,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
                   </button>
                 </>
               ) : (
-                <div className="h-14 w-full flex items-center justify-center bg-muted/40 text-muted-foreground uppercase tracking-[0.3em] text-[10px] font-bold border-b border-border">
+                <div className="h-16 w-full flex items-center justify-center bg-muted/40 text-muted-foreground uppercase tracking-[0.3em] text-[12px] font-bold border border-border">
                   Création Indisponible
                 </div>
               )}
@@ -390,7 +395,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
           <div className="flex-grow flex items-center justify-center perspective-[1000px]">
             <div className="relative w-full max-w-5xl h-full max-h-[85vh] animate-in slide-in-from-bottom-5 duration-700 ease-out">
               <AppImage 
-                src={product.image} 
+                src={activeImage} 
                 alt={product.alt || product.name} 
                 className="w-full h-full object-contain"
               />

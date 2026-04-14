@@ -21,7 +21,7 @@ export default function LoginPage() {
             <div className="hidden lg:block">
               <div className="relative h-[600px] rounded-2xl overflow-hidden shadow-warm-xl">
                 <AppImage
-                  src="https://images.unsplash.com/photo-1596983475220-42c388adcbcf"
+                  src="/images/login_bg_20260414.png"
                   alt="Assortiment coloré de bonbons et confiseries françaises disposés artistiquement sur fond blanc"
                   className="w-full h-full object-cover"
                   priority />

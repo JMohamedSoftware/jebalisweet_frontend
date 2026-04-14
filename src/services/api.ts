@@ -282,5 +282,26 @@ export const api = {
             headers: getAuthHeaders()
         }).then(handleResponse),
         validate: (code: string) => fetch(`${API_BASE_URL}/promo-codes/validate/${code}`, { headers: getPublicHeaders() }).then(handleResponse),
+    },
+    hero: {
+        get: () => fetch(`${API_BASE_URL}/hero`, { headers: getPublicHeaders() }).then(handleResponse),
+        // Get all slides from the hero.slides field (array), fallback to single slide
+        getSlides: async () => {
+            const data = await fetch(`${API_BASE_URL}/hero`, { headers: getPublicHeaders() }).then(handleResponse);
+            if (Array.isArray(data?.slides) && data.slides.length > 0) return data.slides;
+            if (data) return [{ title: data.title, subtitle: data.subtitle, image: data.image, ctaText: data.ctaText, targetCategory: data.targetCategory }];
+            return [];
+        },
+        update: (data: any) => fetch(`${API_BASE_URL}/hero`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(data)
+        }).then(handleResponse),
+        // Save the full slides array inside the hero payload
+        updateSlides: (slides: any[]) => fetch(`${API_BASE_URL}/hero`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ ...(slides[0] || {}), slides })
+        }).then(handleResponse),
     }
 };

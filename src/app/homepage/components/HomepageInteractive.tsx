@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/services/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { formatPrice } from '@/utils/format';
-import HomepageSkeleton from '@/components/ui/HomepageSkeleton';
+import PageLoader from '@/components/ui/PageLoader';
 
 interface Category {
   id: string;
@@ -52,6 +52,7 @@ const HomepageInteractive = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [activePromotion, setActivePromotion] = useState<Promotion | null>(null);
+  const [heroes, setHeroes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Force scroll to top on mount to fix refresh issue
@@ -65,11 +66,12 @@ const HomepageInteractive = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [cats, productsData, testimonialsData, promoData] = await Promise.all([
+        const [cats, productsData, testimonialsData, promoData, heroData] = await Promise.all([
           api.categories.getAll(),
           api.products.getAll(1, 20),
           api.testimonials.getAll().catch(() => []), 
-          api.promotions.getActive().catch(() => null)
+          api.promotions.getActive().catch(() => null),
+          api.hero.getSlides().catch(() => null)
         ]);
 
         const testimonialsArray = Array.isArray(testimonialsData) ? testimonialsData : (testimonialsData.testimonials || []);
@@ -98,6 +100,12 @@ const HomepageInteractive = () => {
         setFeaturedProducts(mappedProducts);
         setTestimonials(testimonialsArray);
         setActivePromotion(promoData);
+        // Support both array (multi-slide) and single object (legacy)
+        if (Array.isArray(heroData)) {
+          setHeroes(heroData);
+        } else if (heroData) {
+          setHeroes([heroData]);
+        }
 
       } catch (error) {
         console.error("Failed to fetch homepage data", error);
@@ -133,16 +141,20 @@ const HomepageInteractive = () => {
   };
 
   if (!isHydrated || isLoading) {
-    return <HomepageSkeleton />;
+    return <PageLoader />;
   }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="flex flex-col">
         <HeroSection
-          title={t('home.hero.title')}
-          subtitle={t('home.hero.subtitle')}
-          categories={categories}
+          heroes={heroes.length > 0 ? heroes : [{
+            title: t('home.hero.title'),
+            subtitle: t('home.hero.subtitle'),
+            image: "/images/17189029461596829888opals_3200x1200.jpg",
+            ctaText: "Déguster",
+            targetCategory: "Général"
+          }]}
         />
 
         {/* Quick Access Category Grid - High Visibility Position */}

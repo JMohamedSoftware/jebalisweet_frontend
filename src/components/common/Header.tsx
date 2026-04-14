@@ -95,10 +95,10 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out ${
+        className={`fixed top-0 left-0 w-full z-[100] transition-colors duration-300 ease-out ${
           isHomePage 
-            ? `${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-warm-lg py-2 border-b border-black/[0.03]' : 'bg-transparent py-4 border-b border-transparent'}`
-            : `bg-white/95 backdrop-blur-2xl border-b border-black/[0.03] py-2 shadow-sm`
+            ? `${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-warm-sm border-b border-black/[0.03]' : 'bg-transparent border-b border-transparent'}`
+            : `bg-white/95 backdrop-blur-2xl border-b border-black/[0.03] shadow-sm`
         }`}
       >
         <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -108,6 +108,7 @@ const Header = () => {
               <MobileNavToggle
                 isOpen={isMobileMenuOpen}
                 onToggle={handleMobileMenuToggle}
+                inverse={isHomePage && !isScrolled}
               />
             </div>
 
@@ -128,7 +129,7 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <CartIndicator />
+              <CartIndicator inverse={isHomePage && !isScrolled} />
             </div>
           </div>
 
@@ -147,7 +148,7 @@ const Header = () => {
                   height="48"
                   className="rounded-full object-cover shadow-sm transition-transform duration-500 hover:rotate-12"
                 />
-                <span className={`font-heading text-2xl font-black tracking-tighter transition-colors duration-500 text-primary`}>
+                <span className={`font-heading text-2xl font-black tracking-tighter transition-colors duration-300 ${isHomePage && !isScrolled ? 'text-white drop-shadow-md' : 'text-primary'}`}>
                   Jebali Sweet
                 </span>
               </Link>
@@ -165,9 +166,12 @@ const Header = () => {
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`relative px-5 py-2 flex items-center group transition-all duration-500 ${isActivePath(item.path)
-                        ? 'text-primary'
-                        : isScrolled ? 'text-foreground/70 hover:text-primary' : 'text-foreground/80 hover:text-primary font-medium'
+                      className={`relative px-5 py-2 flex items-center group transition-all duration-300 ${
+                        isActivePath(item.path)
+                          ? isHomePage && !isScrolled ? 'text-primary' : 'text-primary'
+                          : isHomePage && !isScrolled
+                            ? 'text-white/90 hover:text-white font-medium'
+                            : isScrolled ? 'text-foreground/70 hover:text-primary' : 'text-foreground/80 hover:text-primary font-medium'
                         }`}
                     >
                       <span className="text-[10px] font-black tracking-[0.3em] uppercase leading-none">
@@ -187,10 +191,10 @@ const Header = () => {
 
             <div className="flex items-center gap-6">
               <div className="scale-90 opacity-80 hover:opacity-100 transition-opacity">
-                <LanguageSwitcher />
+                <LanguageSwitcher inverse={isHomePage && !isScrolled} />
               </div>
-              {userRole !== 'livreur' && <CartIndicator />}
-              <UserMenu />
+              {userRole !== 'livreur' && <CartIndicator inverse={isHomePage && !isScrolled} />}
+              <UserMenu inverse={isHomePage && !isScrolled} />
             </div>
           </div>
         </div>
@@ -220,8 +224,9 @@ const Header = () => {
             <div className="py-4">
               {navigationItems
                 .filter(item => {
-                  if (item.path === '/login') return false;
                   if (userRole === 'livreur') return item.path === '/';
+                  // Only show login to public users (non-logged in)
+                  if (item.path === '/login' && userRole) return false;
                   return true;
                 })
                 .map((item) => (

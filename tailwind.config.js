@@ -156,6 +156,18 @@ module.exports = {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
+        'ken-burns': {
+          '0%': { transform: 'scale(1.04)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'slideProgressAnim': {
+          '0%': { transform: 'scaleX(0)' },
+          '100%': { transform: 'scaleX(1)' },
+        },
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'pulse-gentle': 'pulse-gentle 2s ease-in-out infinite',
@@ -163,10 +175,12 @@ module.exports = {
         'slide-in-right': 'slide-in-right 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         'slide-out-right': 'slide-out-right 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         'fade-in': 'fade-in 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        'fade-in-up': 'fade-in-up 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
         'float': 'float 6s ease-in-out infinite',
         'reveal': 'reveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         'slide-up': 'slide-up 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         'scale-in': 'scale-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'ken-burns': 'ken-burns 12s ease-in-out infinite alternate',
       },
     },
   },

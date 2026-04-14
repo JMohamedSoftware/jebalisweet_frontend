@@ -393,6 +393,17 @@ const AdminDashboardInteractive = () => {
                   <p className="caption text-muted-foreground">Coupons et remises panier</p>
                 </div>
               </Link>
+
+              <Link
+                href="/admin-hero-management"
+                className="flex items-center gap-3 p-4 bg-accent/5 hover:bg-accent/10 rounded-lg transition-smooth border border-accent/20"
+              >
+                <Icon name="PhotoIcon" size={24} className="text-accent" />
+                <div>
+                  <p className="font-medium text-foreground">Gérer le Hero</p>
+                  <p className="caption text-muted-foreground">Image d'accueil et slogan</p>
+                </div>
+              </Link>
             </div>
           </div>
         </div>

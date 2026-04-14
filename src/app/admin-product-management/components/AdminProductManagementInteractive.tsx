@@ -318,7 +318,7 @@ const AdminProductManagementInteractive = () => {
             </button>
             <button
               onClick={() => handleOpenModal()}
-              className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium shadow-warm-md"
+              className="hidden md:flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-smooth font-medium shadow-warm-md"
             >
               <Icon name="PlusIcon" size={20} />
               {t('admin.productManagement.addProduct')}
@@ -429,6 +429,15 @@ const AdminProductManagementInteractive = () => {
           </div>
         )}
       </div>
+
+      {/* Floating Action Button (FAB) for Mobile */}
+      <button
+        onClick={() => handleOpenModal()}
+        className="md:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center w-16 h-16 bg-primary text-primary-foreground rounded-full shadow-warm-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+        aria-label={t('admin.productManagement.addProduct')}
+      >
+        <Icon name="PlusIcon" size={28} strokeWidth={2} />
+      </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">

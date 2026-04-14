@@ -6,9 +6,10 @@ import Icon from '@/components/ui/AppIcon';
 interface MobileNavToggleProps {
   isOpen: boolean;
   onToggle: () => void;
+  inverse?: boolean;
 }
 
-const MobileNavToggle = ({ isOpen, onToggle }: MobileNavToggleProps) => {
+const MobileNavToggle = ({ isOpen, onToggle, inverse }: MobileNavToggleProps) => {
   return (
     <button
       onClick={onToggle}
@@ -19,7 +20,7 @@ const MobileNavToggle = ({ isOpen, onToggle }: MobileNavToggleProps) => {
       <Icon
         name={isOpen ? 'XMarkIcon' : 'Bars3Icon'}
         size={24}
-        className="text-foreground"
+        className={inverse ? 'text-white' : 'text-foreground'}
       />
     </button>
   );

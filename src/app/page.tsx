@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description: 'Découvrez Jebali Sweet, votre destination pour des chocolats artisanaux, bonbons, gâteaux et pâtisseries de qualité supérieure. Livraison rapide en Tunisie.',
 };
 
-export default function HomePage() {
+export default async function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />

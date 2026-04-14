@@ -15,40 +15,55 @@ const CategoryCard = ({ name, description, image, alt, productCount }: CategoryC
   return (
     <Link
       href={`/product-catalog?category=${encodeURIComponent(name)}`}
-      className="group relative flex flex-col bg-transparent transition-all duration-500 overflow-hidden cursor-pointer"
+      className="group relative block aspect-[4/5] sm:aspect-[3/4] overflow-hidden rounded-2xl border border-border/10 bg-muted/20 transition-all duration-700 hover:shadow-2xl hover:shadow-primary/20"
     >
-      {/* Image Container */}
-      <div className="relative aspect-[4/5] sm:aspect-square overflow-hidden rounded-2xl border border-border/5 mb-4 group-hover:shadow-lg transition-all duration-500">
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0 transition-transform duration-1000 group-hover:scale-110">
         <AppImage
           src={image}
           alt={alt}
           fill
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 30vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-cover"
         />
-        {/* Subtle Product Count - High Level styling */}
-        <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-xl text-foreground font-medium text-[9px] sm:text-xs tracking-wider border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10">
-          {productCount}
-        </div>
       </div>
 
-      {/* Content - Below Image */}
-      <div className="flex flex-col space-y-2 p-1">
-        <div className="space-y-1">
-          <h3 className="font-heading font-bold text-foreground text-lg sm:text-2xl leading-tight tracking-wide group-hover:text-primary transition-colors">
+      {/* Layered Overlays for Depth and Readability - Lightened */}
+      {/* 1. Remove base dark overlay to keep image bright */}
+      <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-500 z-1" />
+      
+      {/* 2. Very subtle Text Support Gradient (Bottom only) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-2 opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
+
+      {/* Content Overlay - Immersive Typography */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 sm:p-8 space-y-3">
+        
+        {/* Subtle Product Count */}
+        <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+          <span className="px-3 py-1 bg-primary text-black font-black text-[9px] uppercase tracking-[0.2em] rounded-sm shadow-xl">
+             {productCount} {productCount > 1 ? 'Créations' : 'Création'}
+          </span>
+        </div>
+
+        <div className="space-y-1 transform transition-transform duration-500 group-hover:-translate-y-1">
+          <h3 className="font-heading font-black text-white text-2xl sm:text-3xl lg:text-4xl leading-[0.9] tracking-tighter uppercase drop-shadow-2xl">
             {name}
           </h3>
-          <p className="text-muted-foreground text-[11px] sm:text-[13px] line-clamp-2 leading-relaxed font-light">
+          <p className="text-white/80 text-[11px] sm:text-[13px] line-clamp-2 leading-relaxed font-serif italic max-w-[90%] transition-opacity duration-500">
             {description}
           </p>
         </div>
 
-        {/* Action Indicator */}
-        <div className="flex items-center gap-2 pt-1 text-primary font-bold text-[10px] sm:text-xs uppercase tracking-[0.15em] transition-all duration-300">
-          <span>Découvrir</span>
-          <div className="h-px w-6 bg-primary/30 group-hover:bg-primary group-hover:w-10 transition-all duration-300" />
+        {/* Hover Action Indicator */}
+        <div className="flex items-center gap-3 pt-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+          <span className="text-primary font-black text-[9px] sm:text-[10px] uppercase tracking-[0.4em]">Explorer l'univers</span>
+          <div className="h-[1px] w-8 bg-primary/40 group-hover:w-16 transition-all duration-500" />
         </div>
       </div>
+
+      {/* Luxury Border Animation (on hover) */}
+      <div className="absolute inset-3 border border-white/0 group-hover:border-white/10 transition-all duration-1000 z-5 pointer-events-none" />
+
     </Link>
   );
 };
