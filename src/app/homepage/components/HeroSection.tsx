@@ -53,7 +53,7 @@ const HeroSection = ({ heroes }: HeroSectionProps) => {
   const slide = slides[current];
 
   return (
-    <section className="relative h-[100dvh] w-full overflow-hidden bg-black">
+    <section className="relative h-[80dvh] md:h-[100dvh] w-full overflow-hidden bg-black">
 
       {/* ── FULL BLEED IMAGE ── */}
       <div
@@ -93,8 +93,8 @@ const HeroSection = ({ heroes }: HeroSectionProps) => {
 
         {/* Main Title */}
         <div className={`transition-all duration-500 ${fading ? 'opacity-0 translate-y-6' : 'opacity-100 translate-y-0'}`}>
-          <h1 className="font-heading font-light uppercase tracking-[0.08em] text-white leading-[1.05] drop-shadow-2xl
-                         text-4xl sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="font-heading font-light uppercase tracking-[0.05em] sm:tracking-[0.08em] text-white leading-[1.05] drop-shadow-2xl
+                         text-3xl sm:text-6xl md:text-7xl lg:text-8xl break-words px-2">
             {slide.title}
           </h1>
         </div>
@@ -113,7 +113,7 @@ const HeroSection = ({ heroes }: HeroSectionProps) => {
         <div className={`mt-10 transition-all duration-700 delay-150 ${fading ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
           <Link
             href={`/product-catalog?category=${encodeURIComponent(slide.targetCategory || '')}`}
-            className="group inline-flex items-center gap-5 px-10 py-4 border border-primary/60
+            className="group inline-flex items-center gap-5 px-8 py-3 sm:px-10 sm:py-4 border border-primary/60
                        text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em]
                        hover:bg-primary hover:border-primary hover:text-black
                        transition-all duration-500"

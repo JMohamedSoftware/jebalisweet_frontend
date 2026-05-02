@@ -66,7 +66,7 @@ const ThematicCategorySection = ({ category, products, onAddToCart }: ThematicCa
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-10">
           {products.slice(0, 4).map((product, index) => (
             <div 
               key={product.id} 

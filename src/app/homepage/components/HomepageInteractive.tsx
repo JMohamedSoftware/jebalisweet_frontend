@@ -168,7 +168,7 @@ const HomepageInteractive = () => {
             </div>
 
             {categories.length > 0 ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                 {categories.map((category, index) => (
                   <div key={category.id} className="reveal" style={{ animationDelay: `${index * 100}ms` }}>
                     <CategoryCard

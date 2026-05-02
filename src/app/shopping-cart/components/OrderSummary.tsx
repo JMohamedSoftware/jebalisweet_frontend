@@ -15,7 +15,7 @@ interface OrderSummaryProps {
   promoCodeError: string;
   promoCodeSuccess: string;
   hasCustomItems?: boolean;
-}
+}  
 
 const OrderSummary = ({
   subtotal,
