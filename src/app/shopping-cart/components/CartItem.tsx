@@ -40,22 +40,7 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
     }
   };
 
-  const getAvailabilityText = () => {
-    return t(`cart.item.availability.${item.availability}`) || item.availability;
-  };
 
-  const getAvailabilityColor = () => {
-    switch (item.availability) {
-      case 'in_stock':
-        return 'text-success';
-      case 'low_stock':
-        return 'text-warning';
-      case 'out_of_stock':
-        return 'text-error';
-      default:
-        return '';
-    }
-  };
 
   const subtotal = item.price * item.quantity;
 
@@ -74,9 +59,17 @@ const CartItem = ({ item, onUpdateQuantity, onUpdateComment, onRemove }: CartIte
           <h3 className="font-heading text-lg font-semibold text-foreground mb-1">
             {item.name}
           </h3>
-          <p className={`caption font-medium ${getAvailabilityColor()}`}>
-            {getAvailabilityText()}
-          </p>
+
+          {item.customOptions && Object.keys(item.customOptions).length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-1 mb-2">
+              {Object.entries(item.customOptions).map(([key, val]) => (
+                <span key={key} className="px-2 py-1 bg-muted/50 rounded text-[10px] uppercase font-bold text-muted-foreground border border-border/50">
+                  {key}: {val as React.ReactNode}
+                </span>
+              ))}
+            </div>
+          )}
+
           <div className="mt-3">
             <label className="text-[10px] font-bold text-muted-foreground uppercase mb-1 block">{t('cart.item.commentLabel')}</label>
             <textarea

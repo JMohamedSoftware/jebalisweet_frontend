@@ -93,8 +93,7 @@ const HomepageInteractive = () => {
         const mappedProducts = prods.map((p: any) => ({
           ...p,
           id: p.id || p._id,
-          stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
-          inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
+          inStock: true,
           category: p.categoryName || (p.category && p.category.name) || "Général",
         }));
         setFeaturedProducts(mappedProducts);

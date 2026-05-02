@@ -21,6 +21,7 @@ export interface Product {
     sku?: string;
     conservation?: string;
     ingredients?: string;
+    variants?: { name: string; options: string[] }[];
 }
 
 export interface ProductResponse {

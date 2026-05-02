@@ -25,7 +25,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!product.inStock || isAdding) return;
+    if (isAdding) return;
     setIsAdding(true);
     await onAddToCart();
     setTimeout(() => setIsAdding(false), 1200);
@@ -44,8 +44,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
     router.push(`/product/${product.id}`);
   };
 
-  const stockQty = Math.max(0, product.stockQuantity || 0);
-  const isLowStock = stockQty > 0 && stockQty <= 5;
+
 
   return (
     <div 
@@ -74,12 +73,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
 
 
-        {/* Low Stock Indicator - Understated */}
-        {isLowStock && product.inStock && (
-          <div className="absolute top-3 left-3 px-3 py-1 rounded-md bg-accent/90 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] tracking-wider animate-pulse shadow-sm z-20">
-            PIÈCES LIMITÉES
-          </div>
-        )}
+
 
         {/* Jadour (Wishlist) Button */}
         <button 
@@ -92,14 +86,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           <Icon name="HeartIcon" size={18} variant={isWishlisted ? 'solid' : 'outline'} />
         </button>
 
-        {/* Out of stock - High-end style */}
-        {!product.inStock && (
-          <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-            <span className="px-5 py-2.5 bg-foreground text-background rounded-lg font-bold text-[11px] tracking-[0.2em] uppercase shadow-lg">
-              Indisponible
-            </span>
-          </div>
-        )}
+
 
         {/* Subtle Shine effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
@@ -126,13 +113,11 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
             <button
               onClick={handleAddToCart}
-              disabled={!product.inStock || isAdding}
+              disabled={isAdding}
               aria-label={t('product.addToCartAria', { productName: product.name })}
               className={`flex items-center justify-center p-2 rounded-lg transition-all duration-300 shadow-sm ${isAdding
                   ? 'bg-success text-white scale-90'
-                  : product.inStock
-                    ? 'bg-primary text-white hover:bg-black hover:scale-110 active:scale-95'
-                    : 'bg-muted text-muted-foreground cursor-not-allowed opacity-30'
+                  : 'bg-primary text-white hover:bg-black hover:scale-110 active:scale-95'
                 }`}
             >
               {isAdding ? (

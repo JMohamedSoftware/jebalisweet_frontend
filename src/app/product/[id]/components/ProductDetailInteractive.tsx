@@ -27,6 +27,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
   const [activeImage, setActiveImage] = useState(product.image);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [isImageExpanded, setIsImageExpanded] = useState(false);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
 
   // Accordion states
   const [openSection, setOpenSection] = useState<'ingredients' | 'conservation' | null>(null);
@@ -38,7 +39,18 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
 
   useEffect(() => {
     setActiveImage(product.image);
-  }, [product.image]);
+    
+    // Initialize default variants
+    if (product.variants && product.variants.length > 0) {
+      const initialVariants: Record<string, string> = {};
+      product.variants.forEach(v => {
+        if (v.options && v.options.length > 0) {
+          initialVariants[v.name] = v.options[0];
+        }
+      });
+      setSelectedVariants(initialVariants);
+    }
+  }, [product.image, product.variants]);
 
   useEffect(() => {
     const fetchRelated = async () => {
@@ -58,7 +70,7 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
   const handleAddToCart = async () => {
     setIsAdding(true);
     try {
-      await addItem(product, quantity);
+      await addItem(product, quantity, selectedVariants);
     } catch (error) {
       console.error('Failed to add to cart:', error);
     } finally {
@@ -75,7 +87,10 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
     } as any);
   };
 
-  const incrementQty = () => setQuantity(prev => prev + 1);
+  const incrementQty = () => {
+    const maxLimit = product.priceUnit === 'kg' ? 5 : 50;
+    setQuantity(prev => Math.min(maxLimit, prev + 1));
+  };
   const decrementQty = () => setQuantity(prev => Math.max(1, prev - 1));
 
   return (
@@ -198,6 +213,15 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
 
             <hr className="w-12 border-t-2 border-primary my-10" />
 
+            {/* Freshness Note */}
+            <div className="mb-8 p-4 bg-primary/5 border-l-2 border-primary">
+              <p className="text-[12px] font-medium text-foreground">
+                {direction === 'rtl' 
+                  ? "هذا المنتج يُحضّر يوميًا حسب الطلب لضمان الجودة والطزاجة" 
+                  : "Ce produit est préparé quotidiennement sur commande pour garantir qualité et fraîcheur"}
+              </p>
+            </div>
+
             {/* Description */}
             <div className="prose prose-sm text-muted-foreground font-light leading-loose text-[14px] tracking-wide mb-12">
               <p>{product.description || "Une création artisanale d'exception, réalisée avec passion et des ingrédients sélectionnés pour leur noblesse."}</p>
@@ -228,6 +252,29 @@ const ProductDetailInteractive = ({ product }: ProductDetailInteractiveProps) =>
             <div className="flex flex-col gap-4 mt-auto">
               {product.inStock ? (
                 <>
+                  {/* Variants Selector */}
+                  {product.variants && product.variants.length > 0 && (
+                    <div className="flex flex-col gap-4 mb-4">
+                      {product.variants.map((variant, idx) => (
+                        <div key={idx} className="flex flex-col gap-2">
+                          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
+                            {variant.name}
+                          </label>
+                          <select
+                            value={selectedVariants[variant.name] || ''}
+                            onChange={(e) => setSelectedVariants(prev => ({ ...prev, [variant.name]: e.target.value }))}
+                            className="w-full h-12 px-4 bg-transparent border border-border focus:border-foreground outline-none transition-colors text-sm font-light appearance-none cursor-pointer"
+                            style={{ backgroundImage: 'linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%)', backgroundPosition: 'calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px)', backgroundSize: '5px 5px, 5px 5px', backgroundRepeat: 'no-repeat' }}
+                          >
+                            {variant.options.map((opt, oIdx) => (
+                              <option key={oIdx} value={opt}>{opt}</option>
+                            ))}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Fine Quantity Selector */}
                   <div className="flex items-center justify-between border border-border hover:border-foreground transition-colors h-14 w-full bg-transparent">
                     <button 
