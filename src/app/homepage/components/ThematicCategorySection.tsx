@@ -53,9 +53,6 @@ const ThematicCategorySection = ({ category, products, onAddToCart }: ThematicCa
       <div className="container mx-auto px-6 relative z-10">
         {/* Centered Header */}
         <div className="flex flex-col items-center text-center mb-12 sm:mb-20 space-y-4 reveal">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60">
-            {t('catalog.exclusive') || 'Collection Exclusive'}
-          </span>
           <h2 className="text-4xl sm:text-6xl font-heading font-black text-foreground tracking-tight">
             {category.name}
           </h2>
@@ -66,7 +63,7 @@ const ThematicCategorySection = ({ category, products, onAddToCart }: ThematicCa
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-12">
           {products.slice(0, 4).map((product, index) => (
             <div 
               key={product.id} 

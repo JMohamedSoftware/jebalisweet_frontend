@@ -12,11 +12,11 @@ interface FilterPanelProps {
   selectedBrands: string[];
   priceRange: [number, number];
   maxPrice: number;
-
+  showInStockOnly: boolean;
   onCategoryChange: (category: string) => void;
   onBrandToggle: (brand: string) => void;
   onPriceRangeChange: (range: [number, number]) => void;
-
+  onStockToggle: () => void;
   onClearFilters: () => void;
   resultCount: number;
 }
@@ -28,11 +28,11 @@ const FilterPanel = ({
   selectedBrands,
   priceRange,
   maxPrice,
-
+  showInStockOnly,
   onCategoryChange,
   onBrandToggle,
   onPriceRangeChange,
-
+  onStockToggle,
   onClearFilters,
   resultCount,
 }: FilterPanelProps) => {
@@ -131,7 +131,19 @@ const FilterPanel = ({
           </div>
         </div>
 
-
+        <div className="pt-4 border-t border-border">
+          <label className="flex items-center gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={showInStockOnly}
+              onChange={onStockToggle}
+              className="w-5 h-5 rounded border-2 border-border text-primary focus:ring-3 focus:ring-ring cursor-pointer"
+            />
+            <span className="text-foreground group-hover:text-primary transition-smooth font-medium">
+              {t('catalog.filters.stockOnly')}
+            </span>
+          </label>
+        </div>
 
       </div>
     </div>

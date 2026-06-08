@@ -93,7 +93,8 @@ const HomepageInteractive = () => {
         const mappedProducts = prods.map((p: any) => ({
           ...p,
           id: p.id || p._id,
-          inStock: true,
+          stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
+          inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
           category: p.categoryName || (p.category && p.category.name) || "Général",
         }));
         setFeaturedProducts(mappedProducts);
@@ -168,7 +169,7 @@ const HomepageInteractive = () => {
             </div>
 
             {categories.length > 0 ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                 {categories.map((category, index) => (
                   <div key={category.id} className="reveal" style={{ animationDelay: `${index * 100}ms` }}>
                     <CategoryCard

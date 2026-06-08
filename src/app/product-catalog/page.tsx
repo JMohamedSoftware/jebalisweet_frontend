@@ -55,7 +55,8 @@ async function getInitialData(params: { [key: string]: string | string[] | undef
       products: (productsData.products || []).map((p: any) => ({
         ...p,
         id: (p._id || p.id).toString(),
-        inStock: true,
+        stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
+        inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
         category: p.categoryName || (p.category && p.category.name) || p.category,
         priceUnit: p.priceUnit || 'pièce',
       })),

@@ -22,6 +22,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [isAdding, setIsAdding] = useState(false);
   const isWishlisted = isInWishlist(product.id);
+  const isCustom = product.name.toLowerCase().includes('personnalisé');
 
   // Determine if product is "New" (less than 7 days old)
   const isNew = React.useMemo(() => {
@@ -56,7 +57,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
     >
       {/* Badges Overlay */}
       <div className="absolute top-3 left-3 z-20 flex flex-col gap-2">
-        {product.originalPrice && product.originalPrice > product.price && (
+        {product.originalPrice && product.originalPrice > product.price && !isCustom && (
           <span className="bg-error text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wider">
             {t('product.promo') || 'Promo'}
           </span>
@@ -79,7 +80,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       </button>
 
       {/* Clickable Area (Image + Title) */}
-      <Link href={`/product/${product.id}`} className="flex flex-col flex-grow outline-none relative z-10" aria-label={product.name}>
+      <Link href={isCustom ? '/custom-cake' : `/product/${product.id}`} className="flex flex-col flex-grow outline-none relative z-10" aria-label={product.name}>
         {/* Image Section */}
         <div className="relative h-48 sm:h-72 overflow-hidden bg-transparent group-hover:scale-105 transition-transform duration-700 rounded-2xl border border-border/5">
           <AppImage
@@ -113,28 +114,46 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       <div className="px-4 sm:px-5 pb-4 sm:pb-5">
         <div className="flex items-center justify-between pt-1">
             <div className="flex flex-col">
-              {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-[10px] text-muted-foreground line-through opacity-60 mb-0.5">
-                  {formatPrice(product.originalPrice)}
+              {isCustom ? (
+                <span className="font-heading text-lg font-black text-primary uppercase tracking-wider">
+                  {t('product.customCakePrice') || 'Sur devis'}
                 </span>
+              ) : (
+                <>
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <span className="text-[10px] text-muted-foreground line-through opacity-60 mb-0.5">
+                      {formatPrice(product.originalPrice)}
+                    </span>
+                  )}
+                  <span className="font-heading text-xl font-black text-primary flex items-baseline gap-0.5">
+                    {formatPrice(product.price).replace('DT', '').trim()} 
+                    <span className="text-[10px] font-bold text-muted-foreground/60 uppercase">DT</span>
+                  </span>
+                </>
               )}
-              <span className="font-heading text-xl font-black text-primary flex items-baseline gap-0.5">
-                {formatPrice(product.price).replace('DT', '').trim()} 
-                <span className="text-[10px] font-bold text-muted-foreground/60 uppercase">DT</span>
-              </span>
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              disabled={product.inStock === false || isAdding}
-              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 shadow-sm transform ${
-                isAdding
-                ? 'bg-success text-white scale-90'
-                : 'bg-primary text-primary-foreground hover:bg-black hover:text-white hover:scale-110 active:scale-95'
-              } disabled:opacity-30 disabled:grayscale`}
-            >
-              <Icon name={isAdding ? 'CheckIcon' : 'ShoppingBagIcon'} size={22} variant="outline" />
-            </button>
+            {isCustom ? (
+              <Link
+                href="/custom-cake"
+                className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 shadow-sm transform bg-primary text-primary-foreground hover:bg-black hover:text-white hover:scale-110 active:scale-95"
+                title={t('product.customize') || 'Personnaliser'}
+              >
+                <Icon name="SparklesIcon" size={22} variant="outline" />
+              </Link>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                disabled={product.inStock === false || isAdding}
+                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 shadow-sm transform ${
+                  isAdding
+                  ? 'bg-success text-white scale-90'
+                  : 'bg-primary text-primary-foreground hover:bg-black hover:text-white hover:scale-110 active:scale-95'
+                } disabled:opacity-30 disabled:grayscale`}
+              >
+                <Icon name={isAdding ? 'CheckIcon' : 'ShoppingBagIcon'} size={22} variant="outline" />
+              </button>
+            )}
         </div>
       </div>
     </div>

@@ -42,30 +42,37 @@ const CartDrawer = () => {
           {/* Items List */}
           <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 scrollbar-hide">
             {cartItems.length > 0 ? (
-              cartItems.map((item, idx) => (
-                <div key={`${item.productId?._id}-${idx}`} className="flex gap-4 group">
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden bg-muted/20 border border-border/5 flex-shrink-0">
-                    <AppImage 
-                      src={item.image || item.productId?.image} 
-                      alt={item.name || item.productId?.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-foreground text-sm truncate">{item.name || item.productId?.name}</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">{item.productId?.categoryName || item.productId?.category}</p>
-                    <div className="flex items-center justify-between mt-3">
-                      <span className="font-black text-primary">{formatPrice(item.price || item.productId?.price)} x {item.quantity}</span>
-                      <button 
-                        onClick={() => removeItem(item)}
-                        className="text-error/40 hover:text-error transition-colors p-1"
-                      >
-                        <Icon name="TrashIcon" size={16} />
-                      </button>
+              cartItems.map((item, idx) => {
+                const isCustom = item.customOptions?.isCustom || 
+                                 item.name?.toLowerCase().includes('personnalisé') || 
+                                 item.productId?.name?.toLowerCase().includes('personnalisé');
+                return (
+                  <div key={`${item.productId?._id}-${idx}`} className="flex gap-4 group">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden bg-muted/20 border border-border/5 flex-shrink-0">
+                      <AppImage 
+                        src={item.image || item.productId?.image} 
+                        alt={item.name || item.productId?.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold text-foreground text-sm truncate">{item.name || item.productId?.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">{item.productId?.categoryName || item.productId?.category}</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <span className="font-black text-primary">
+                          {isCustom ? (t('product.customCakePrice') || 'Sur devis') : formatPrice(item.price || item.productId?.price)} x {item.quantity}
+                        </span>
+                        <button 
+                          onClick={() => removeItem(item)}
+                          className="text-error/40 hover:text-error transition-colors p-1"
+                        >
+                          <Icon name="TrashIcon" size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-40">
                 <Icon name="ShoppingCartIcon" size={64} variant="outline" />

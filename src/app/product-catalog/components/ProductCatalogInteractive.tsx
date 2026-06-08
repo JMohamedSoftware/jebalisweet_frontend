@@ -24,6 +24,7 @@ interface Product {
   category: string;
   brand?: string;
   inStock: boolean;
+  stockQuantity?: number;
   priceUnit?: string;
 }
 
@@ -54,7 +55,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
   const [selectedCategory, setSelectedCategory] = useState(CATEGORY_ALL);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, initialData?.maxPrice || 100]);
-
+  const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -105,6 +106,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
           brands: selectedBrands,
           minPrice: priceRange[0],
           maxPrice: priceRange[1],
+          inStock: showInStockOnly,
           sortBy: sortBy,
           search: searchQuery
         };
@@ -112,7 +114,8 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
         setProducts(response.products.map((p: any) => ({
           ...p,
           id: (p._id || p.id).toString(),
-          inStock: true,
+          stockQuantity: Math.max(0, p.stockQuantity ?? p.stock_quantity ?? 0),
+          inStock: (p.stockQuantity ?? p.stock_quantity ?? 0) > 0,
           category: p.categoryName || (p.category && p.category.name) || p.category,
           priceUnit: p.priceUnit || 'pièce',
         })));
@@ -135,7 +138,7 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
       }
     };
     loadData();
-  }, [currentPage, selectedCategory, selectedBrands, priceRange, sortBy, searchQuery, initialData]);
+  }, [currentPage, selectedCategory, selectedBrands, priceRange, showInStockOnly, sortBy, searchQuery, initialData]);
 
   const handleAddToCart = async (product: Product) => {
     if (!localStorage.getItem('user')) {
@@ -183,9 +186,10 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
           <FilterPanel
             categories={categories} brands={brands} selectedCategory={selectedCategory}
             selectedBrands={selectedBrands} priceRange={priceRange} maxPrice={maxPrice}
+            showInStockOnly={showInStockOnly}
             onCategoryChange={(cat) => { setSelectedCategory(cat); setCurrentPage(1); }}
             onBrandToggle={(b) => { setSelectedBrands(prev => prev.includes(b) ? prev.filter(i => i !== b) : [...prev, b]); setCurrentPage(1); }}
-            onPriceRangeChange={setPriceRange}
+            onPriceRangeChange={setPriceRange} onStockToggle={() => setShowInStockOnly(!showInStockOnly)}
             onClearFilters={() => { setSelectedCategory(CATEGORY_ALL); setSelectedBrands([]); setPriceRange([0, maxPrice]); }}
             resultCount={responseTotal}
           />
@@ -251,9 +255,10 @@ const ProductCatalogInteractive = ({ initialData }: ProductCatalogInteractivePro
               <FilterPanel
                 categories={categories} brands={brands} selectedCategory={selectedCategory}
                 selectedBrands={selectedBrands} priceRange={priceRange} maxPrice={maxPrice}
+                showInStockOnly={showInStockOnly}
                 onCategoryChange={(cat) => { setSelectedCategory(cat); }}
                 onBrandToggle={(b) => setSelectedBrands(prev => prev.includes(b) ? prev.filter(i => i !== b) : [...prev, b])}
-                onPriceRangeChange={setPriceRange}
+                onPriceRangeChange={setPriceRange} onStockToggle={() => setShowInStockOnly(!showInStockOnly)}
                 onClearFilters={() => { setSelectedCategory(CATEGORY_ALL); setSelectedBrands([]); setPriceRange([0, maxPrice]); }}
                 resultCount={responseTotal}
               />

@@ -218,7 +218,9 @@
         "quickViewProduct": "Aperçu rapide de {productName}",
         "customCakeCategory": "Gâteaux",
         "pricePerPiece": "{price} DT / pièce",
-        "pricePerKg": "{price} DT / kg"
+        "pricePerKg": "{price} DT / kg",
+        "customCakePrice": "Sur devis",
+        "customize": "Personnaliser"
     },
     "admin": {
         "orders": {

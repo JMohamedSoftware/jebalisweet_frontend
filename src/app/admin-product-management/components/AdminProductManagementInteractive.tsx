@@ -30,7 +30,6 @@ interface Product {
   leadTime?: string;
   conservation?: string;
   ingredients?: string;
-  variants?: { name: string; options: string[] }[];
 }
 
 interface ProductFormData {
@@ -52,7 +51,6 @@ interface ProductFormData {
   leadTime: string;
   conservation: string;
   ingredients: string;
-  variants: { name: string; options: string[] }[];
 }
 
 const AdminProductManagementInteractive = () => {
@@ -81,7 +79,6 @@ const AdminProductManagementInteractive = () => {
     leadTime: '',
     conservation: '',
     ingredients: '',
-    variants: [],
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState(CATEGORY_ALL);
@@ -116,8 +113,7 @@ const AdminProductManagementInteractive = () => {
         leadTime: p.leadTime || '',
         conservation: p.conservation || '',
         ingredients: p.ingredients || '',
-        images: p.images || [],
-        variants: p.variants || []
+        images: p.images || []
       }));
       setProducts(mappedProducts);
 
@@ -177,7 +173,6 @@ const AdminProductManagementInteractive = () => {
         leadTime: product.leadTime || '',
         conservation: product.conservation || '',
         ingredients: product.ingredients || '',
-        variants: product.variants || [],
       });
     } else {
       setEditingProduct(null);
@@ -200,7 +195,6 @@ const AdminProductManagementInteractive = () => {
         leadTime: '',
         conservation: '',
         ingredients: '',
-        variants: [],
       });
     }
     setIsModalOpen(true);
@@ -264,8 +258,7 @@ const AdminProductManagementInteractive = () => {
       leadTime: formData.leadTime,
       conservation: formData.conservation,
       ingredients: formData.ingredients,
-      images: formData.images,
-      variants: formData.variants
+      images: formData.images
     };
 
     try {
@@ -591,7 +584,7 @@ const AdminProductManagementInteractive = () => {
 
                 <div className="space-y-2">
                   <label className="block caption font-medium text-foreground italic">
-                    {formData.priceUnit === 'kg' ? 'Nombre de pièces approx. par kg' : 'Nombre de pièces approx.'}
+                    Nombre de pièces approx.
                   </label>
                   <input
                     type="text"
@@ -660,71 +653,7 @@ const AdminProductManagementInteractive = () => {
                 />
               </div>
 
-              {/* Variants Section */}
-              <div className="space-y-4 pt-4 border-t border-border">
-                <div className="flex items-center justify-between">
-                  <label className="block caption font-black uppercase tracking-widest text-primary">
-                    Variantes (Options)
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, variants: [...prev.variants, { name: '', options: [] }] }))}
-                    className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-smooth font-medium"
-                  >
-                    <Icon name="PlusIcon" size={16} /> Ajouter une variante
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {formData.variants.map((variant, index) => (
-                    <div key={index} className="flex flex-col gap-3 p-4 border border-border rounded-lg bg-muted/10 relative">
-                      <button
-                        type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, variants: prev.variants.filter((_, i) => i !== index) }))}
-                        className="absolute top-2 right-2 text-muted-foreground hover:text-error transition-colors"
-                      >
-                        <Icon name="TrashIcon" size={16} />
-                      </button>
-                      <div className="space-y-2">
-                        <label className="block caption font-medium text-foreground text-[10px] uppercase">
-                          Nom de l'option (ex: Taille, Disponibilité)
-                        </label>
-                        <input
-                          type="text"
-                          value={variant.name}
-                          onChange={(e) => {
-                            const newVariants = [...formData.variants];
-                            newVariants[index].name = e.target.value;
-                            setFormData(prev => ({ ...prev, variants: newVariants }));
-                          }}
-                          placeholder="Ex: Taille"
-                          className="w-full px-3 py-2 bg-background border border-input rounded focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="block caption font-medium text-foreground text-[10px] uppercase">
-                          Valeurs (séparées par une virgule)
-                        </label>
-                        <input
-                          type="text"
-                          value={variant.options.join(', ')}
-                          onChange={(e) => {
-                            const newVariants = [...formData.variants];
-                            newVariants[index].options = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
-                            setFormData(prev => ({ ...prev, variants: newVariants }));
-                          }}
-                          placeholder="Ex: Petit, Moyen, Grand"
-                          className="w-full px-3 py-2 bg-background border border-input rounded focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  {formData.variants.length === 0 && (
-                    <p className="text-sm text-muted-foreground italic">Aucune variante ajoutée.</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-4 border-t border-border">
+              <div className="space-y-4">
                 <label className="block caption font-medium text-foreground">
                   {t('admin.productManagement.modal.imagePreview')}
                 </label>

@@ -112,7 +112,7 @@ const UserMenu = ({ inverse }: UserMenuProps = {}) => {
         <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
           {(user.username || user.name || user.firstName || 'U').charAt(0).toUpperCase()}
         </div>
-        <span className={`hidden sm:inline-block ${inverse ? 'text-white font-medium' : 'text-foreground'}`}>
+        <span className={inverse ? 'text-white font-medium' : 'text-foreground'}>
           {user.username || user.name || (user.firstName ? `${user.firstName} ${user.lastName || ''}` : t('nav.user'))}
         </span>
         <Icon

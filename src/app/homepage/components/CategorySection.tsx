@@ -44,9 +44,6 @@ const CategorySection = ({ category, products, isReversed }: CategorySectionProp
         <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-14 lg:p-20 z-10">
           <div className="max-w-md w-full space-y-6 animate-in fade-in slide-in-from-bottom duration-1000">
             <div className="space-y-3">
-              <span className="text-primary font-bold text-[10px] uppercase tracking-[0.3em] block mb-1">
-                {t('catalog.exclusive') || 'Collection Exclusive'}
-              </span>
               <h2 className="text-4xl md:text-5xl font-heading font-black text-foreground leading-tight">
                 {category.name}
               </h2>

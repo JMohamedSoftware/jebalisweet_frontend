@@ -59,8 +59,9 @@ const ShoppingCartInteractive = () => {
         productId: item.productId,
         image: item.image || "https://images.unsplash.com/photo-1663214956771-9c6d8f646a2d",
         alt: item.name,
-        availability: 'in_stock',
-        maxQuantity: item.maxQuantity || 50
+        stockQuantity: Math.max(0, item.stockQuantity || 0),
+        availability: item.availability || ((item.stockQuantity || 0) > 0 ? 'in_stock' : 'out_of_stock'),
+        maxQuantity: Math.max(0, item.stockQuantity || 0)
       }));
       setCartItems(mappedItems);
     } catch (error: any) {

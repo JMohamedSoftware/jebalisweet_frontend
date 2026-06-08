@@ -26,7 +26,7 @@ const CartIndicator = ({ inverse }: CartIndicatorProps) => {
       className="relative p-2 rounded-lg transition-smooth hover:bg-muted focus:outline-none focus:ring-3 focus:ring-ring focus:ring-offset-3"
       aria-label={`Panier - ${cartCount} article${cartCount !== 1 ? 's' : ''}`}
     >
-      <Icon name="ShoppingBagIcon" size={24} strokeWidth={1.2} className={inverse ? 'text-white' : 'text-foreground'} />
+      <Icon name="ShoppingCartIcon" size={24} className={inverse ? 'text-white' : 'text-foreground'} />
       {cartCount > 0 && (
         <span
           className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-accent text-accent-foreground text-xs font-bold rounded-full transition-smooth ${isAnimating ? 'animate-bounce-gentle' : ''

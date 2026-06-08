@@ -129,7 +129,6 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <UserMenu inverse={isHomePage && !isScrolled} />
               <CartIndicator inverse={isHomePage && !isScrolled} />
             </div>
           </div>

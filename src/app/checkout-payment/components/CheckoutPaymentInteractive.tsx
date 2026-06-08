@@ -119,7 +119,7 @@ const CheckoutPaymentInteractive = () => {
             alt: item.name
           })));
 
-          setIsQuoteRequest(data.items.some((item: any) => item.customImage));
+          setIsQuoteRequest(data.items.some((item: any) => item.customImage || (item.customOptions && item.customOptions.isCustom) || item.name?.toLowerCase().includes('personnalisé')));
           
           // Load and auto-apply promo code from localStorage
           const savedPromoCode = localStorage.getItem('currentPromoCode');

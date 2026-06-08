@@ -217,7 +217,9 @@
         "quickViewProduct": "عرض سريع لـ {productName}",
         "customCakeCategory": "الحلويات",
         "pricePerPiece": "{price} د.ت / للقطعة",
-        "pricePerKg": "{price} د.ت / للكغ"
+        "pricePerKg": "{price} د.ت / للكغ",
+        "customCakePrice": "حسب الطلب",
+        "customize": "تخصيص"
     },
     "admin": {
         "orders": {
